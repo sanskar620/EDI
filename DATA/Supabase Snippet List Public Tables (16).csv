@@ -1,0 +1,15 @@
+id,topic,module_code,question_text,question_type,options,correct_answer,translations,difficulty,points,is_active,created_at,intended_for
+1,Fire safety,null,12,MCQ,"[""1"",""9"",""3"",""5""]",1,null,3,1,true,2026-04-30 19:21:00.773,BOTH
+2,Abs,null,Sjehd,MCQ,"[""W"",""C"",""V"",""A""]",A,null,3,1,true,2026-04-30 19:37:41.989,BOTH
+3,At,null,Hejd,MCQ,"[""Bxn"",""Nd"",""Ndj"",""Jeks""]",Bxn,null,2,1,true,2026-05-01 10:35:55.765,BOTH
+8,SEPM,null,Cp,MCQ,"[{""text"":""Egg"",""is_correct"":true},{""text"":""4th"",""is_correct"":false},{""text"":""Egg"",""is_correct"":false},{""text"":""Egg"",""is_correct"":false}]",Egg,null,2,1,true,2026-05-01 21:11:15.133,PRE
+9,SEPM,null,Tci,MCQ,"[{""text"":""Vi"",""is_correct"":true},{""text"":""Db"",""is_correct"":false},{""text"":""UV"",""is_correct"":false},{""text"":""Hd"",""is_correct"":false}]",Vi,null,2,1,true,2026-05-01 21:34:05.9,PRE
+10,SEPM,null,FC,MCQ,"[{""text"":""Db"",""is_correct"":true},{""text"":""Db"",""is_correct"":false},{""text"":""Egg"",""is_correct"":false},{""text"":""Sb"",""is_correct"":false}]",Db,null,2,1,true,2026-05-01 21:34:18.866,POST
+11,SEPM,null,Go,MCQ,"[{""text"":""Web"",""is_correct"":true},{""text"":""Web is"",""is_correct"":false},{""text"":""Web web"",""is_correct"":false},{""text"":""Web web db"",""is_correct"":false}]",Web,null,2,1,true,2026-05-02 09:58:46.912,POST
+12,SEPM,null,Abcd,MCQ,"[{""text"":""H"",""is_correct"":true},{""text"":""L"",""is_correct"":false},{""text"":""N"",""is_correct"":false},{""text"":""M"",""is_correct"":false}]",H,null,2,1,true,2026-05-03 14:23:07.046,PRE
+13,Djfjf,null,Cbdb,MCQ,"[{""text"":""N"",""is_correct"":true},{""text"":""L"",""is_correct"":false},{""text"":""H"",""is_correct"":false},{""text"":""Z"",""is_correct"":false}]",N,null,2,1,true,2026-05-03 14:30:45.574,PRE
+14,Djfjf,null,Hdbdb,MCQ,"[{""text"":""Dn"",""is_correct"":false},{""text"":""Sl"",""is_correct"":false},{""text"":""Xnx"",""is_correct"":false},{""text"":""Xnxn"",""is_correct"":true}]",Xnxn,null,2,1,true,2026-05-03 14:30:56.259,POST
+15,Al,null,Dhxb,MCQ,"[{""text"":""Dbd"",""is_correct"":true},{""text"":""Dbdb"",""is_correct"":false},{""text"":""Dbxb"",""is_correct"":false},{""text"":""Nxxn"",""is_correct"":false}]",Dbd,null,2,1,true,2026-05-03 14:31:14.345,PRE
+16,Al,null,Cf,MCQ,"[{""text"":""D"",""is_correct"":true},{""text"":""N"",""is_correct"":false},{""text"":""L"",""is_correct"":false},{""text"":""A"",""is_correct"":false}]",D,null,2,1,true,2026-05-03 17:00:20.372,PRE
+17,DBMS,session_28,What is elephant,MCQ,"[{""text"":""1"",""is_correct"":false},{""text"":""5"",""is_correct"":false},{""text"":""J"",""is_correct"":false},{""text"":""M"",""is_correct"":true}]",M,null,2,1,true,2026-05-04 05:02:53.017,PRE
+18,Dbms,null,Sql,MCQ,"[""A"",""V"",""Q"",""P""]",P,null,3,1,true,2026-05-04 05:19:00.964,BOTH

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0056b2",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f1923",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>LMS Communications</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex h-screen w-full flex-col overflow-hidden">
+<header class="flex items-center justify-between px-4 pt-6 pb-2 bg-background-light dark:bg-background-dark">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-2xl">menu</span>
+<h1 class="text-xl font-bold tracking-tight">Communications</h1>
+</div>
+<div class="flex gap-2">
+<button class="p-2 rounded-full bg-slate-200 dark:bg-slate-800">
+<span class="material-symbols-outlined text-xl">search</span>
+</button>
+<button class="p-2 rounded-full bg-slate-200 dark:bg-slate-800 relative">
+<span class="material-symbols-outlined text-xl">notifications</span>
+<span class="absolute top-2 right-2 flex h-2 w-2 rounded-full bg-red-500"></span>
+</button>
+</div>
+</header>
+<div class="px-4 py-2">
+<div class="flex bg-slate-200/50 dark:bg-slate-800/50 rounded-xl p-1">
+<button class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg bg-white dark:bg-primary text-slate-900 dark:text-white shadow-sm font-semibold text-sm transition-all">
+<span class="material-symbols-outlined text-lg">campaign</span>
+                    Notices
+                </button>
+<button class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 font-semibold text-sm transition-all">
+<span class="material-symbols-outlined text-lg">chat_bubble</span>
+                    Messages
+                </button>
+</div>
+</div>
+<main class="flex-1 overflow-y-auto px-4 py-2 space-y-4">
+<div class="flex items-center justify-between mt-2">
+<h2 class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Recent Notices</h2>
+<button class="text-primary text-xs font-semibold">Mark all as read</button>
+</div>
+<div class="space-y-3">
+<div class="group relative flex flex-col gap-3 rounded-xl bg-white dark:bg-slate-800/40 p-4 border border-slate-200 dark:border-slate-700/50">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400">
+<span class="material-symbols-outlined">priority_high</span>
+</div>
+<div>
+<h3 class="font-bold text-sm">Urgent: UI Design Workshop</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">From: Alex Rivera (Lead Trainer)</p>
+</div>
+</div>
+<span class="text-[10px] font-medium text-slate-400">12m ago</span>
+</div>
+<p class="text-sm leading-relaxed text-slate-600 dark:text-slate-300">The UI Design workshop scheduled for tomorrow has been moved to Room 402. Please ensure you have Figma installed on your laptops.</p>
+<div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-700/50">
+<span class="inline-flex items-center gap-1 rounded-full bg-red-100 dark:bg-red-900/20 px-2 py-0.5 text-[10px] font-bold text-red-600 dark:text-red-400">
+                            High Priority
+                        </span>
+<button class="text-xs font-bold text-primary">View Details</button>
+</div>
+</div>
+<div class="group relative flex flex-col gap-3 rounded-xl bg-white dark:bg-slate-800/40 p-4 border border-slate-200 dark:border-slate-700/50 opacity-80">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined">info</span>
+</div>
+<div>
+<h3 class="font-bold text-sm">New Course Materials Uploaded</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">From: Learning Management System</p>
+</div>
+</div>
+<span class="text-[10px] font-medium text-slate-400">2h ago</span>
+</div>
+<p class="text-sm leading-relaxed text-slate-600 dark:text-slate-300">The reading list for 'Advanced Prototypes' is now available in the resource section of your dashboard.</p>
+<div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-700/50">
+<span class="inline-flex items-center gap-1 rounded-full bg-slate-100 dark:bg-slate-700/50 px-2 py-0.5 text-[10px] font-bold text-slate-500 dark:text-slate-400">
+                            General
+                        </span>
+<button class="text-xs font-bold text-primary">Download PDF</button>
+</div>
+</div>
+<div class="group relative flex flex-col gap-3 rounded-xl bg-white dark:bg-slate-800/40 p-4 border border-slate-200 dark:border-slate-700/50">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
+<span class="material-symbols-outlined">verified</span>
+</div>
+<div>
+<h3 class="font-bold text-sm">Assessment Results Released</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">From: Examination Cell</p>
+</div>
+</div>
+<span class="text-[10px] font-medium text-slate-400">Yesterday</span>
+</div>
+<p class="text-sm leading-relaxed text-slate-600 dark:text-slate-300">Results for the 'Frontend Fundamentals' quiz have been published. Check your grades in the Profile tab.</p>
+<div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-700/50">
+<span class="inline-flex items-center gap-1 rounded-full bg-green-100 dark:bg-green-900/20 px-2 py-0.5 text-[10px] font-bold text-green-600 dark:text-green-400">
+                            Important
+                        </span>
+<button class="text-xs font-bold text-primary">View Grades</button>
+</div>
+</div>
+</div>
+</main>
+<button class="fixed bottom-24 right-6 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-lg shadow-primary/30 z-20">
+<span class="material-symbols-outlined text-2xl">add_comment</span>
+</button>
+<nav class="flex border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark px-4 pb-8 pt-2">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">home</span>
+<p class="text-[10px] font-medium uppercase tracking-wider">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<p class="text-[10px] font-medium uppercase tracking-wider">Courses</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">chat</span>
+<p class="text-[10px] font-medium uppercase tracking-wider">Comm</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-[10px] font-medium uppercase tracking-wider">Profile</p>
+</a>
+</nav>
+<div class="hidden absolute inset-0 z-50 flex flex-col bg-background-light dark:bg-background-dark">
+<header class="flex items-center gap-4 px-4 py-4 border-b border-slate-200 dark:border-slate-800">
+<button class="material-symbols-outlined text-slate-600 dark:text-slate-300">arrow_back</button>
+<div class="flex-1 flex items-center gap-3">
+<div class="h-10 w-10 rounded-full overflow-hidden bg-slate-300">
+<img alt="Avatar of trainer" class="h-full w-full object-cover" data-alt="Professional headshot of a smiling male trainer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZCqtqVchOnV1qBFuOq62g-hVwgqQItDnZqCok9CGTawA2vTg5g6U4qoMMADGVcxrn4Oa2dGTPaypKDMnSMAXQ0rk87JjH1Kf-dZwglOMJQdzKqQ5jf4S7W14FfLmzjunki2jIOn5jZWbScabWskbvWw3-cgil5lDXREpQuDWBrYKQfThzbzyQu2V8LK9OxO2VSSOzrCk1gHOHc-qQtOebnJRyZDMGJAF2CzNem9LqGaI0blDWVPwaU-LfBBiN8ZWjC_oYnBCMCR8"/>
+</div>
+<div>
+<h3 class="font-bold text-sm">Alex Rivera</h3>
+<div class="flex items-center gap-1">
+<span class="h-2 w-2 rounded-full bg-green-500"></span>
+<span class="text-[10px] text-slate-500">Active now</span>
+</div>
+</div>
+</div>
+<button class="material-symbols-outlined text-slate-600 dark:text-slate-300">more_vert</button>
+</header>
+<div class="flex-1 overflow-y-auto p-4 space-y-4">
+<div class="flex justify-center">
+<span class="bg-slate-200 dark:bg-slate-800 px-3 py-1 rounded-full text-[10px] font-bold text-slate-500 uppercase">Today</span>
+</div>
+<div class="flex flex-col items-start max-w-[80%]">
+<div class="bg-slate-200 dark:bg-slate-800 p-3 rounded-2xl rounded-tl-none text-sm">
+                        Hello! Did you get a chance to review the feedback on your last assignment?
+                    </div>
+<span class="text-[10px] text-slate-400 mt-1 ml-1">10:45 AM</span>
+</div>
+<div class="flex flex-col items-end self-end max-w-[80%]">
+<div class="bg-primary text-white p-3 rounded-2xl rounded-tr-none text-sm">
+                        Yes, Alex. Working on the revisions now. Should I focus more on the spacing or the color palette?
+                    </div>
+<div class="flex items-center gap-1 mt-1 mr-1">
+<span class="text-[10px] text-slate-400">10:48 AM</span>
+<span class="material-symbols-outlined text-xs text-primary">done_all</span>
+</div>
+</div>
+<div class="flex flex-col items-start max-w-[80%]">
+<div class="bg-slate-200 dark:bg-slate-800 p-3 rounded-2xl rounded-tl-none text-sm space-y-2">
+<p>Focus on the spacing first. Here's a quick guide for reference.</p>
+<div class="flex items-center gap-3 p-2 bg-white/10 rounded-lg border border-white/10">
+<span class="material-symbols-outlined text-2xl text-primary">picture_as_pdf</span>
+<div class="flex-1 min-w-0">
+<p class="text-xs font-bold truncate">Spacing_Guide_v2.pdf</p>
+<p class="text-[10px] opacity-60">1.2 MB</p>
+</div>
+<span class="material-symbols-outlined text-lg">download</span>
+</div>
+</div>
+<span class="text-[10px] text-slate-400 mt-1 ml-1">10:50 AM</span>
+</div>
+</div>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50">
+<div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 rounded-full px-4 py-2">
+<button class="material-symbols-outlined text-slate-400">attach_file</button>
+<input class="flex-1 bg-transparent border-none focus:ring-0 text-sm py-1" placeholder="Type a message..." type="text"/>
+<button class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white">
+<span class="material-symbols-outlined text-lg">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

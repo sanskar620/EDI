@@ -1,0 +1,757 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.root{font-family:var(--font-sans)}
+.top-nav{display:flex;gap:6px;flex-wrap:wrap;padding:1rem 1.25rem 0;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);border-radius:12px 12px 0 0}
+.tnav{padding:7px 14px;border-radius:8px 8px 0 0;border:0.5px solid transparent;font-size:12px;font-weight:500;cursor:pointer;color:var(--color-text-secondary);background:transparent;transition:all .15s;margin-bottom:-1px}
+.tnav.on{color:var(--color-text-primary);background:var(--color-background-primary);border-color:var(--color-border-tertiary);border-bottom-color:var(--color-background-primary)}
+.body{border:0.5px solid var(--color-border-tertiary);border-top:none;border-radius:0 0 12px 12px;padding:1.25rem}
+.phase{display:none}
+.phase.on{display:block}
+
+.phase-header{margin-bottom:16px}
+.phase-title{font-size:16px;font-weight:500;color:var(--color-text-primary)}
+.phase-desc{font-size:12px;color:var(--color-text-secondary);margin-top:3px}
+.sprint-badge{display:inline-block;font-size:11px;font-weight:500;padding:2px 10px;border-radius:10px;margin-top:6px}
+
+.feat-block{margin-bottom:20px}
+.feat-block-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)}
+
+.feat-card{border:0.5px solid var(--color-border-tertiary);border-radius:10px;margin-bottom:10px;overflow:hidden}
+.feat-top{padding:10px 14px;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start}
+.feat-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.feat-desc{font-size:12px;color:var(--color-text-secondary);margin-top:2px;line-height:1.5}
+.who-row{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
+.who{font-size:10px;font-weight:500;padding:2px 8px;border-radius:8px}
+.who-t{background:#E6F1FB;color:#185FA5}
+.who-tr{background:#EAF3DE;color:#3B6D11}
+.who-s{background:#EEEDFE;color:#3C3489}
+
+.stack-row{background:var(--color-background-secondary);padding:8px 14px;border-top:0.5px solid var(--color-border-tertiary);display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.stack-label{font-size:10px;color:var(--color-text-secondary);font-weight:500;margin-right:2px}
+.stag{font-size:10px;padding:2px 8px;border-radius:6px;font-weight:500}
+
+.s-rn{background:#E6F1FB;color:#0C447C}
+.s-api{background:#EAF3DE;color:#27500A}
+.s-db{background:#FAEEDA;color:#633806}
+.s-3p{background:#FBEAF0;color:#72243E}
+.s-os{background:#EEEDFE;color:#26215C}
+.s-lib{background:#FAECE7;color:#712B13}
+
+.p1c{background:#E6F1FB}.p1t{color:#185FA5}.p1b{background:#B5D4F4;color:#0C447C}
+.p2c{background:#EAF3DE}.p2t{color:#3B6D11}.p2b{background:#9FE1CB;color:#04342C}
+.p3c{background:#EEEDFE}.p3t{color:#3C3489}.p3b{background:#CECBF6;color:#26215C}
+.p4c{background:#FAEEDA}.p4t{color:#854F0B}.p4b{background:#FAC775;color:#412402}
+.p5c{background:#FBEAF0}.p5t{color:#72243E}.p5b{background:#F4C0D1;color:#4B1528}
+.p6c{background:#FAECE7}.p6t{color:#993C1D}.p6b{background:#F0997B;color:#4A1B0C}
+</style>
+
+<div class="root">
+<div class="top-nav">
+  <button class="tnav on" onclick="show(0)">Phase 1 · Auth</button>
+  <button class="tnav" onclick="show(1)">Phase 2 · Pre-training</button>
+  <button class="tnav" onclick="show(2)">Phase 3 · Attendance</button>
+  <button class="tnav" onclick="show(3)">Phase 4 · Learning</button>
+  <button class="tnav" onclick="show(4)">Phase 5 · Assessment</button>
+  <button class="tnav" onclick="show(5)">Phase 6 · Compliance</button>
+</div>
+<div class="body">
+
+<div class="phase on" id="p0">
+  <div class="phase-header">
+    <div class="phase-title">Phase 1 — Onboarding & Authentication</div>
+    <div class="phase-desc">First thing the app does. Every role goes through this. Build this before anything else — everything depends on it.</div>
+    <span class="sprint-badge p1c p1t">Sprints 1–3 · Weeks 1–6</span>
+  </div>
+
+  <div class="feat-block">
+    <div class="feat-block-title">App install & version control</div>
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Dual distribution channels</div>
+          <div class="feat-desc">App available on Google Play Store and Apple App Store publicly. Also as a private APK/IPA link hosted on company server for corporate-managed devices. On first launch, app checks current version against server — if outdated, a mandatory update screen blocks all access until updated.</div>
+          <div class="who-row"><span class="who who-t">Trainee</span><span class="who who-tr">Trainer</span><span class="who who-s">Supervisor</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-rn">React Native</span>
+        <span class="stag s-api">FastAPI version-check endpoint</span>
+        <span class="stag s-3p">Google Play / App Store / internal CDN for APK</span>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Employee ID + mobile number login</div>
+          <div class="feat-desc">User enters Employee ID and registered mobile number on login screen. FastAPI cross-references both fields against the HR Master Data table in MySQL. If no match found, login is blocked with a "Contact your admin" message. No password needed at this stage.</div>
+          <div class="who-row"><span class="who who-t">Trainee</span><span class="who who-tr">Trainer</span><span class="who who-s">Supervisor</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-rn">React Native form</span>
+        <span class="stag s-api">FastAPI /auth/verify-identity</span>
+        <span class="stag s-db">MySQL users table</span>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">SMS OTP activation</div>
+          <div class="feat-desc">After identity verified, a 6-digit OTP is sent to the registered mobile number via SMS gateway. OTP expires in 5 minutes, max 3 attempts. On success, account is activated and a JWT access token + refresh token is issued. Also used for password recovery and supervisor proxy login.</div>
+          <div class="who-row"><span class="who who-t">Trainee</span><span class="who who-tr">Trainer</span><span class="who who-s">Supervisor</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-3p">MSG91 or Twilio SMS gateway</span>
+        <span class="stag s-api">FastAPI /auth/send-otp + /auth/verify-otp</span>
+        <span class="stag s-db">Redis for OTP storage with TTL</span>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Device binding</div>
+          <div class="feat-desc">On first successful login, the device's unique identifier (Android ID or iOS identifierForVendor) is stored against the user's account. Future logins from a different device are blocked unless admin resets the binding. This prevents proxy attendance by using a friend's phone. Supervisor devices are exempt — they use shared device mode.</div>
+          <div class="who-row"><span class="who who-t">Trainee</span><span class="who who-tr">Trainer</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-rn">react-native-device-info (getUniqueId)</span>
+        <span class="stag s-api">FastAPI stores device_id on users table</span>
+        <span class="stag s-db">MySQL users.device_id column</span>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Live photo capture & face match</div>
+          <div class="feat-desc">After OTP success, app opens front camera. Trainee snaps a selfie. The photo is sent to the AI face service which compares it against the HR profile photo stored in the database. A liveness check detects if someone is holding a printed photo in front of the camera. Confidence score below threshold = registration blocked, alert sent to admin.</div>
+          <div class="who-row"><span class="who who-t">Trainee</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-rn">react-native-camera or expo-camera</span>
+        <span class="stag s-3p">AWS Rekognition (CompareFaces + DetectFaces liveness)</span>
+        <span class="stag s-api">FastAPI /auth/verify-photo</span>
+        <span class="stag s-db">S3 for photo storage</span>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">JWT session + role-based routing</div>
+          <div class="feat-desc">On successful login, JWT contains the user's role (TRAINEE / TRAINER / SUPERVISOR). The app reads this token and routes to the correct home screen — each role sees a completely different dashboard. Refresh token stored securely in encrypted device storage. Session auto-expires after inactivity timeout.</div>
+          <div class="who-row"><span class="who who-t">Trainee</span><span class="who who-tr">Trainer</span><span class="who who-s">Supervisor</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-rn">react-navigation (role-based stack)</span>
+        <span class="stag s-lib">python-jose for JWT</span>
+        <span class="stag s-rn">react-native-keychain (secure token storage)</span>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Language selection</div>
+          <div class="feat-desc">First-time users see a language picker after login. Options: English, Hindi, Marathi, Tamil, Telugu, Kannada, Bengali, Odia. Selection persists locally. All screens, labels, and assessment questions then load in chosen language. User can change language anytime from profile settings.</div>
+          <div class="who-row"><span class="who who-t">Trainee</span><span class="who who-tr">Trainer</span><span class="who who-s">Supervisor</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-lib">i18next + react-i18next</span>
+        <span class="stag s-rn">AsyncStorage for language preference</span>
+        <span class="stag s-lib">Unicode-compliant fonts (Noto Sans family)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="phase" id="p1">
+  <div class="phase-header">
+    <div class="phase-title">Phase 2 — Notifications, Invites & Pre-study</div>
+    <div class="phase-desc">What happens before a trainee walks into training. Invites, material access, and baseline testing.</div>
+    <span class="sprint-badge p2c p2t">Sprints 4–5 · Weeks 7–10</span>
+  </div>
+
+  <div class="feat-block">
+    <div class="feat-block-title">Training invites & notifications</div>
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Push notification — training invite</div>
+          <div class="feat-desc">When admin publishes a session on web, the system auto-sends push notifications to all enrolled trainees. Notification shows session name, date, time, location. Trainee taps it to open the session detail screen in the app. RSVP buttons (Accept / Decline) inside the screen.</div>
+          <div class="who-row"><span class="who who-t">Trainee receives</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-3p">Firebase FCM (push notifications)</span>
+        <span class="stag s-lib">@react-native-firebase/messaging</span>
+        <span class="stag s-api">FastAPI background job triggers FCM on session publish</span>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Reminder alerts — 24h and 1h before</div>
+          <div class="feat-desc">Scheduled background jobs fire push notifications 24 hours before the session starts and again 1 hour before. Trainee sees: "Your Fire Safety training starts in 1 hour at Block B Campus." These are separate from the invite notification.</div>
+          <div class="who-row"><span class="who who-t">Trainee receives</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-db">Celery + Redis as task queue</span>
+        <span class="stag s-3p">Firebase FCM</span>
+        <span class="stag s-api">FastAPI scheduled tasks (APScheduler or Celery beat)</span>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">QR code enrollment check-in</div>
+          <div class="feat-desc">Invite includes a unique QR code per trainee per session. At the venue entrance, trainee scans it using the in-app QR scanner. System instantly validates and marks them as arrived. Trainer sees real-time arrival count on their trainer dashboard screen.</div>
+          <div class="who-row"><span class="who who-t">Trainee scans</span><span class="who who-tr">Trainer sees count</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-rn">react-native-camera / expo-barcode-scanner</span>
+        <span class="stag s-api">FastAPI /sessions/checkin-qr</span>
+        <span class="stag s-lib">qrcode (Python) for QR generation</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="feat-block">
+    <div class="feat-block-title">Pre-study materials</div>
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Study materials unlock (48–72h before)</div>
+          <div class="feat-desc">48–72 hours before the session, materials assigned to that session automatically become visible in the trainee's app under "Upcoming Sessions." PDFs, PPTs, and videos appear in a locked in-app viewer — no download button, no share option. Trainee can read/watch inside the app only.</div>
+          <div class="who-row"><span class="who who-t">Trainee reads</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-3p">AWS S3 pre-signed URLs (time-limited)</span>
+        <span class="stag s-lib">react-native-pdf for PDF viewing</span>
+        <span class="stag s-lib">react-native-video for video playback</span>
+        <span class="stag s-api">FastAPI /materials/unlock (scheduled job)</span>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Offline download of materials</div>
+          <div class="feat-desc">Trainee can download materials to device while on Wi-Fi for offline access at remote sites. "High Quality" or "Data Saver" version choice shown before download. Files stored in encrypted local SQLite/filesystem. Download progress bar shown per file.</div>
+          <div class="who-row"><span class="who who-t">Trainee downloads</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-rn">react-native-fs (filesystem access)</span>
+        <span class="stag s-lib">react-native-sqlite-storage (local DB)</span>
+        <span class="stag s-lib">react-native-aes-crypto (encryption at rest)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="feat-block">
+    <div class="feat-block-title">Pre-assessment (baseline test)</div>
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Baseline test before training</div>
+          <div class="feat-desc">Before attending the session, trainee takes a short MCQ/True-False test. Questions pulled randomly from question bank for this topic. Timer shown on screen. Results saved as pre-score — not used for pass/fail, only to measure how much the trainee improved post-training.</div>
+          <div class="who-row"><span class="who who-t">Trainee takes</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-api">FastAPI /assessments/pre-test</span>
+        <span class="stag s-db">MySQL question_bank, assessment_attempts tables</span>
+        <span class="stag s-rn">React Native timer + MCQ UI components</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="phase" id="p2">
+  <div class="phase-header">
+    <div class="phase-title">Phase 3 — Attendance & Session Start</div>
+    <div class="phase-desc">Verifying the trainee is physically present at the right location at the right time.</div>
+    <span class="sprint-badge p3c p3t">Sprints 6–7 · Weeks 11–14</span>
+  </div>
+
+  <div class="feat-block">
+    <div class="feat-block-title">Geo-fenced attendance</div>
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">GPS location check on check-in</div>
+          <div class="feat-desc">When trainee taps "Mark Attendance," app reads current GPS coordinates and sends them to the API. Server checks if coordinates fall inside the campus geo-fence polygon stored in the Campus master. If outside, check-in is rejected with "You are not at the training venue" message. Admin can override remotely if needed.</div>
+          <div class="who-row"><span class="who who-t">Trainee marks</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-rn">react-native-geolocation-service</span>
+        <span class="stag s-api">FastAPI /attendance/checkin (polygon check via Shapely)</span>
+        <span class="stag s-lib">Shapely (Python) for point-in-polygon geo math</span>
+        <span class="stag s-db">MySQL campus_geofence table (lat/lng polygon)</span>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Biometric authentication for check-in</div>
+          <div class="feat-desc">After geo-fence passes, trainee confirms identity via device fingerprint or Face ID. This uses the phone's native biometric system — no biometric data leaves the device. A success callback is sent to the app, which then finalizes the check-in API call with a biometric_verified: true flag.</div>
+          <div class="who-row"><span class="who who-t">Trainee authenticates</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-rn">react-native-biometrics</span>
+        <span class="stag s-os">Android BiometricPrompt / iOS LocalAuthentication</span>
+        <span class="stag s-api">FastAPI /attendance/finalize</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="feat-block">
+    <div class="feat-block-title">Trainer session start actions</div>
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Trainer views live attendance dashboard</div>
+          <div class="feat-desc">Trainer's home screen for an active session shows real-time list of who has checked in, who is pending, and who is absent. Updates automatically as trainees check in. Trainer can manually mark someone absent or force-mark present if biometric fails and they are physically verified.</div>
+          <div class="who-row"><span class="who who-tr">Trainer views and acts</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-rn">React Native FlatList with polling or WebSocket</span>
+        <span class="stag s-api">FastAPI /sessions/{id}/attendance-status</span>
+        <span class="stag s-db">Redis for real-time attendance state</span>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Batch group photo upload by trainer</div>
+          <div class="feat-desc">At session start, trainer is prompted to photograph the full group assembled in the room. Photo is uploaded to S3 and the AI face service counts faces and matches each against the check-in list. If headcount doesn't match digital check-ins, an alert is flagged for admin review before results are published.</div>
+          <div class="who-row"><span class="who who-tr">Trainer photographs</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-rn">react-native-camera</span>
+        <span class="stag s-3p">AWS Rekognition (DetectFaces for headcount)</span>
+        <span class="stag s-3p">AWS S3 for photo storage</span>
+        <span class="stag s-api">FastAPI /sessions/group-photo</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="phase" id="p3">
+  <div class="phase-header">
+    <div class="phase-title">Phase 4 — In-session Learning</div>
+    <div class="phase-desc">What trainees, trainers, and supervisors do during the actual training session.</div>
+    <span class="sprint-badge p4c p4t">Sprints 8–10 · Weeks 15–20</span>
+  </div>
+
+  <div class="feat-block">
+    <div class="feat-block-title">Trainer content delivery</div>
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Timed release — unlock content mid-lecture</div>
+          <div class="feat-desc">Trainer sees a list of materials assigned to the session, each with a lock icon. Trainer taps "Unlock Now" next to a specific file during the lecture. The API instantly makes that file visible to all enrolled trainees' apps. Prevents trainees from reading ahead before the trainer covers that topic.</div>
+          <div class="who-row"><span class="who who-tr">Trainer unlocks</span><span class="who who-t">Trainee receives</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-api">FastAPI /materials/release (sets released_at timestamp)</span>
+        <span class="stag s-rn">React Native real-time update via polling / WebSocket</span>
+        <span class="stag s-db">MySQL session_materials.is_released column</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="feat-block">
+    <div class="feat-block-title">Trainee content consumption</div>
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Secure in-app document viewer (PDF/PPT/video)</div>
+          <div class="feat-desc">Trainee opens released materials inside a sandboxed viewer. No download button, no share sheet, no screenshot prevention (best-effort). PDFs rendered natively. Videos stream from S3 pre-signed URL with progress tracking — video must reach 100% before marked complete. Seeking to end is detected and blocked.</div>
+          <div class="who-row"><span class="who who-t">Trainee views</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-lib">react-native-pdf</span>
+        <span class="stag s-lib">react-native-video (with onProgress tracking)</span>
+        <span class="stag s-3p">AWS S3 pre-signed URLs (short expiry)</span>
+        <span class="stag s-rn">Custom seek-detection logic in video onSeek callback</span>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Document watermarking</div>
+          <div class="feat-desc">Every page of every PDF opened by a trainee shows a translucent watermark overlay with their Employee ID and name. This is applied as a React Native overlay layer on top of the PDF viewer — not baked into the file, so original remains clean. Deters screenshot sharing.</div>
+          <div class="who-row"><span class="who who-t">Trainee sees their own watermark</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-rn">React Native View overlay on PDF component</span>
+        <span class="stag s-lib">Or server-side: PyMuPDF (fitz) adds watermark before pre-sign</span>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Flashcards / quick bytes</div>
+          <div class="feat-desc">Short micro-learning cards (text + image) accessible from any session or topic. Trainee swipes through cards like a deck. Available offline once synced. Useful for field safety refreshers while waiting at a site. Trainer can assign specific flashcard decks to a session.</div>
+          <div class="who-row"><span class="who who-t">Trainee uses</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-rn">React Native FlatList with horizontal swipe</span>
+        <span class="stag s-lib">react-native-sqlite-storage (offline card data)</span>
+        <span class="stag s-api">FastAPI /flashcards/{topic_id}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="feat-block">
+    <div class="feat-block-title">Trainer scoring during session</div>
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Field practical scoring</div>
+          <div class="feat-desc">For physical drills (fire evacuation, equipment handling), trainer opens a scoring screen per trainee. Criteria are predefined (configurable by admin). Trainer taps scores 1–5 per criterion and adds a text comment. Scores are saved immediately to the server. If offline, saved locally and synced on reconnect.</div>
+          <div class="who-tr">Trainer scores</div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-rn">React Native rating/slider UI</span>
+        <span class="stag s-api">FastAPI /assessments/practical-score</span>
+        <span class="stag s-lib">react-native-sqlite-storage (offline queue)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="phase" id="p4">
+  <div class="phase-header">
+    <div class="phase-title">Phase 5 — Assessment, AI Proctoring & Shared Device</div>
+    <div class="phase-desc">The most critical phase. Post-training test with full integrity enforcement. Includes the shared device flow for trainees without phones.</div>
+    <span class="sprint-badge p5c p5t">Sprints 11–13 · Weeks 21–26</span>
+  </div>
+
+  <div class="feat-block">
+    <div class="feat-block-title">Post-training assessment</div>
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Locked exam mode</div>
+          <div class="feat-desc">When trainee starts the post-test, the app enters a locked state: status bar hidden, navigation bar hidden, back button disabled, app-switch detection active. If trainee minimizes the app or switches to another app, a warning is logged and shown. Third switch = auto-submit with integrity flag.</div>
+          <div class="who-row"><span class="who who-t">Trainee is locked in</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-rn">react-navigation (disable back)</span>
+        <span class="stag s-os">Android: AppState API + FLAG_SECURE window</span>
+        <span class="stag s-os">iOS: UIApplication backgrounding detection</span>
+        <span class="stag s-api">FastAPI /assessments/log-integrity-event</span>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Randomized MCQ + timer</div>
+          <div class="feat-desc">Questions pulled randomly from the question bank for this topic. Options within each question also shuffled. Countdown timer displayed prominently — auto-submits when time runs out. Trainee cannot go back to a previous question once answered (configurable). Results calculated instantly on submit.</div>
+          <div class="who-row"><span class="who who-t">Trainee answers</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-api">FastAPI /assessments/fetch-questions (randomized server-side)</span>
+        <span class="stag s-rn">React Native countdown timer (useEffect + setInterval)</span>
+        <span class="stag s-db">MySQL question_bank, assessment_sessions tables</span>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">AI random snapshot proctoring</div>
+          <div class="feat-desc">During the test, the front camera fires at random intervals (every 2–5 minutes, randomized so trainee cannot predict it). Each snapshot is sent to AWS Rekognition which compares it against the HR profile photo. No match = integrity alert logged. Multiple faces in frame = alert logged. All photos stored in S3 with GPS tag and timestamp.</div>
+          <div class="who-row"><span class="who who-t">Trainee is monitored</span><span class="who who-tr">Trainer reviews flags</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-rn">react-native-camera (background capture)</span>
+        <span class="stag s-3p">AWS Rekognition CompareFaces + DetectFaces</span>
+        <span class="stag s-3p">AWS S3 (photo + GPS metadata storage)</span>
+        <span class="stag s-api">FastAPI /proctoring/snapshot</span>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Auto-grading + instant result screen</div>
+          <div class="feat-desc">On submit, server grades all objective questions, calculates score percentage, compares against passing threshold configured per module. Trainee sees score, pass/fail status, and which questions they got wrong with correct answers shown. If failed, retake countdown starts (if retakes allowed by policy).</div>
+          <div class="who-row"><span class="who who-t">Trainee sees result</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-api">FastAPI /assessments/submit + /assessments/grade</span>
+        <span class="stag s-db">MySQL assessment_results, passing_thresholds tables</span>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Dual digital signature</div>
+          <div class="feat-desc">After result shown, trainee draws their signature on a canvas. Signature is saved as PNG with session ID, timestamp, GPS. Then the trainer or supervisor opens a PIN prompt, authenticates, and draws their own signature. Both signatures stored in S3 and linked to the session record — audit evidence.</div>
+          <div class="who-row"><span class="who who-t">Trainee signs first</span><span class="who who-tr">Trainer / Supervisor signs second</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-lib">react-native-signature-canvas</span>
+        <span class="stag s-3p">AWS S3 for PNG signature storage</span>
+        <span class="stag s-api">FastAPI /sessions/sign</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="feat-block">
+    <div class="feat-block-title">Shared device flow (for trainees without personal phones)</div>
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Supervisor proxy login + batch mode</div>
+          <div class="feat-desc">Supervisor logs into the app on the shared device via their own OTP. They see a "Start Batch Session" button. They select the training session and see the list of enrolled trainees who need to be tested. They verify each trainee's physical ID card before selecting their name.</div>
+          <div class="who-row"><span class="who who-s">Supervisor initiates</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-api">FastAPI /supervisor/batch-session</span>
+        <span class="stag s-db">MySQL: supervisor_sessions table tracking batch state</span>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Handover — locked exam for single trainee</div>
+          <div class="feat-desc">Supervisor taps trainee's name → app switches to that trainee's locked exam screen → supervisor hands device to trainee. Trainee completes the test. On submit, a "Return device to supervisor" screen appears and the app locks again. Supervisor enters PIN to unlock and regain access. Then selects next trainee. Cycle repeats for all 20–30.</div>
+          <div class="who-row"><span class="who who-s">Supervisor manages handover</span><span class="who who-t">Trainee completes test</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-rn">React Navigation locked stack (no back, no nav bar)</span>
+        <span class="stag s-os">Android FLAG_SECURE, iOS guided access (advisory)</span>
+        <span class="stag s-lib">react-native-biometrics (supervisor PIN/biometric unlock)</span>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Post-exam photo + supervisor sign-off</div>
+          <div class="feat-desc">After each trainee completes, supervisor is prompted to photograph the trainee (or both together). This photo is AI-matched to confirm correct identity was tested. Supervisor then provides digital signature. Only then does the session for that trainee close and the next one opens.</div>
+          <div class="who-row"><span class="who who-s">Supervisor photographs and signs</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-rn">react-native-camera</span>
+        <span class="stag s-3p">AWS Rekognition (face match)</span>
+        <span class="stag s-lib">react-native-signature-canvas</span>
+        <span class="stag s-api">FastAPI /supervisor/complete-trainee</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="phase" id="p5">
+  <div class="phase-header">
+    <div class="phase-title">Phase 6 — Post-training, Compliance Loop & Storage</div>
+    <div class="phase-desc">Certificate generation, feedback, offline sync, the ongoing compliance engine, and smart storage management.</div>
+    <span class="sprint-badge p6c p6t">Sprints 14–16 · Weeks 27–32</span>
+  </div>
+
+  <div class="feat-block">
+    <div class="feat-block-title">Post-session actions</div>
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Mandatory feedback form</div>
+          <div class="feat-desc">After results are published, training record is not finalized until feedback is submitted. Trainee sees a feedback form: rating sliders for trainer clarity, content relevance, venue quality, plus a free-text comment. Cannot skip this — "View Certificate" button is locked until submitted.</div>
+          <div class="who-row"><span class="who who-t">Trainee submits (mandatory)</span><span class="who who-tr">Trainer submits trainee observations</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-rn">React Native form with rating stars/sliders</span>
+        <span class="stag s-api">FastAPI /feedback/submit</span>
+        <span class="stag s-db">MySQL session_feedback table</span>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Digital certificate auto-generation</div>
+          <div class="feat-desc">On passing score + feedback submitted, a branded digital certificate is auto-generated with trainee name, topic, score, date, and expiry date. Displayed inside the app profile. Certificate has a unique ID that can be verified by scanning a QR on it. Company logo and branding applied from white-label settings.</div>
+          <div class="who-row"><span class="who who-t">Trainee receives</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-lib">ReportLab or WeasyPrint (Python PDF generation)</span>
+        <span class="stag s-3p">AWS S3 (certificate storage)</span>
+        <span class="stag s-api">FastAPI /certificates/generate</span>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Offline sync — "Sync All" button</div>
+          <div class="feat-desc">If entire session was conducted in a dead zone (no internet), all data is queued locally: attendance, scores, photos, signatures. Supervisor sees a "Sync All" banner when back on network. One tap pushes everything to the server in order. Conflict resolution: server timestamp wins if duplicate data exists.</div>
+          <div class="who-row"><span class="who who-s">Supervisor syncs</span><span class="who who-tr">Trainer syncs</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-lib">react-native-sqlite-storage (local queue)</span>
+        <span class="stag s-rn">NetInfo (@react-native-community/netinfo) for connectivity</span>
+        <span class="stag s-api">FastAPI /sync/batch-upload (idempotent endpoint)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="feat-block">
+    <div class="feat-block-title">Smart storage management</div>
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">30-day inactivity tracker + auto-archive</div>
+          <div class="feat-desc">A background service checks last-accessed timestamp for every downloaded module. At Day 25 → push notification "Module X will be removed in 5 days." At Day 28 → final warning. At Day 30 → files deleted from device, completion record remains visible. User can re-download anytime via Cloud-Fetch button.</div>
+          <div class="who-row"><span class="who who-t">Trainee is notified and manages</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-rn">react-native-background-fetch (background job)</span>
+        <span class="stag s-rn">react-native-fs (file deletion)</span>
+        <span class="stag s-lib">react-native-sqlite-storage (last_accessed tracking)</span>
+        <span class="stag s-3p">Firebase FCM (local scheduled notification)</span>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Storage manager UI</div>
+          <div class="feat-desc">In app Settings → Storage screen, trainee sees a visual bar showing total space used by training materials vs device available storage. List of downloaded modules with individual file sizes. Manual archive button per module. "Clear All Cache" button for temp files. Background cleanup runs during device idle/charging.</div>
+          <div class="who-row"><span class="who who-t">Trainee manages</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-rn">react-native-fs (getFreeDiskStorage, getFSInfo)</span>
+        <span class="stag s-rn">React Native Animated (storage bar visualization)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="feat-block">
+    <div class="feat-block-title">Compliance loop — ongoing (runs forever in background)</div>
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Expiry tracking + T-30/15/5 alerts</div>
+          <div class="feat-desc">Every certificate has an expiry date. Server-side Celery beat job runs daily, checks all certificates nearing expiry. At T-30, T-15, T-5 days: pushes multi-channel alert (push + SMS + email) to trainee and their supervisor. Alert shows which module is expiring and a "Start Renewal" deep link into the app.</div>
+          <div class="who-row"><span class="who who-t">Trainee receives alerts</span><span class="who who-s">Supervisor receives alerts</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-db">Celery beat (daily expiry scan job)</span>
+        <span class="stag s-3p">Firebase FCM (push)</span>
+        <span class="stag s-3p">MSG91 (SMS)</span>
+        <span class="stag s-3p">SendGrid (email)</span>
+        <span class="stag s-rn">Deep link into app (React Navigation linking)</span>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-top">
+        <div>
+          <div class="feat-name">Compliance status on trainee profile</div>
+          <div class="feat-desc">Trainee home screen shows a "Compliance Status" badge — green (all certs valid), amber (expiring soon), red (expired). Tapping it opens a list of all certificates with their expiry dates and renewal status. Expired certs show a "Renew Now" button that deep-links to the relevant training enrollment.</div>
+          <div class="who-row"><span class="who who-t">Trainee sees own status</span></div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="stack-label">Stack:</span>
+        <span class="stag s-api">FastAPI /compliance/status/{user_id}</span>
+        <span class="stag s-db">MySQL certificates, validity_periods tables</span>
+        <span class="stag s-rn">React Native badge + FlatList</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script>
+function show(i){
+  document.querySelectorAll('.phase').forEach((el,j)=>el.classList.toggle('on',j===i));
+  document.querySelectorAll('.tnav').forEach((el,j)=>el.classList.toggle('on',j===i));
+}
+</script>

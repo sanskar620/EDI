@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,FILL@0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0056b2",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f1923",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>My Courses - LMS</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-background-light dark:bg-background-dark/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center p-4 justify-between">
+<button class="text-slate-900 dark:text-slate-100 flex size-10 items-center justify-center rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-10">My Courses</h1>
+</div>
+<!-- Tabs -->
+<nav class="flex px-4 overflow-x-auto no-scrollbar">
+<a class="flex flex-col items-center justify-center border-b-2 border-primary text-primary pb-3 pt-2 flex-1 min-w-[100px]" href="#">
+<span class="text-sm font-bold tracking-wide">Allocated</span>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 pb-3 pt-2 flex-1 min-w-[100px]" href="#">
+<span class="text-sm font-semibold tracking-wide">In Progress</span>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 pb-3 pt-2 flex-1 min-w-[100px]" href="#">
+<span class="text-sm font-semibold tracking-wide">Completed</span>
+</a>
+</nav>
+</header>
+<!-- Content Area -->
+<main class="flex-1 p-4 @container overflow-y-auto">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-xl font-bold tracking-tight">New Assignments</h2>
+<span class="bg-primary/20 text-primary text-xs font-bold px-2 py-1 rounded-full">3 Available</span>
+</div>
+<!-- Course List -->
+<div class="space-y-4">
+<!-- Allocated Course Card 1 -->
+<div class="flex flex-col items-stretch justify-start rounded-xl overflow-hidden shadow-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+<div class="w-full bg-center bg-no-repeat aspect-video bg-cover relative" data-alt="Cybersecurity server room neon lighting" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDOb5AI4ASMaBXMCMPbb-dLJirpZVU8Gahx-a7sTcMQzJm-G8fdoJW9sf_dmsyeWWHhz-8B_CcGQtnxbywTf3bp4Hjaw4h8XccnNZnuZXnBJ_hU_e-2SX-DNAP389Gh1Ot-6_-aysI8Q1Vo7COsXvr-S7hQT21IJ7iIPfBHaSdzaJVTTNCA-623bfyTxL18oQVEu9D98lJtk130edRnpGH6_HrJLCDuVopok9roySOUPmOGVsgdaFCk6eaXrsYvHpfXpTN9dTT-vhs");'>
+<div class="absolute top-3 left-3">
+<span class="bg-slate-900/80 text-white text-[10px] uppercase font-bold tracking-widest px-2 py-1 rounded backdrop-blur-sm">Compliance</span>
+</div>
+</div>
+<div class="flex w-full flex-col gap-3 p-4">
+<div>
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight">Cybersecurity Essentials 2024</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-base">schedule</span> 2h 30m • Level 1
+                        </p>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">
+<div class="flex flex-col">
+<span class="text-slate-400 dark:text-slate-500 text-[10px] uppercase font-bold">Due Date</span>
+<span class="text-rose-500 dark:text-rose-400 text-sm font-semibold">Oct 25, 2023</span>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-white text-sm font-bold py-2 px-6 rounded-lg transition-all shadow-md shadow-primary/20">
+                            Start Course
+                        </button>
+</div>
+</div>
+</div>
+<!-- Allocated Course Card 2 -->
+<div class="flex flex-col items-stretch justify-start rounded-xl overflow-hidden shadow-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+<div class="w-full bg-center bg-no-repeat aspect-video bg-cover relative" data-alt="Data analysis charts on a digital screen" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAKipVf9L__M-klJBWo92Hf3Qu6qQDl-zROX4Lkml_w9IL89HSoD9azqV4MY6coKuiGj4cEVioim503z1I8Tg7Q-ihZII2YyNGFAmv6hwLC9AMmOIiZmJTn5rAOcpc9wzUiRCHfbx2VOZO5eW1d-mdt0_o6uxLPky7SUgShKNMjo4XHgKM5w6d9_597-2TbPKL91CkRPaO9ylXICwNwpkbxnq4p197VYLACkKxjV-w3OW5q1UdlX7s5sClRPg6_q7weOIuXqcloo40");'>
+<div class="absolute top-3 left-3">
+<span class="bg-slate-900/80 text-white text-[10px] uppercase font-bold tracking-widest px-2 py-1 rounded backdrop-blur-sm">Skill-based</span>
+</div>
+</div>
+<div class="flex w-full flex-col gap-3 p-4">
+<div>
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight">Advanced Data Analytics</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-base">schedule</span> 5h 15m • Level 3
+                        </p>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">
+<div class="flex flex-col">
+<span class="text-slate-400 dark:text-slate-500 text-[10px] uppercase font-bold">Due Date</span>
+<span class="text-slate-700 dark:text-slate-300 text-sm font-semibold">Nov 12, 2023</span>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-white text-sm font-bold py-2 px-6 rounded-lg transition-all shadow-md shadow-primary/20">
+                            Start Course
+                        </button>
+</div>
+</div>
+</div>
+<!-- In Progress Section Hint -->
+<div class="pt-6 pb-2">
+<h2 class="text-slate-400 dark:text-slate-500 text-xs font-bold uppercase tracking-widest">Preview: In Progress</h2>
+</div>
+<!-- In Progress Mock Card -->
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 flex gap-4 items-center opacity-60">
+<div class="w-16 h-16 rounded-lg bg-slate-200 dark:bg-slate-800 shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400">pending</span>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="font-bold truncate text-sm">Strategic Leadership</h4>
+<div class="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full mt-2">
+<div class="bg-primary h-full rounded-full" style="width: 65%"></div>
+</div>
+<p class="text-[10px] text-slate-500 mt-1 italic">Last active: 2 days ago</p>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</div>
+</div>
+<div class="h-24"></div>
+</main>
+<!-- Bottom Navigation Bar -->
+<footer class="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 px-4 pb-6 pt-2 z-50">
+<div class="flex gap-2 max-w-md mx-auto">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">home</span>
+<p class="text-[10px] font-bold uppercase tracking-tighter">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">book_4</span>
+<p class="text-[10px] font-bold uppercase tracking-tighter">My Courses</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">workspace_premium</span>
+<p class="text-[10px] font-bold uppercase tracking-tighter">Achievements</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<p class="text-[10px] font-bold uppercase tracking-tighter">Profile</p>
+</a>
+</div>
+</footer>
+</body></html>

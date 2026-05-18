@@ -1,0 +1,21 @@
+id,session_id,user_id,status,method,check_in_time,check_out_time,check_in_lat,check_in_lng,geo_verified,geo_accuracy_meters,biometric_verified,biometric_method,face_match_score,selfie_image_url,qr_verified,is_present,marked_by,force_marked,notes,created_at,updated_at
+1,2,1,PRESENT,FACE,2026-04-06 09:00:51.419152,2026-04-06 11:00:51.419152,null,null,true,10,true,face_rekognition,92.5,null,false,true,1,false,null,2026-04-07 13:14:51.647526,2026-04-07 13:14:51.647526
+2,3,1,PRESENT,FACE,2026-04-05 14:00:51.419152,2026-04-05 17:00:51.419152,null,null,true,10,true,face_rekognition,92.5,null,false,true,1,false,null,2026-04-07 13:14:51.647526,2026-04-07 13:14:51.647526
+3,1,1,PRESENT,FACE,2026-04-30 19:40:24.61,null,null,null,false,10,true,face_fallback,null,null,false,true,1,false,null,2026-04-30 19:40:24.61,2026-04-30 19:40:24.61
+4,11,1,PRESENT,FACE,2026-05-01 05:23:53.747,null,18.462826,73.8631792,true,10,true,face_fallback,null,null,false,true,1,false,null,2026-05-01 05:23:53.747,2026-05-01 05:23:53.747
+5,15,1,PRESENT,FACE,2026-05-01 07:31:29.649,null,18.4648683,73.8667194,true,10,true,face_fallback,null,null,false,true,1,false,null,2026-05-01 07:31:29.649,2026-05-01 07:31:29.649
+6,4,1,PRESENT,MANUAL,2026-05-01 07:42:01.694,null,null,null,false,null,false,null,null,null,false,true,2,true,Manually marked by Priya Sharma,2026-05-01 07:42:01.694,2026-05-01 07:42:01.694
+7,10,1,PRESENT,MANUAL,2026-05-01 07:42:15.379,null,null,null,false,null,false,null,null,null,false,true,2,true,Manually marked by Priya Sharma,2026-05-01 07:42:15.379,2026-05-01 07:42:15.379
+8,10,5,PRESENT,MANUAL,2026-05-01 07:42:18.444,null,null,null,false,null,false,null,null,null,false,true,2,true,Manually marked by Priya Sharma,2026-05-01 07:42:18.444,2026-05-01 07:42:18.444
+9,10,4,PRESENT,MANUAL,2026-05-01 07:46:11.726,null,null,null,false,null,false,null,null,null,false,true,2,true,Manually marked by Priya Sharma,2026-05-01 07:46:11.726,2026-05-01 07:46:11.726
+10,21,1,PRESENT,FACE,2026-05-01 08:12:19.872,null,18.4648804,73.8667318,true,10,true,face_fallback,null,null,false,true,1,false,null,2026-05-01 08:12:19.872,2026-05-01 08:12:19.872
+14,24,1,PRESENT,MANUAL,2026-05-01 10:58:02.783,null,null,null,false,null,false,null,null,null,false,true,2,true,Manually marked by Priya Sharma,2026-05-01 10:58:02.783,2026-05-01 10:58:02.783
+15,25,1,PRESENT,MANUAL,2026-05-01 12:42:33.087,null,null,null,false,null,false,null,null,null,false,true,2,true,Manually marked by Priya Sharma,2026-05-01 12:42:33.087,2026-05-01 12:42:33.087
+16,26,1,PRESENT,MANUAL,2026-05-03 14:26:14.925,null,null,null,false,null,false,null,null,null,false,true,2,true,Manually marked by Priya Sharma,2026-05-03 14:26:14.925,2026-05-03 14:26:14.925
+17,28,1,PRESENT,MANUAL,2026-05-04 05:03:10.523,null,null,null,false,null,false,null,null,null,false,true,2,true,Manually marked by Priya Sharma,2026-05-04 05:03:10.523,2026-05-04 05:03:10.523
+18,28,4,PRESENT,MANUAL,2026-05-04 05:03:12.905,null,null,null,false,null,false,null,null,null,false,true,2,true,Manually marked by Priya Sharma,2026-05-04 05:03:12.905,2026-05-04 05:03:12.905
+19,28,27,PRESENT,MANUAL,2026-05-04 05:03:14.93,null,null,null,false,null,false,null,null,null,false,true,2,true,Manually marked by Priya Sharma,2026-05-04 05:03:14.93,2026-05-04 05:03:14.93
+20,28,5,PRESENT,MANUAL,2026-05-04 05:03:17.449,null,null,null,false,null,false,null,null,null,false,true,2,true,Manually marked by Priya Sharma,2026-05-04 05:03:17.449,2026-05-04 05:03:17.449
+21,28,11,PRESENT,MANUAL,2026-05-04 05:03:21.497,null,null,null,false,null,false,null,null,null,false,true,2,true,Manually marked by Priya Sharma,2026-05-04 05:03:21.497,2026-05-04 05:03:21.497
+22,28,10,PRESENT,MANUAL,2026-05-04 05:03:26.162,null,null,null,false,null,false,null,null,null,false,true,2,true,Manually marked by Priya Sharma,2026-05-04 05:03:26.163,2026-05-04 05:03:26.163
+23,27,1,PRESENT,FACE,2026-05-04 05:04:50.804765,null,null,null,true,null,true,face_rekognition,99.9994506835938,attendance-selfies/3f583101-ee57-4fa1-809b-09d4626ea2a4-attendance_EMP001_27_20260504_050436.jpg,false,true,1,false,null,2026-05-04 05:04:50.804778,2026-05-04 05:04:50.83913

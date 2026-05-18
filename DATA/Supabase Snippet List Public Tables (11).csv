@@ -1,0 +1,19 @@
+id,employee_id,mobile_number,email,password_hash,role,status,full_name,department,designation,campus_id,profile_photo_url,face_image_url,device_id,device_model,device_bound_at,language,fcm_token,last_login_at,created_at,updated_at,face_embedding
+32,EMP023,9822079201,null,null,TRAINER,ACTIVE,Stive,null,null,null,null,null,null,null,null,en,null,null,2026-05-04 09:48:41.689,2026-05-04 09:48:41.689,null
+3,EMP003,+919822079201,supervisor@company.com,null,SUPERVISOR,ACTIVE,Amit Patel,HR,Training Manager,1,face-images/face_EMP003_1776159155435.jpg,null,null,SM-S921B,null,en,null,2026-05-04 09:48:15.601,2026-04-07 13:14:51.296572,2026-04-14 09:32:38.427,null
+1,EMP001,+919822079201,trainee@company.com,null,TRAINEE,ACTIVE,Rajesh Kumar,Operations,Field Executive,1,face-images/f9d50172-9670-4a88-82fd-9abd957d5a4f-face_EMP001_20260504_044433.jpg,null,BP2A.250605.031.A3.S921BXXUDCZC2,SM-S921B,null,en,null,2026-05-04 09:57:53.987,2026-04-07 13:14:51.296572,2026-05-04 04:44:36.683,null
+2,EMP002,9822079201,trainer@company.com,null,TRAINER,ACTIVE,Priya Sharma,Training,Senior Trainer,1,face-images/face_EMP002_1777576366437.jpg,null,null,SM-S921B,null,en,null,2026-05-04 05:36:09.837,2026-05-04 06:46:46.592,2026-05-04 06:46:46.592,null
+26,EMP046,9822079201,null,null,TRAINER,ACTIVE,San,null,null,null,null,null,null,null,null,en,null,null,2026-05-03 18:39:06.693,2026-05-03 18:39:06.693,null
+27,EMP056,9822079201,null,null,TRAINEE,ACTIVE,Jay,null,null,null,null,null,null,null,null,en,null,null,2026-05-03 18:39:52.008,2026-05-03 18:39:52.008,null
+13,EMP032,+919822079201,xyz29021986@gmail.com,null,TRAINER,ACTIVE,Om,IT,Senior Professor,null,face-images/face_EMP032_1777617185510.jpg,null,null,moto g96 5G,null,en,null,2026-05-01 06:32:56.181,2026-05-01 06:32:27.047,2026-05-01 06:33:05.559,null
+4,EMP065,+919881669101,asd@gmail.com,null,TRAINEE,ACTIVE,Asd,Op,Head,null,null,null,null,null,null,en,null,null,2026-04-14 09:33:31.892,2026-04-14 09:33:31.892,null
+5,EMP010,+919822079201,r@gmail.com,null,TRAINEE,ACTIVE,R,Operating,Associate,null,null,null,null,null,null,en,null,null,2026-04-30 20:05:12.169,2026-04-30 20:05:12.169,null
+30,EMP089,9822079201,null,null,TRAINER,ACTIVE,Joy,null,null,null,null,null,null,null,null,en,null,null,2026-05-04 06:46:32.872,2026-05-04 06:46:32.872,null
+6,EMP006,+919822079201,d@gmail.com,null,TRAINEE,ACTIVE,Db,Op,Ass,null,face-images/face_EMP006_1777580246723.jpg,null,null,SM-S921B,null,en,null,2026-04-30 20:17:17.748,2026-04-30 20:16:36.843,2026-04-30 20:17:31.773,null
+11,EMP011,+919822079201,om@gmail.com,null,TRAINEE,ACTIVE,Om,S,Associate,null,face-images/face_EMP011_1777614588925.jpg,null,null,moto g96 5G,null,en,null,2026-05-01 07:00:46.33,2026-05-01 05:48:59.934,2026-05-01 05:49:48.982,null
+7,EMP101,+1000000001,null,null,TRAINEE,ACTIVE,Alice Smith,HR,null,null,null,null,null,null,null,en,null,null,2026-04-30 21:21:35.590356,2026-04-30 21:21:35.590363,null
+8,EMP102,+1000000002,null,null,TRAINEE,ACTIVE,Bob Johnson,Operations,null,null,null,null,null,null,null,en,null,null,2026-04-30 21:21:35.590367,2026-04-30 21:21:35.590369,null
+9,EMP103,+1000000003,null,null,TRAINEE,ACTIVE,Charlie Davis,Engineering,null,null,null,null,null,null,null,en,null,null,2026-04-30 21:21:35.590371,2026-04-30 21:21:35.590375,null
+10,EMP104,+1000000004,null,null,TRAINEE,ACTIVE,Diana Ross,Marketing,null,null,null,null,null,null,null,en,null,null,2026-04-30 21:21:35.590376,2026-04-30 21:21:35.590379,null
+28,EMP034,9822079201,null,null,TRAINER,ACTIVE,Sanskar,null,null,null,null,null,null,null,null,en,null,null,2026-05-04 04:58:27.024,2026-05-04 04:58:27.025,null
+29,EMP078,9822079201,null,null,TRAINEE,ACTIVE,Mich,null,null,null,null,null,null,null,null,en,null,null,2026-05-04 04:59:00.277,2026-05-04 04:59:00.277,null

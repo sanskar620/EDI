@@ -1,0 +1,43 @@
+{
+  "expo": {
+    "name": "Training LMS",
+    "slug": "NewTrainingApp",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0f1923"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.traininglms.cloud"
+    },
+    "android": {
+      "package": "com.traininglms.cloud",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundColor": "#0f1923"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "scheme": "traininglms",
+    "plugins": [
+      "@react-native-community/datetimepicker",
+      "expo-sqlite",
+      "expo-sharing",
+      "expo-web-browser",
+      "expo-video"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "09f2ca9b-5aa8-4551-b8e8-f397480e99cd"
+      }
+    },
+    "owner": "sanskar_7626"
+  }
+}

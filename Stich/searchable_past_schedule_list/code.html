@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Past Schedule - Training Reports</title>
+<!-- Tailwind CSS V3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Manrope -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Manrope', 'sans-serif'],
+          },
+          colors: {
+            'app-bg': '#0a0d12',
+            'card-bg': '#14181f',
+            'primary-blue': '#2563eb',
+            'accent-blue': '#3b82f6',
+            'text-muted': '#94a3b8',
+            'status-green': '#10b981',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-layout">
+    body {
+      background-color: #0a0d12;
+      color: #ffffff;
+      -webkit-tap-highlight-color: transparent;
+    }
+    /* Custom scrollbar for clean dark look */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0a0d12;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body class="font-sans pb-24">
+<!-- BEGIN: Header -->
+<header class="sticky top-0 z-50 bg-app-bg/95 backdrop-blur-md px-5 pt-6 pb-4 border-b border-white/5">
+<div class="flex items-center justify-between mb-5">
+<div class="flex items-center gap-3">
+<button class="p-2 -ml-2 text-white">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<h1 class="text-xl font-bold tracking-tight">Past Schedule</h1>
+</div>
+<button class="p-2 bg-white/5 rounded-full">
+<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+<!-- Search and Filter Bar -->
+<div class="flex gap-3">
+<div class="relative flex-1">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+<svg class="w-4 h-4 text-primary-blue" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</span>
+<input class="w-full bg-white/5 border-none rounded-xl py-2.5 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary-blue text-white placeholder-text-muted" placeholder="Search sessions..." type="text"/>
+</div>
+<button class="bg-white/5 p-2.5 rounded-xl border border-white/10 bg-primary-blue/10">
+<svg class="w-5 h-5 text-accent-blue" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div><div class="mt-4 grid grid-cols-2 gap-3">
+<div class="space-y-1">
+<label class="text-[10px] font-bold text-text-muted uppercase tracking-wider ml-1">Client</label>
+<div class="relative">
+<select class="w-full bg-card-bg border border-white/10 rounded-xl py-2 pl-3 pr-8 text-xs text-white appearance-none focus:ring-1 focus:ring-primary-blue">
+<option>All Clients</option>
+<option>Corp X</option>
+<option>Global Tech</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-text-muted">
+<svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+</div>
+</div>
+<div class="space-y-1">
+<label class="text-[10px] font-bold text-text-muted uppercase tracking-wider ml-1">Branch</label>
+<div class="relative">
+<select class="w-full bg-card-bg border border-white/10 rounded-xl py-2 pl-3 pr-8 text-xs text-white appearance-none focus:ring-1 focus:ring-primary-blue">
+<option>All Branches</option>
+<option>North</option>
+<option>South</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-text-muted">
+<svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+</div>
+</div>
+<div class="space-y-1">
+<label class="text-[10px] font-bold text-text-muted uppercase tracking-wider ml-1">Site</label>
+<div class="relative">
+<select class="w-full bg-card-bg border border-white/10 rounded-xl py-2 pl-3 pr-8 text-xs text-white appearance-none focus:ring-1 focus:ring-primary-blue">
+<option>All Sites</option>
+<option>Main</option>
+<option>Annex</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-text-muted">
+<svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+</div>
+</div>
+<div class="space-y-1">
+<label class="text-[10px] font-bold text-text-muted uppercase tracking-wider ml-1">Training Type</label>
+<div class="relative">
+<select class="w-full bg-card-bg border border-white/10 rounded-xl py-2 pl-3 pr-8 text-xs text-white appearance-none focus:ring-1 focus:ring-primary-blue">
+<option>All Types</option>
+<option>Security</option>
+<option>UX</option>
+<option>Leadership</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-text-muted">
+<svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- END: Header -->
+<!-- BEGIN: Main Content -->
+<main class="px-5 py-4 space-y-4">
+<div class="flex justify-between items-center mb-2">
+<span class="text-xs font-semibold text-text-muted uppercase tracking-widest">Completed Sessions</span>
+<span class="text-xs text-primary-blue font-medium">Oct - Dec 2025</span>
+</div>
+<!-- BEGIN: Session Card 1 -->
+<section class="bg-card-bg border border-white/5 rounded-2xl p-5 shadow-xl" data-purpose="session-card">
+<div class="flex justify-between items-start mb-3">
+<div>
+<h2 class="text-lg font-bold leading-tight">Advanced Security Protocol</h2>
+<span class="text-xs font-mono text-primary-blue font-bold">#SES-90210</span>
+</div>
+<span class="bg-status-green/10 text-status-green text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">Completed</span>
+</div>
+<div class="space-y-2 mb-5">
+<div class="flex items-center gap-2 text-sm text-text-muted">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Oct 24, 2025 | 09:00 AM - 11:00 AM</span>
+</div>
+<div class="flex items-center gap-2 text-sm text-text-muted">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Main Campus, Room 402</span>
+</div>
+</div>
+<!-- Quick Stats Container -->
+<div class="grid grid-cols-2 gap-3 mb-5">
+<div class="bg-white/5 p-3 rounded-xl border border-white/5">
+<p class="text-[10px] text-text-muted uppercase font-bold tracking-tight mb-1">Attendance</p>
+<p class="text-xl font-extrabold">92%</p>
+</div>
+<div class="bg-white/5 p-3 rounded-xl border border-white/5">
+<p class="text-[10px] text-text-muted uppercase font-bold tracking-tight mb-1">Avg Score</p>
+<p class="text-xl font-extrabold">88<span class="text-sm font-normal text-text-muted">/100</span></p>
+</div>
+</div>
+<button class="w-full bg-primary-blue hover:bg-blue-600 transition-colors py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-primary-blue/20">
+        View Full Report
+      </button>
+</section>
+<!-- END: Session Card 1 -->
+<!-- BEGIN: Session Card 2 -->
+<section class="bg-card-bg border border-white/5 rounded-2xl p-5 shadow-xl opacity-90" data-purpose="session-card">
+<div class="flex justify-between items-start mb-3">
+<div>
+<h2 class="text-lg font-bold leading-tight">UX Research Methods</h2>
+<span class="text-xs font-mono text-primary-blue font-bold">#SES-88421</span>
+</div>
+<span class="bg-status-green/10 text-status-green text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">Completed</span>
+</div>
+<div class="space-y-2 mb-5">
+<div class="flex items-center gap-2 text-sm text-text-muted">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Oct 18, 2025 | 10:00 AM - 12:30 PM</span>
+</div>
+<div class="flex items-center gap-2 text-sm text-text-muted">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 10l4.553 2.276A1 1 0 0120 13.17V17a2 2 0 01-2 2H6a2 2 0 01-2-2v-3.83a1 1 0 01.553-.894L9 10m6 0V6a3 3 0 00-6 0v4m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Virtual (Zoom Room A)</span>
+</div>
+</div>
+<!-- Quick Stats Container -->
+<div class="grid grid-cols-2 gap-3 mb-5">
+<div class="bg-white/5 p-3 rounded-xl border border-white/5">
+<p class="text-[10px] text-text-muted uppercase font-bold tracking-tight mb-1">Attendance</p>
+<p class="text-xl font-extrabold">100%</p>
+</div>
+<div class="bg-white/5 p-3 rounded-xl border border-white/5">
+<p class="text-[10px] text-text-muted uppercase font-bold tracking-tight mb-1">Avg Score</p>
+<p class="text-xl font-extrabold">94<span class="text-sm font-normal text-text-muted">/100</span></p>
+</div>
+</div>
+<button class="w-full bg-primary-blue hover:bg-blue-600 transition-colors py-3.5 rounded-xl font-bold text-sm">
+        View Full Report
+      </button>
+</section>
+<!-- END: Session Card 2 -->
+<!-- BEGIN: Session Card 3 -->
+<section class="bg-card-bg border border-white/5 rounded-2xl p-5 shadow-xl opacity-80" data-purpose="session-card">
+<div class="flex justify-between items-start mb-3">
+<div>
+<h2 class="text-lg font-bold leading-tight">Team Leadership 101</h2>
+<span class="text-xs font-mono text-primary-blue font-bold">#SES-85200</span>
+</div>
+<span class="bg-status-green/10 text-status-green text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">Completed</span>
+</div>
+<div class="space-y-2 mb-5">
+<div class="flex items-center gap-2 text-sm text-text-muted">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Oct 12, 2025 | 02:00 PM - 04:00 PM</span>
+</div>
+<div class="flex items-center gap-2 text-sm text-text-muted">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Conference Center, Level 2</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3 mb-5">
+<div class="bg-white/5 p-3 rounded-xl border border-white/5">
+<p class="text-[10px] text-text-muted uppercase font-bold tracking-tight mb-1">Attendance</p>
+<p class="text-xl font-extrabold">85%</p>
+</div>
+<div class="bg-white/5 p-3 rounded-xl border border-white/5">
+<p class="text-[10px] text-text-muted uppercase font-bold tracking-tight mb-1">Avg Score</p>
+<p class="text-xl font-extrabold">79<span class="text-sm font-normal text-text-muted">/100</span></p>
+</div>
+</div>
+<button class="w-full bg-primary-blue hover:bg-blue-600 transition-colors py-3.5 rounded-xl font-bold text-sm">
+        View Full Report
+      </button>
+</section>
+<!-- END: Session Card 3 -->
+</main>
+<!-- END: Main Content -->
+<!-- BEGIN: Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 bg-app-bg/90 backdrop-blur-lg border-t border-white/5 px-6 pt-3 pb-8 flex justify-between items-center z-50">
+<button class="flex flex-col items-center gap-1 text-text-muted">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[10px] font-medium">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary-blue">
+<svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24">
+<path d="M7 2a2 2 0 00-2 2v16a2 2 0 002 2h10a2 2 0 002-2V7.414a2 2 0 00-.586-1.414l-4.414-4.414A2 2 0 0012.586 2H7zm5 8a1 1 0 110-2 1 1 0 010 2zm-3 4a1 1 0 110-2h6a1 1 0 110 2H9zm0 4a1 1 0 110-2h6a1 1 0 110 2H9z"></path>
+</svg>
+<span class="text-[10px] font-bold">Reports</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-text-muted">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[10px] font-medium">Trainees</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-text-muted">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[10px] font-medium">Settings</span>
+</button>
+</nav>
+<!-- END: Bottom Navigation -->
+</body></html>

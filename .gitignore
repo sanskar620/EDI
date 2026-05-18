@@ -1,0 +1,57 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p8
+*.p12
+*.jks
+*.mobileprovision
+firebase-service-account.json
+backend/firebase-service-account.json
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+backend/venv/
+
+# Databases and runtime data
+*.db
+*.sqlite
+*.sqlite3
+backend/uploads/
+backend/backups/
+
+# Node / Expo
+node_modules/
+TrainingApp/node_modules/
+TrainingApp/.expo/
+TrainingApp/dist/
+TrainingApp/web-build/
+TrainingApp/expo-env.d.ts
+TrainingApp/ios/
+TrainingApp/android/
+TrainingApp.worktrees/
+
+# Build and logs
+*.log
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+expo_output.txt
+errors.txt
+errors_utf8.txt
+typescript_errors.log
+
+# Preserve nested Git metadata locally if renamed during root repo setup
+TrainingApp/.git.nested-backup/

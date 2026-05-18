@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LMS Trainee Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0056b2",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f1923",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="relative flex min-h-screen w-full flex-col pb-24">
+<!-- Header -->
+<header class="flex items-center bg-background-light dark:bg-background-dark p-4 justify-between sticky top-0 z-10 border-b border-slate-200 dark:border-slate-800">
+<div class="flex size-10 shrink-0 items-center overflow-hidden rounded-full">
+<img alt="Profile" class="h-full w-full object-cover" data-alt="Close up portrait of a young man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQVi7i3jLq-t2Q58tWq6vKeBcjzIy9X9C-k6zx7KY7iXgvZTR-CV_hzC0Y7PH_DuDmEpNaMcqDzAq9cky9NyrAQadIWU1StK2p2p7KUlHZ_tuu4Jd21kECyGnB4alkUNWsbWK9Kr2Qu-twjF7thFu69CTZd49brd1mEl00v-pQiFRvTd0h_4MV5qQXSLBZQEMWgZQesEWCEe_LfktOQEWZqERU1ceh9JLTsTF0vYu1qIWv6OQOh1hMXE7IYFLFm95EmZWb2oEYpSY"/>
+</div>
+<div class="flex-1 px-3">
+<h2 class="text-slate-900 dark:text-slate-100 text-sm font-bold leading-tight">LMS Portal</h2>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex size-10 items-center justify-center rounded-lg bg-primary text-white shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-[24px]">qr_code_scanner</span>
+</button><button class="flex size-10 items-center justify-center rounded-lg bg-slate-200/50 dark:bg-slate-800 text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined text-[24px]">search</span>
+</button>
+<button class="flex size-10 items-center justify-center rounded-lg bg-slate-200/50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 relative">
+<span class="material-symbols-outlined text-[24px]">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-primary rounded-full border-2 border-background-light dark:border-background-dark"></span>
+</button>
+</div>
+</header>
+<main class="flex flex-col gap-6 px-4 pt-6">
+<!-- Welcome Section -->
+<section>
+<h1 class="text-slate-900 dark:text-slate-100 text-3xl font-extrabold tracking-tight">Hello, Alex!</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">You've completed 75% of your weekly goal.</p>
+</section>
+<!-- Progress Overview Cards -->
+<section class="grid grid-cols-3 gap-3">
+<div class="flex flex-col gap-1 rounded-lg p-4 bg-primary/10 dark:bg-primary/20 border border-primary/20 shadow-sm">
+<p class="text-primary text-[10px] font-bold uppercase tracking-wider">In Progress</p>
+<p class="text-slate-900 dark:text-white text-2xl font-bold">4</p>
+</div>
+<div class="flex flex-col gap-1 rounded-lg p-4 bg-emerald-500/10 dark:bg-emerald-500/20 border border-emerald-500/20">
+<p class="text-emerald-600 dark:text-emerald-400 text-[10px] font-bold uppercase tracking-wider">Completed</p>
+<p class="text-slate-900 dark:text-white text-2xl font-bold">12</p>
+</div>
+<div class="flex flex-col gap-1 rounded-lg p-4 bg-amber-500/10 dark:bg-amber-500/20 border border-amber-500/20">
+<p class="text-amber-600 dark:text-amber-400 text-[10px] font-bold uppercase tracking-wider">Avg. Score</p>
+<p class="text-slate-900 dark:text-white text-2xl font-bold">88%</p>
+</div>
+</section>
+<!-- My Learning Section -->
+<section>
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-slate-900 dark:text-white text-xl font-bold">My Learning</h2>
+<button class="text-primary text-sm font-bold">View All</button>
+</div>
+<div class="flex overflow-x-auto gap-4 hide-scrollbar pb-2">
+<!-- Course Card 1 -->
+<div class="min-w-[280px] rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
+<div class="h-32 w-full relative">
+<img alt="Code" class="w-full h-full object-cover" data-alt="Modern programming code on a monitor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3ARVssgWlkNAkn63Rl9a7eQV5GsDiqKU8tap9yx1tuOwxYyX7_kyuE2gxIpaJITbQGOyuAXmXaApZnYQIXsqCx3uiC9-UpgkfN6wTWz6m69JSBCF9QovsN0oZRvUwPIM8SKjrC4o3Xv0vUNqnJgkfhTkFuMd7xllL5Be4_i5Vm0gpW3EfGvm86-eYDqS2xbjw0PD3dBrfnvc3Vp1YkWZg2w1L6EFuD5RFj78A45Q6CTAZTV1jorIPMTrA8wda2E5l4xMQQN6ZOPU"/>
+<span class="absolute top-2 right-2 bg-primary text-white text-[10px] font-bold px-2 py-1 rounded">TECH</span>
+</div>
+<div class="p-4">
+<h3 class="text-slate-900 dark:text-white font-bold text-base mb-3">Advanced React Patterns</h3>
+<div class="flex items-center justify-between mb-1">
+<span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Progress</span>
+<span class="text-[11px] text-primary font-bold">65%</span>
+</div>
+<div class="w-full bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 65%"></div>
+</div>
+</div>
+</div>
+<!-- Course Card 2 -->
+<div class="min-w-[280px] rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
+<div class="h-32 w-full relative">
+<img alt="Data" class="w-full h-full object-cover" data-alt="Business data charts and analytics" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4zzADAvfyeQGTYS-m4msOLTzI4jFHAwmPSUQZUoAXUUt-UeRcfTXbwUD2FkW2qSqySSjhfwkDmNQkieQgHSq1-d5KByIE8cHlDRChoCdQj9U3GjOGu1u_YpQUNGbYEpdP5zD_MaC9Um0qmbsGlROs05t1ZyqCgQGZMh3XbCgIPUfyFzjOfAdLatlN3HFe-JGkSJH2xIEzxpT0n0BThMf1u9o3HSZzU3DXfhKu_1i4OueKO8phxSeEObf_NnytzEOG2rRINrIt9EU"/>
+<span class="absolute top-2 right-2 bg-primary text-white text-[10px] font-bold px-2 py-1 rounded">BUSINESS</span>
+</div>
+<div class="p-4">
+<h3 class="text-slate-900 dark:text-white font-bold text-base mb-3">Data Science Fundamentals</h3>
+<div class="flex items-center justify-between mb-1">
+<span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Progress</span>
+<span class="text-[11px] text-primary font-bold">30%</span>
+</div>
+<div class="w-full bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 30%"></div>
+</div>
+</div>
+</div>
+</div>
+</section><section class="mt-6">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-slate-900 dark:text-white text-xl font-bold">My Certificates</h2>
+<button class="text-primary text-sm font-bold">View All</button>
+</div>
+<div class="flex overflow-x-auto gap-4 hide-scrollbar pb-2">
+<div class="min-w-[160px] p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex flex-col items-center text-center gap-2 shadow-sm">
+<div class="size-12 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-500">
+<span class="material-symbols-outlined text-3xl">workspace_premium</span>
+</div>
+<p class="text-xs font-bold dark:text-white">Safety First 2023</p>
+<button class="text-[10px] text-primary font-bold flex items-center gap-1 mt-1"><span class="material-symbols-outlined text-sm">download</span> Download</button>
+</div>
+<div class="min-w-[160px] p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex flex-col items-center text-center gap-2 shadow-sm">
+<div class="size-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500">
+<span class="material-symbols-outlined text-3xl">verified</span>
+</div>
+<p class="text-xs font-bold dark:text-white">React Advanced</p>
+<button class="text-[10px] text-primary font-bold flex items-center gap-1 mt-1"><span class="material-symbols-outlined text-sm">download</span> Download</button>
+</div>
+</div>
+</section>
+<!-- Upcoming Sessions -->
+<section class="mt-2">
+<h2 class="text-slate-900 dark:text-white text-xl font-bold mb-4">Compliance Status</h2>
+<div class="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-4">
+<div class="relative size-12 flex items-center justify-center">
+<svg class="size-full" viewbox="0 0 36 36">
+<path class="text-emerald-500/20" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"></path>
+<path class="text-emerald-500" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831" fill="none" stroke="currentColor" stroke-dasharray="92, 100" stroke-width="3"></path>
+</svg>
+<span class="absolute text-[10px] font-bold text-emerald-600 dark:text-emerald-400">92%</span>
+</div>
+<div class="flex-1">
+<h4 class="text-sm font-bold dark:text-white">PSARA/Safety Readiness</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400">You are fully compliant for this month.</p>
+</div>
+<span class="material-symbols-outlined text-emerald-500">check_circle</span>
+</div>
+</section><section>
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-slate-900 dark:text-white text-xl font-bold">Upcoming Sessions</h2>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-4 p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm">
+<div class="flex flex-col items-center justify-center size-14 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary">
+<span class="text-xs font-bold uppercase">Oct</span>
+<span class="text-xl font-black">24</span>
+</div>
+<div class="flex-1">
+<h4 class="text-slate-900 dark:text-white font-bold text-sm">UX Design Workshop</h4>
+<div class="flex items-center gap-3 mt-1 text-slate-500 dark:text-slate-400 text-xs">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span>02:00 PM</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">videocam</span>
+<span>Virtual</span>
+</div>
+</div>
+</div>
+<button class="size-8 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-700 text-slate-400">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm">
+<div class="flex flex-col items-center justify-center size-14 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400">
+<span class="text-xs font-bold uppercase">Oct</span>
+<span class="text-xl font-black">26</span>
+</div>
+<div class="flex-1">
+<h4 class="text-slate-900 dark:text-white font-bold text-sm">Agile Methodology Coaching</h4>
+<div class="flex items-center gap-3 mt-1 text-slate-500 dark:text-slate-400 text-xs">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span>10:30 AM</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">location_on</span>
+<span>Room 402</span>
+</div>
+</div>
+</div>
+<button class="size-8 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-700 text-slate-400">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Pending Assessments -->
+<section>
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-slate-900 dark:text-white text-xl font-bold">Pending Assessments</h2>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div class="flex flex-col gap-3 p-4 rounded-xl bg-primary border border-primary shadow-lg shadow-primary/20">
+<div class="size-8 flex items-center justify-center rounded-lg bg-white/20 text-white">
+<span class="material-symbols-outlined">quiz</span>
+</div>
+<div>
+<p class="text-white/70 text-[10px] font-bold uppercase tracking-wider">Pre-Quiz</p>
+<h4 class="text-white font-bold text-sm leading-tight mt-0.5">Cloud Architecture</h4>
+</div>
+<button class="w-full py-2 bg-white text-primary rounded-lg text-xs font-extrabold hover:bg-slate-50 transition-colors">Start Now</button>
+</div>
+<div class="flex flex-col gap-3 p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm">
+<div class="size-8 flex items-center justify-center rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined">assignment_turned_in</span>
+</div>
+<div>
+<p class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider">Post-Quiz</p>
+<h4 class="text-slate-900 dark:text-white font-bold text-sm leading-tight mt-0.5">Effective Communication</h4>
+</div>
+<button class="w-full py-2 border border-primary text-primary rounded-lg text-xs font-extrabold hover:bg-primary/5 transition-colors">Review</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<section class="px-4 py-6 mb-4">
+<h2 class="text-slate-900 dark:text-white text-xl font-bold mb-4">Reports &amp; Documents</h2>
+<div class="grid grid-cols-1 gap-3">
+<a class="flex items-center justify-between p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">description</span>
+<span class="text-sm font-medium dark:text-slate-200">Individual Compliance Report</span>
+</div>
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</a>
+<a class="flex items-center justify-between p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">folder_shared</span>
+<span class="text-sm font-medium dark:text-slate-200">Profile Documents (CV, Aadhar, etc.)</span>
+</div>
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</a>
+</div>
+</section><nav class="fixed bottom-0 left-0 right-0 border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-background-dark/95 backdrop-blur-sm px-4 pb-6 pt-2 z-50">
+<div class="flex gap-2 max-w-lg mx-auto">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[24px] font-variation-fill">home</span>
+<p class="text-[10px] font-extrabold leading-normal tracking-wide">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined text-[24px]">book_5</span>
+<p class="text-[10px] font-bold leading-normal tracking-wide">My Courses</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined text-[24px]">workspace_premium</span>
+<p class="text-[10px] font-bold leading-normal tracking-wide">Achievements</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined text-[24px]">person</span>
+<p class="text-[10px] font-bold leading-normal tracking-wide">Profile</p>
+</a>
+</div>
+</nav>
+</div>
+<style>
+        .font-variation-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</body></html>

@@ -1,0 +1,2 @@
+id,name,address,polygon_coords,center_lat,center_lng,radius_meters,is_active,created_at
+1,Main Training Campus,"123 Training Street, Tech Park","[[19.076,72.8777],[19.0765,72.8785],[19.0755,72.879],[19.075,72.878]]",19.076,72.8777,500,true,2026-04-07 13:14:51.277106

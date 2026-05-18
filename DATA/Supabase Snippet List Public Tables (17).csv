@@ -1,0 +1,8 @@
+id,assessment_session_id,session_id,user_id,assessment_type,total_questions,correct_answers,score_percentage,passed,attempt_number,integrity_flags,proctoring_alerts,created_at
+1,10,25,1,PRE_TEST,3,2,66.6666666666667,false,1,0,0,2026-05-02 10:05:27.91
+2,16,12,1,PRE_TEST,10,1,10,false,1,0,0,2026-05-03 14:37:42.52
+3,14,26,1,PRE_TEST,10,2,20,false,1,0,0,2026-05-03 17:04:10.31
+4,17,26,1,PRE_TEST,10,0,0,false,1,0,0,2026-05-03 20:38:37.229
+5,18,26,1,PRE_TEST,10,4,40,false,1,0,0,2026-05-03 20:52:17.506
+6,19,28,1,PRE_TEST,10,4,40,false,1,0,0,2026-05-04 05:05:13.189
+7,20,28,1,PRE_TEST,10,0,0,false,1,0,0,2026-05-04 05:05:34.322

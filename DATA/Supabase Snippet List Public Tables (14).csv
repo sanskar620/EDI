@@ -1,0 +1,2 @@
+id,user_id,notification_type,title,body,action_url,session_id,is_read,is_sent,sent_via,sent_at,created_at,target_role,message
+2,null,GENERAL,New course is added,null,null,null,false,true,null,null,2026-05-04 05:13:49.323,ALL,DBMS

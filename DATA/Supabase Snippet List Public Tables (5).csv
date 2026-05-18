@@ -1,0 +1,7 @@
+id,course_id,title,sort_order,content_type,content_url,duration_minutes,created_at
+1,1,Introduction Video,1,VIDEO,null,15,2026-04-30 21:26:37.232
+2,1,Check Your Understanding,2,QUIZ,null,null,2026-04-30 21:26:37.232
+3,1,Advanced Concepts,3,VIDEO,null,25,2026-04-30 21:26:37.232
+4,2,Introduction Video,1,VIDEO,null,15,2026-04-30 21:37:27.945
+5,2,Check Your Understanding,2,QUIZ,null,null,2026-04-30 21:37:27.945
+6,2,Advanced Concepts,3,VIDEO,null,25,2026-04-30 21:37:27.945

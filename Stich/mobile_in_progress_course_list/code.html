@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>In-Progress Courses</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0056b2",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f1923",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<header class="sticky top-0 z-20 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10">
+<div class="flex items-center p-4 justify-between">
+<div class="flex items-center gap-3">
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_back</span>
+</button>
+<h2 class="text-lg font-bold leading-tight tracking-tight">Learning Lab</h2>
+</div>
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">notifications</span>
+</button>
+</div>
+</header>
+<main class="flex-1 pb-24">
+<!-- Progress Summary Grid -->
+<div class="px-4 py-6">
+<div class="grid grid-cols-3 gap-3">
+<div class="flex flex-col gap-1.5 rounded-xl p-4 bg-primary/10 border border-primary/20">
+<p class="text-[10px] uppercase font-bold tracking-wider text-primary/70">Progress</p>
+<p class="text-xl font-extrabold text-primary">64%</p>
+</div>
+<div class="flex flex-col gap-1.5 rounded-xl p-4 bg-primary/10 border border-primary/20">
+<p class="text-[10px] uppercase font-bold tracking-wider text-primary/70">Spent</p>
+<p class="text-xl font-extrabold text-primary">42.5h</p>
+</div>
+<div class="flex flex-col gap-1.5 rounded-xl p-4 bg-primary/10 border border-primary/20">
+<p class="text-[10px] uppercase font-bold tracking-wider text-primary/70">XP Gained</p>
+<p class="text-xl font-extrabold text-primary">2.8k</p>
+</div>
+</div>
+</div>
+<!-- Tabbed Navigation -->
+<div class="px-4 sticky top-[72px] z-10 bg-background-light dark:bg-background-dark">
+<div class="flex border-b border-slate-200 dark:border-slate-800">
+<button class="flex-1 pb-3 pt-2 text-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 font-bold text-sm">
+                        Allocated
+                    </button>
+<button class="flex-1 pb-3 pt-2 text-center border-b-2 border-primary text-primary font-bold text-sm">
+                        In Progress
+                    </button>
+<button class="flex-1 pb-3 pt-2 text-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 font-bold text-sm">
+                        Completed
+                    </button>
+</div>
+</div>
+<!-- Course List -->
+<div class="p-4 flex flex-col gap-4 mt-2">
+<!-- Course Card 1 -->
+<div class="bg-white dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+<div class="p-4">
+<div class="flex justify-between items-start mb-3">
+<span class="bg-primary/20 text-primary text-[10px] font-extrabold px-2 py-1 rounded uppercase tracking-wider">Business Intelligence</span>
+<span class="text-slate-500 dark:text-slate-400 text-xs font-medium">Last active 2h ago</span>
+</div>
+<h3 class="text-lg font-bold leading-snug mb-4">Advanced Data Analytics &amp; Visualization</h3>
+<div class="space-y-3">
+<div class="flex justify-between items-end mb-1">
+<span class="text-xs font-bold text-slate-500 dark:text-slate-400">Course Progress</span>
+<span class="text-sm font-extrabold text-primary">72%</span>
+</div>
+<div class="w-full bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full w-[72%]"></div>
+</div>
+</div>
+<div class="flex items-center gap-4 mt-4 py-3 border-y border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-lg">schedule</span>
+<span class="text-xs font-bold text-slate-700 dark:text-slate-300">12H LEFT</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-lg">menu_book</span>
+<span class="text-xs font-bold text-slate-700 dark:text-slate-300">8/12 MODULES</span>
+</div>
+</div>
+<button class="w-full mt-4 bg-primary text-white font-bold py-3.5 rounded-lg flex items-center justify-center gap-2 active:scale-[0.98] transition-transform">
+                            Continue Learning
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Course Card 2 -->
+<div class="bg-white dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+<div class="p-4">
+<div class="flex justify-between items-start mb-3">
+<span class="bg-emerald-500/20 text-emerald-500 text-[10px] font-extrabold px-2 py-1 rounded uppercase tracking-wider">Design Systems</span>
+<span class="text-slate-500 dark:text-slate-400 text-xs font-medium">Last active yesterday</span>
+</div>
+<h3 class="text-lg font-bold leading-snug mb-4">Mastering UI Architecture &amp; Components</h3>
+<div class="space-y-3">
+<div class="flex justify-between items-end mb-1">
+<span class="text-xs font-bold text-slate-500 dark:text-slate-400">Course Progress</span>
+<span class="text-sm font-extrabold text-primary">45%</span>
+</div>
+<div class="w-full bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full w-[45%]"></div>
+</div>
+</div>
+<div class="flex items-center gap-4 mt-4 py-3 border-y border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-lg">schedule</span>
+<span class="text-xs font-bold text-slate-700 dark:text-slate-300">18H LEFT</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-lg">menu_book</span>
+<span class="text-xs font-bold text-slate-700 dark:text-slate-300">4/9 MODULES</span>
+</div>
+</div>
+<button class="w-full mt-4 bg-primary text-white font-bold py-3.5 rounded-lg flex items-center justify-center gap-2 active:scale-[0.98] transition-transform">
+                            Continue Learning
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Course Card 3 -->
+<div class="bg-white dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+<div class="p-4">
+<div class="flex justify-between items-start mb-3">
+<span class="bg-orange-500/20 text-orange-500 text-[10px] font-extrabold px-2 py-1 rounded uppercase tracking-wider">Engineering</span>
+<span class="text-slate-500 dark:text-slate-400 text-xs font-medium">Last active 3d ago</span>
+</div>
+<h3 class="text-lg font-bold leading-snug mb-4">Scalable Microservices with Kubernetes</h3>
+<div class="space-y-3">
+<div class="flex justify-between items-end mb-1">
+<span class="text-xs font-bold text-slate-500 dark:text-slate-400">Course Progress</span>
+<span class="text-sm font-extrabold text-primary">12%</span>
+</div>
+<div class="w-full bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full w-[12%]"></div>
+</div>
+</div>
+<div class="flex items-center gap-4 mt-4 py-3 border-y border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-lg">schedule</span>
+<span class="text-xs font-bold text-slate-700 dark:text-slate-300">32H LEFT</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-lg">menu_book</span>
+<span class="text-xs font-bold text-slate-700 dark:text-slate-300">1/15 MODULES</span>
+</div>
+</div>
+<button class="w-full mt-4 bg-primary text-white font-bold py-3.5 rounded-lg flex items-center justify-center gap-2 active:scale-[0.98] transition-transform">
+                            Continue Learning
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-background-light dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 px-2 pb-6 pt-2">
+<div class="flex justify-around items-center max-w-md mx-auto">
+<a class="flex flex-col items-center justify-center gap-1 px-4 py-2 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-bold uppercase tracking-tight">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 px-4 py-2 text-primary transition-colors relative" href="#">
+<span class="material-symbols-outlined">book_4</span>
+<span class="text-[10px] font-bold uppercase tracking-tight">My Courses</span>
+<div class="absolute -top-1 w-1 h-1 bg-primary rounded-full"></div>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 px-4 py-2 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="text-[10px] font-bold uppercase tracking-tight">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 px-4 py-2 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold uppercase tracking-tight">Profile</span>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

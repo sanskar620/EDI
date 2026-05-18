@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Trainer Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0056b2",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f1923",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<header class="flex items-center bg-slate-100 dark:bg-slate-900/50 p-4 border-b border-slate-200 dark:border-slate-800 justify-between sticky top-0 z-10 backdrop-blur-md">
+<div class="flex size-10 shrink-0 items-center overflow-hidden rounded-full border border-primary/20">
+<img class="w-full h-full object-cover" data-alt="Profile picture of a professional trainer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaIW17U3Z2i_Cwl_M0z3LQ9aPSsfGdRXMHMU3SedwUVy49vBkbWprpkqtAt7ek1kLumUuLckVCgZaSgchgN2ksO5PqFrlfoo1TzA7JBQMTDUCfZiCuoXmtX95mUVuJ5_fAvzy0k42He5UxrkSjYUizkUpsRoUgUTqkLRGEUviW1nT-JS1gh4N7pL5CQLgGMvrofzvWfn8Am1Eh7aRiQBpViEcq_h06KKsoEVynehSDS_OR-7ELdJBluLl_Fps3qF4y305QfidoOs4"/>
+</div>
+<div class="flex-1 px-3">
+<p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Good morning,</p>
+<h2 class="text-slate-900 dark:text-white text-base font-bold leading-tight tracking-tight">Coach Alex Morgan</h2>
+</div>
+<div class="flex gap-2">
+<button class="flex size-10 items-center justify-center rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<main class="flex-1 pb-24">
+<section class="p-4 grid grid-cols-2 gap-3">
+<div class="col-span-2 flex flex-col gap-1 mb-1">
+<h3 class="text-slate-900 dark:text-white text-lg font-bold">Performance Overview</h3>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-4 bg-primary/10 border border-primary/20">
+<div class="flex items-center justify-between">
+<span class="material-symbols-outlined text-primary">exercise</span>
+<span class="text-emerald-500 text-xs font-bold bg-emerald-500/10 px-1.5 py-0.5 rounded">+2</span>
+</div>
+<div>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Active Sessions</p>
+<p class="text-slate-900 dark:text-white text-2xl font-extrabold leading-tight">12</p>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-4 bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
+<div class="flex items-center justify-between">
+<span class="material-symbols-outlined text-primary">how_to_reg</span>
+<span class="text-emerald-500 text-xs font-bold bg-emerald-500/10 px-1.5 py-0.5 rounded">+3%</span>
+</div>
+<div>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Attendance</p>
+<p class="text-slate-900 dark:text-white text-2xl font-extrabold leading-tight">94%</p>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-4 bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
+<div class="flex items-center justify-between">
+<span class="material-symbols-outlined text-primary">leaderboard</span>
+<span class="text-rose-500 text-xs font-bold bg-rose-500/10 px-1.5 py-0.5 rounded">-0.2</span>
+</div>
+<div>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Avg Score</p>
+<p class="text-slate-900 dark:text-white text-2xl font-extrabold leading-tight">8.5</p>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-4 bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
+<div class="flex items-center justify-between">
+<span class="material-symbols-outlined text-primary">groups</span>
+</div>
+<div>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Total Trainees</p>
+<p class="text-slate-900 dark:text-white text-2xl font-extrabold leading-tight">48</p>
+</div>
+</div>
+</section>
+<section class="px-4 py-2">
+<h3 class="text-slate-900 dark:text-white text-lg font-bold mb-3">Quick Actions</h3>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex flex-col items-center justify-center gap-2 rounded-xl h-28 bg-primary text-white shadow-lg shadow-primary/20 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-3xl">add_circle</span>
+<span class="text-sm font-bold">New Session</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 rounded-xl h-28 bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-3xl text-primary">calendar_month</span>
+<span class="text-sm font-bold">My Schedule</span>
+</button>
+</div>
+</section>
+<section class="px-4 py-6">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-slate-900 dark:text-white text-lg font-bold">Recent Activity</h3>
+<button class="text-primary text-sm font-bold">See all</button>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-4 p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-500">
+<span class="material-symbols-outlined">task_alt</span>
+</div>
+<div class="flex-1 overflow-hidden">
+<h4 class="text-slate-900 dark:text-white font-bold text-sm truncate">HIIT Advanced Completed</h4>
+<p class="text-slate-500 dark:text-slate-400 text-xs truncate">12 participants • 45 min</p>
+</div>
+<div class="text-right">
+<p class="text-slate-400 text-[10px] font-medium uppercase">10m ago</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 text-blue-500">
+<span class="material-symbols-outlined">person_add</span>
+</div>
+<div class="flex-1 overflow-hidden">
+<h4 class="text-slate-900 dark:text-white font-bold text-sm truncate">New Trainee Registered</h4>
+<p class="text-slate-500 dark:text-slate-400 text-xs truncate">Sarah Johnson joined Strength Elite</p>
+</div>
+<div class="text-right">
+<p class="text-slate-400 text-[10px] font-medium uppercase">1h ago</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-amber-500">
+<span class="material-symbols-outlined">reviews</span>
+</div>
+<div class="flex-1 overflow-hidden">
+<h4 class="text-slate-900 dark:text-white font-bold text-sm truncate">Feedback Received</h4>
+<p class="text-slate-500 dark:text-slate-400 text-xs truncate">"Incredible session, very motivating!"</p>
+</div>
+<div class="text-right">
+<p class="text-slate-400 text-[10px] font-medium uppercase">3h ago</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<nav class="fixed bottom-0 left-0 right-0 flex border-t border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg px-4 pb-6 pt-2 z-20">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">home</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Schedule</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">groups</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Trainees</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Settings</p>
+</a>
+</nav>
+</div>
+</body></html>

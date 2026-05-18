@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Registration - Step 1</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0056b2",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f1923",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden max-w-md mx-auto">
+<!-- Header -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between">
+<div class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-start" data-icon="arrow_back">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1">Registration</h2>
+<div class="size-12 shrink-0"></div> <!-- Spacer for centering -->
+</div>
+<!-- Progress Section -->
+<div class="flex flex-col gap-3 p-4">
+<div class="flex gap-6 justify-between items-center">
+<p class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal">Registration Progress</p>
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold leading-normal">Step 1 of 3</p>
+</div>
+<div class="rounded-full bg-slate-200 dark:bg-slate-800 h-2 w-full overflow-hidden">
+<div class="h-full rounded-full bg-primary" style="width: 33.33%;"></div>
+</div>
+</div>
+<!-- Hero Content -->
+<div class="px-4 pt-6 pb-3">
+<h1 class="text-slate-900 dark:text-slate-100 tracking-tight text-[32px] font-extrabold leading-tight">Initiate Registration</h1>
+<p class="text-slate-600 dark:text-slate-400 text-base font-normal leading-normal mt-2">Please enter your company credentials to verify your identity and continue your setup.</p>
+</div>
+<!-- Input Fields -->
+<div class="flex flex-col gap-4 px-4 py-3">
+<label class="flex flex-col w-full">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-bold leading-normal pb-2 uppercase tracking-wider">Employee ID</p>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+<span class="material-symbols-outlined text-xl">badge</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-2 focus:ring-primary border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 placeholder:text-slate-400 dark:placeholder:text-slate-500 h-14 pl-12 pr-4 text-base font-normal leading-normal" placeholder="Ex: EMP-123456" type="text"/>
+</div>
+</label>
+<label class="flex flex-col w-full mt-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-bold leading-normal pb-2 uppercase tracking-wider">Temporary Password</p>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+<span class="material-symbols-outlined text-xl">lock_open</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-2 focus:ring-primary border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 placeholder:text-slate-400 dark:placeholder:text-slate-500 h-14 pl-12 pr-12 text-base font-normal leading-normal" placeholder="Enter temporary password" type="password"/>
+<div class="absolute inset-y-0 right-0 pr-4 flex items-center cursor-pointer text-slate-400">
+<span class="material-symbols-outlined text-xl">visibility</span>
+</div>
+</div>
+<p class="text-slate-500 dark:text-slate-500 text-xs mt-2 px-1 italic">Check your onboarding email for this code.</p>
+</label>
+</div>
+<!-- Action Button -->
+<div class="px-4 py-8 mt-auto">
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-primary/20 transition-all active:scale-[0.98]">
+<span>Verify Identity</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<p class="text-center text-slate-500 dark:text-slate-500 text-sm mt-6">
+                Having trouble? <a class="text-primary font-semibold underline underline-offset-4" href="#">Contact HR Support</a>
+</p>
+</div>
+<!-- Decorative Element -->
+<div class="h-24 px-4 overflow-hidden relative opacity-20 pointer-events-none select-none">
+<div class="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[120%] h-40 bg-gradient-to-t from-primary to-transparent rounded-[100%] blur-3xl"></div>
+</div>
+</div>
+</body></html>

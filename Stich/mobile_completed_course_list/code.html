@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0056b2",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f1923",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<title>Completed Courses</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-2xl">
+<!-- Header -->
+<header class="flex items-center justify-between px-4 py-4 sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-lg font-bold flex-1 text-center">My Courses</h1>
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</header>
+<!-- Search Bar -->
+<div class="px-4 py-2">
+<div class="relative flex items-center group">
+<span class="material-symbols-outlined absolute left-3 text-slate-400 group-focus-within:text-primary">search</span>
+<input class="w-full h-12 pl-11 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800/50 focus:ring-2 focus:ring-primary text-sm font-medium placeholder:text-slate-500 dark:placeholder:text-slate-400" placeholder="Search completed courses" type="text"/>
+</div>
+</div>
+<!-- Tabbed Navigation -->
+<nav class="flex px-4 border-b border-slate-200 dark:border-slate-800 sticky top-[72px] z-10 bg-background-light dark:bg-background-dark">
+<a class="flex-1 py-4 text-center text-sm font-semibold text-slate-500 dark:text-slate-400 border-b-2 border-transparent" href="#">
+                Allocated
+            </a>
+<a class="flex-1 py-4 text-center text-sm font-semibold text-slate-500 dark:text-slate-400 border-b-2 border-transparent" href="#">
+                In-Progress
+            </a>
+<a class="flex-1 py-4 text-center text-sm font-bold text-primary border-b-2 border-primary" href="#">
+                Completed
+            </a>
+</nav>
+<!-- Course List -->
+<main class="flex-1 overflow-y-auto p-4 space-y-4 pb-24">
+<!-- Card 1 -->
+<div class="bg-white dark:bg-slate-800/40 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="w-full aspect-video bg-slate-200 dark:bg-slate-700" data-alt="Office workspace with digital management software dashboard" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDNf1PkUPXz2_rP0yrhhI7fUbZ46U4pKuWBExP63NlfBlmMP3MM5w5ugMH6GR51pMzZ3egGta3hRoKu-DfDde6Z28l1ISWmOoVLypQ66e5C4HZbTEvFEf0UeEEZ_2faPG2OgNkWWCWeX7aQbM6lV1-s7lSnt3k5fhnDy07N9ZivDzA2tcRo4-ILPu98ZEnfApg10LnO96l5HNIU78ODRYGmh9U7nD8YluqRIjbK-RLAFG6uwrm8DmlN0QC4yz9-bEmVX7LwFBMzKmk'); background-size: cover; background-position: center;"></div>
+<div class="p-4 space-y-3">
+<h3 class="text-lg font-bold leading-tight">Advanced Project Management</h3>
+<div class="flex items-center justify-between">
+<div class="space-y-1">
+<div class="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 font-medium">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+                                Completed: Oct 12, 2023
+                            </div>
+<div class="flex items-center gap-1.5 text-sm text-primary font-bold">
+<span class="material-symbols-outlined text-sm">stars</span>
+                                Final Score: 94%
+                            </div>
+</div>
+</div>
+<button class="w-full flex items-center justify-center gap-2 bg-primary text-white py-2.5 rounded-lg font-bold text-sm hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-base">download</span>
+                        Download Certificate
+                    </button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white dark:bg-slate-800/40 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="w-full aspect-video bg-slate-200 dark:bg-slate-700" data-alt="Professional business meeting focused on strategic leadership" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBCZ1MGES49JxsAgBC0OHIUgC8F30sBKDA8z_EG31yQYR3mZdJwAju9RCd_FqBIClewZRcNjpVAGXddRk-3ptjKDetrxn4akaIUgqeJr20HL2cXmCPziO3lT0fcNo2_cG4aj_78EUYw3s63g87cojCU2Ifxce3abwbTspUcNb3ko00zEM6F3Hew_3MrjEtBU4vk_YmCM9fDIzjD7D0_erwRlVzybDiu4_y-fmRSOn3MM0t9sByUzgtsaee6d_KpM4fgkdNwL5YN5l0'); background-size: cover; background-position: center;"></div>
+<div class="p-4 space-y-3">
+<h3 class="text-lg font-bold leading-tight">Leadership Essentials</h3>
+<div class="flex items-center justify-between">
+<div class="space-y-1">
+<div class="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 font-medium">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+                                Completed: Sep 28, 2023
+                            </div>
+<div class="flex items-center gap-1.5 text-sm text-primary font-bold">
+<span class="material-symbols-outlined text-sm">stars</span>
+                                Final Score: 88%
+                            </div>
+</div>
+</div>
+<button class="w-full flex items-center justify-center gap-2 bg-primary text-white py-2.5 rounded-lg font-bold text-sm hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-base">download</span>
+                        Download Certificate
+                    </button>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-white dark:bg-slate-800/40 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="w-full aspect-video bg-slate-200 dark:bg-slate-700" data-alt="Analyzing financial data charts on a screen" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAyEGVL0KLECwpxDC77pzUG9QCaKE3r7Mp4tmr3p03UpQuOrLn14E5Q518kXkr_xk85tzaRgW2XUsnWuR-LhHknYUsWzEFLEW1Tm-ORZoMEYK_72obItksffNxwdxN8e1b5J3-4dcPea6Qyl1VKx3vvKCyZv4FzQx5xztLuHJV6dyzZUer8dZqGlVTTcR4ui9bIKS0v3j-t5QffQza8KMScXYygWHO2evLp3DA87o2H1TVbQuld-neeJRBgC6bF1fi4C8CCiFGwg7w'); background-size: cover; background-position: center;"></div>
+<div class="p-4 space-y-3">
+<h3 class="text-lg font-bold leading-tight">Data Analysis with Python</h3>
+<div class="flex items-center justify-between">
+<div class="space-y-1">
+<div class="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 font-medium">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+                                Completed: Aug 15, 2023
+                            </div>
+<div class="flex items-center gap-1.5 text-sm text-primary font-bold">
+<span class="material-symbols-outlined text-sm">stars</span>
+                                Final Score: 92%
+                            </div>
+</div>
+</div>
+<button class="w-full flex items-center justify-center gap-2 bg-primary text-white py-2.5 rounded-lg font-bold text-sm hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-base">download</span>
+                        Download Certificate
+                    </button>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex justify-around items-center px-2 pb-6 pt-2 z-20">
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-bold">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">book_2</span>
+<span class="text-[10px] font-bold">My Courses</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">quiz</span>
+<span class="text-[10px] font-bold">Quizzes</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold">Profile</span>
+</a>
+</nav>
+</div>
+</body></html>

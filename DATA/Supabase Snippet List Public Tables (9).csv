@@ -1,0 +1,11 @@
+id,title,description,material_type,topic,s3_key,s3_key_compressed,file_size_bytes,duration_seconds,version,is_active,created_at,updated_at,module_id,order_number
+13,AT-Course Project Report Final (1).pdf,null,PDF,SEPM,session-materials/session_25_1777671177406.pdf,null,null,null,1,true,2026-05-01 21:33:01.963,2026-05-01 21:33:01.963,null,1
+14,G7_Report_SEPM 24-3-1.docx,null,DOCUMENT,SEPM,session-materials/session_25_1777671230564.docx,null,null,null,1,true,2026-05-01 21:33:56.088,2026-05-01 21:33:56.088,null,1
+15,AT-Course Project Report Final (1).pdf,null,PDF,SEPM,session-materials/session_25_1777715729751.pdf,null,null,null,1,true,2026-05-02 09:55:33.677,2026-05-02 09:55:33.677,1,1
+16,sample-30s-360p.mp4,null,VIDEO,SEPM,session-materials/session_25_1777715897126.mp4,null,null,null,1,true,2026-05-02 09:58:25.083,2026-05-02 09:58:25.083,2,1
+17,Intro,null,PDF,SEPM,session-materials/session_25_1777818167650.pdf,null,null,null,1,true,2026-05-03 14:22:51.3,2026-05-03 14:22:51.3,3,1
+18,NFA-Examples.pdf,null,PDF,Al,session-materials/session_26_1777818461481.pdf,null,null,null,1,true,2026-05-03 14:27:49.396,2026-05-03 14:27:49.396,4,1
+19,AT_QB UNIT 3.pdf,null,PDF,Al,session-materials/session_26_1777827525611.pdf,null,null,null,1,true,2026-05-03 16:58:48.716,2026-05-03 16:58:48.716,4,2
+20,Sample,null,VIDEO,Al,session-materials/session_26_1777828036457.mp4,null,null,null,1,true,2026-05-03 17:07:19.996,2026-05-03 17:07:19.996,4,3
+21,Video,null,VIDEO,DBMS,session-materials/session_28_1777870942135.mp4,null,null,null,1,true,2026-05-04 05:02:32.477,2026-05-04 05:02:32.477,5,1
+22,Intro,null,PDF,OOPS,session-materials/session_29_1777888432889.pdf,null,null,null,1,true,2026-05-04 09:53:56.656,2026-05-04 09:53:56.656,6,1

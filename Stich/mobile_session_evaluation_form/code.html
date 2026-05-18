@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0056b2",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f1923",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
+<!-- Header Section -->
+<div class="sticky top-0 z-10 flex items-center bg-background-light dark:bg-background-dark p-4 border-b border-primary/10 justify-between">
+<div class="text-slate-900 dark:text-slate-100 flex size-10 items-center justify-center rounded-full hover:bg-primary/10">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-10">Session Evaluation</h2>
+</div>
+<div class="flex flex-col gap-8 p-4 pb-32 max-w-md mx-auto w-full">
+<!-- Session Info Card -->
+<div class="flex flex-col gap-4 items-start bg-primary/5 p-4 rounded-xl border border-primary/10">
+<div class="flex gap-4 items-center">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg h-20 w-20 shadow-lg" data-alt="React hooks abstract neon blue logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCbX1-BwsdcI7_86cEm9waXOwNfsQ40M4wSo88FPMQ_-ZofGuzET4_cnFWB_ndQaOMkdwQ-iTfbVUdCp-DCv11IduBgzaVW5_4NVEkXSV-YgVN9_F9W4LDP7tS_ObWeHyhAtNNzma1wrbY7R0TZuVdcT8amJ8DosDq0ryB_ETi9jigpKbxaJFtc0uHLDvtPKW-4wSckhzQP22OUDHCCPqjSPh4sUFO_z0xW6E-EFqKhuZIiJi1XDkEG1HuS2Uh4O41jKJPpIV_mtJ0");'></div>
+<div class="flex flex-col">
+<p class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight">Advanced React Hooks</p>
+<p class="text-primary font-medium text-sm mt-1">REACT-2024-08</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Instructor: Jane Doe</p>
+</div>
+</div>
+</div>
+<!-- Trainer Effectiveness -->
+<section class="flex flex-col gap-4">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">person_check</span>
+                    Trainer Effectiveness
+                </h3>
+<div class="bg-primary/5 p-6 rounded-xl border border-primary/10 flex flex-col items-center gap-4">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider">Overall Rating</p>
+<div class="flex gap-2">
+<span class="material-symbols-outlined material-symbols-fill text-primary text-4xl">star</span>
+<span class="material-symbols-outlined material-symbols-fill text-primary text-4xl">star</span>
+<span class="material-symbols-outlined material-symbols-fill text-primary text-4xl">star</span>
+<span class="material-symbols-outlined material-symbols-fill text-primary text-4xl">star</span>
+<span class="material-symbols-outlined text-primary text-4xl">star</span>
+</div>
+</div>
+<div class="space-y-1">
+<label class="flex items-center gap-3 p-4 bg-white dark:bg-slate-800/50 rounded-lg border border-primary/5">
+<input checked="" class="h-5 w-5 rounded border-primary/30 bg-transparent text-primary focus:ring-primary focus:ring-offset-0" type="checkbox"/>
+<span class="text-slate-700 dark:text-slate-200">Clear communication</span>
+</label>
+<label class="flex items-center gap-3 p-4 bg-white dark:bg-slate-800/50 rounded-lg border border-primary/5">
+<input checked="" class="h-5 w-5 rounded border-primary/30 bg-transparent text-primary focus:ring-primary focus:ring-offset-0" type="checkbox"/>
+<span class="text-slate-700 dark:text-slate-200">Subject expertise</span>
+</label>
+<label class="flex items-center gap-3 p-4 bg-white dark:bg-slate-800/50 rounded-lg border border-primary/5">
+<input class="h-5 w-5 rounded border-primary/30 bg-transparent text-primary focus:ring-primary focus:ring-offset-0" type="checkbox"/>
+<span class="text-slate-700 dark:text-slate-200">Engaging delivery</span>
+</label>
+</div>
+</section>
+<!-- Session Quality & Content -->
+<section class="flex flex-col gap-4">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">analytics</span>
+                    Session Quality &amp; Content
+                </h3>
+<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-2">
+<label class="text-sm font-semibold text-slate-600 dark:text-slate-400 px-1">Content Relevance</label>
+<select class="w-full p-4 rounded-xl bg-white dark:bg-slate-800 border border-primary/20 focus:border-primary focus:ring-1 focus:ring-primary outline-none text-slate-800 dark:text-slate-100">
+<option>Extremely Relevant</option>
+<option>Very Relevant</option>
+<option>Somewhat Relevant</option>
+<option>Not Relevant</option>
+</select>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-semibold text-slate-600 dark:text-slate-400 px-1">Delivery Pace</label>
+<select class="w-full p-4 rounded-xl bg-white dark:bg-slate-800 border border-primary/20 focus:border-primary focus:ring-1 focus:ring-primary outline-none text-slate-800 dark:text-slate-100">
+<option>Just Right</option>
+<option>Too Fast</option>
+<option>Too Slow</option>
+</select>
+</div>
+</div>
+</section>
+<!-- Most Valuable Part -->
+<section class="flex flex-col gap-4">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">lightbulb</span>
+                    Most Valuable Part
+                </h3>
+<textarea class="w-full min-h-[120px] p-4 rounded-xl bg-white dark:bg-slate-800 border border-primary/20 focus:border-primary focus:ring-1 focus:ring-primary outline-none text-slate-800 dark:text-slate-100 placeholder:text-slate-400" placeholder="What was the highlight of this session for you?"></textarea>
+</section>
+<!-- Additional Feedback -->
+<section class="flex flex-col gap-4">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">rate_review</span>
+                    Additional Feedback
+                </h3>
+<div class="bg-white dark:bg-slate-800/30 p-4 rounded-xl border border-primary/5 space-y-4">
+<p class="text-sm font-semibold text-slate-600 dark:text-slate-400">Would you recommend this session?</p>
+<div class="flex gap-4">
+<label class="flex-1 flex items-center justify-center gap-2 p-3 rounded-lg border border-primary/20 has-[:checked]:bg-primary has-[:checked]:border-primary transition-all cursor-pointer">
+<input checked="" class="hidden" name="recommend" type="radio"/>
+<span class="text-sm font-bold text-slate-700 dark:text-slate-200 group-has-[:checked]:text-white">Yes</span>
+</label>
+<label class="flex-1 flex items-center justify-center gap-2 p-3 rounded-lg border border-primary/20 has-[:checked]:bg-primary transition-all cursor-pointer">
+<input class="hidden" name="recommend" type="radio"/>
+<span class="text-sm font-bold text-slate-700 dark:text-slate-200">No</span>
+</label>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-semibold text-slate-600 dark:text-slate-400 px-1">Suggestions for improvement</label>
+<textarea class="w-full min-h-[100px] p-4 rounded-xl bg-white dark:bg-slate-800 border border-primary/20 focus:border-primary focus:ring-1 focus:ring-primary outline-none text-slate-800 dark:text-slate-100 placeholder:text-slate-400" placeholder="Any other comments or suggestions?"></textarea>
+</div>
+</section>
+</div>
+<!-- Sticky Footer Actions -->
+<div class="fixed bottom-0 left-0 right-0 p-4 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-t border-primary/10 flex flex-col gap-3">
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">send</span>
+                Submit Feedback
+            </button>
+<button class="w-full bg-primary/10 hover:bg-primary/20 text-primary font-bold py-3 rounded-xl transition-colors border border-primary/20">
+                Save Draft
+            </button>
+</div>
+</div>
+</body></html>

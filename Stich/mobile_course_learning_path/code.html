@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Trainee Learning Path</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0056b2",
+                        "accent-red": "#dc2626",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f1923",
+                        "card-dark": "#172636",
+                        "border-dark": "#20354b",
+                        "text-muted": "#8dacce"
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Header -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-50 border-b border-border-dark">
+<div class="text-slate-900 dark:text-white flex size-10 shrink-0 items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Learning Path</h2>
+<div class="flex w-10 items-center justify-end">
+<button class="flex cursor-pointer items-center justify-center rounded-lg h-10 bg-transparent text-slate-900 dark:text-white">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Course Hero & Progress -->
+<div class="p-4">
+<div class="relative h-48 w-full overflow-hidden rounded-xl bg-slate-800" data-alt="Digital marketing strategy professional workspace background" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(15, 25, 35, 0.9)), url('https://lh3.googleusercontent.com/aida-public/AB6AXuAGfyXSG9WZLg6BWdB7M4IDvNx2A2URuecLmvaL0ZF7Lcx5H82_DPOr5ZyulNs6Vdp46mIOP5B7IGUwhTyk6ENomIG4KdkU5PJL_r0GA2FRrHAfG43v5nzIzdcDGC4-hWvb11dxdavUQPYV7yfaRdMFYPFZ6f0dAsqo8PK-BfrYutVEaQw3J5DTMQ2uXcunA3HM-P-rQfKRvM693W3L0cge05DqNbyiwCE2uwX8jujAm8wWEEedlTBz3PnIQA5vtsOYLAH7G6gfkQQ'); background-size: cover; background-position: center;">
+<div class="absolute bottom-0 left-0 p-4 w-full">
+<span class="inline-block px-2 py-1 rounded bg-accent-red text-[10px] font-bold uppercase tracking-wider text-white mb-2">Advanced</span>
+<h1 class="text-2xl font-bold text-white">Digital Marketing Masterclass</h1>
+</div>
+</div>
+<div class="mt-4 flex flex-col gap-3 rounded-xl bg-card-dark p-4 border border-border-dark">
+<div class="flex gap-6 justify-between items-center">
+<p class="text-white text-sm font-medium leading-normal">Overall Progress</p>
+<p class="text-primary text-sm font-bold leading-normal">45%</p>
+</div>
+<div class="h-2 w-full rounded-full bg-border-dark">
+<div class="h-2 rounded-full bg-primary" style="width: 45%;"></div>
+</div>
+<div class="flex justify-between items-center">
+<p class="text-text-muted text-xs font-normal">9 of 20 lessons completed</p>
+<div class="flex items-center gap-1 text-accent-red">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span class="text-[10px] font-bold uppercase">12h Left</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Course Modules -->
+<div class="flex flex-col px-4 pb-24 gap-4">
+<!-- Assessment Section -->
+<div class="rounded-xl border-2 border-primary/30 bg-primary/5 p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="bg-primary text-white p-2 rounded-lg">
+<span class="material-symbols-outlined">quiz</span>
+</div>
+<div>
+<h3 class="text-sm font-bold text-white">Level 2 Pre-Assessment</h3>
+<p class="text-xs text-text-muted">Required to unlock Module 2</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary">check_circle</span>
+</div>
+<!-- Module 1 -->
+<div class="rounded-xl bg-card-dark border border-border-dark overflow-hidden">
+<button class="w-full flex items-center justify-between p-4 bg-border-dark/30">
+<div class="flex items-center gap-3">
+<span class="text-xs font-bold text-primary">01</span>
+<h3 class="text-sm font-bold text-white">Introduction to SEO</h3>
+</div>
+<span class="material-symbols-outlined text-text-muted">expand_more</span>
+</button>
+<div class="flex flex-col">
+<!-- Lesson 1: Completed -->
+<div class="flex items-center justify-between p-4 border-t border-border-dark/50">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary filled-icon">play_circle</span>
+<span class="text-xs font-medium text-slate-100">Keyword Research Basics</span>
+</div>
+<span class="material-symbols-outlined text-green-500 text-sm">check_circle</span>
+</div>
+<!-- Lesson 2: Completed -->
+<div class="flex items-center justify-between p-4 border-t border-border-dark/50">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">description</span>
+<span class="text-xs font-medium text-slate-100">On-Page SEO Checklist</span>
+</div>
+<span class="material-symbols-outlined text-green-500 text-sm">check_circle</span>
+</div>
+</div>
+</div>
+<!-- Module 2 -->
+<div class="rounded-xl bg-card-dark border border-border-dark overflow-hidden">
+<button class="w-full flex items-center justify-between p-4 bg-border-dark/30">
+<div class="flex items-center gap-3">
+<span class="text-xs font-bold text-primary">02</span>
+<h3 class="text-sm font-bold text-white">Content Strategy</h3>
+</div>
+<span class="material-symbols-outlined text-text-muted">expand_less</span>
+</button>
+<div class="flex flex-col">
+<!-- Lesson 1: In Progress -->
+<div class="flex items-center justify-between p-4 border-t border-primary/40 bg-primary/10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary filled-icon">play_circle</span>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-primary">Current Lesson</span>
+<span class="text-xs font-medium text-slate-100">Defining Target Audience</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-sm animate-pulse">radio_button_checked</span>
+</div>
+<!-- Lesson 2: Not Started -->
+<div class="flex items-center justify-between p-4 border-t border-border-dark/50 opacity-60">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-text-muted">quiz</span>
+<span class="text-xs font-medium text-slate-100">Module 2 Quiz</span>
+</div>
+<span class="material-symbols-outlined text-text-muted text-sm">circle</span>
+</div>
+</div>
+</div>
+<!-- Locked Section -->
+<div class="rounded-xl bg-card-dark/40 border border-dashed border-border-dark p-4 flex items-center justify-between grayscale">
+<div class="flex items-center gap-3">
+<div class="bg-slate-700 text-slate-400 p-2 rounded-lg">
+<span class="material-symbols-outlined">lock</span>
+</div>
+<div>
+<h3 class="text-sm font-bold text-slate-500">Level 5 Post-Assessment</h3>
+<p class="text-xs text-slate-600">Unlock after completing all modules</p>
+</div>
+</div>
+</div>
+<!-- Certificate Button (Conditional State) -->
+<div class="mt-4">
+<button class="w-full py-4 rounded-xl bg-slate-800 text-slate-500 font-bold flex items-center justify-center gap-2 cursor-not-allowed border border-border-dark">
+<span class="material-symbols-outlined">military_tech</span>
+<span>Level 6 Certificate</span>
+<span class="material-symbols-outlined text-sm">lock</span>
+</button>
+<p class="text-[10px] text-center text-text-muted mt-2 px-6">Complete the course to generate your verified certification.</p>
+</div>
+</div>
+<!-- Bottom Navigation Bar -->
+<div class="fixed bottom-0 left-0 w-full flex gap-2 border-t border-border-dark bg-card-dark px-4 pb-6 pt-2 z-50">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-text-muted" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">home</span>
+</div>
+<p class="text-[10px] font-medium uppercase tracking-wider">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-white" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined filled-icon">book_4</span>
+</div>
+<p class="text-[10px] font-medium uppercase tracking-wider">Courses</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-text-muted" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">assignment</span>
+</div>
+<p class="text-[10px] font-medium uppercase tracking-wider">Exams</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-text-muted" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">person</span>
+</div>
+<p class="text-[10px] font-medium uppercase tracking-wider">Profile</p>
+</a>
+</div>
+</div>
+</body></html>

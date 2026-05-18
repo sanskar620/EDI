@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Trainer Session Planner</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0056b2",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f1923",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(0, 86, 178, 0.3);
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen flex flex-col">
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 py-3 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-lg font-bold tracking-tight">Session Planner</h1>
+</div>
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</header>
+<main class="flex-1 overflow-y-auto pb-24">
+<!-- Configuration Section -->
+<section class="p-4 space-y-4">
+<h2 class="text-xl font-bold text-primary">Session Details</h2>
+<div class="space-y-4">
+<div class="flex flex-col gap-1.5">
+<label class="text-sm font-semibold text-slate-600 dark:text-slate-400">Client Name</label>
+<div class="relative">
+<select class="w-full h-12 pl-4 pr-10 bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl appearance-none focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+<option>Select Client</option>
+<option>Nexus Logistics Corp</option>
+<option>Apex Manufacturing</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">expand_more</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-sm font-semibold text-slate-600 dark:text-slate-400">Training Site</label>
+<div class="relative">
+<select class="w-full h-12 pl-4 pr-10 bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl appearance-none focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+<option>Choose location</option>
+<option>Main Assembly Plant - Hall A</option>
+<option>Distribution Center - West</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">expand_more</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-sm font-semibold text-slate-600 dark:text-slate-400">Course / Module</label>
+<div class="relative">
+<select class="w-full h-12 pl-4 pr-10 bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl appearance-none focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+<option>Select Course</option>
+<option>Safety Compliance 101</option>
+<option>Heavy Machinery Operation</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">expand_more</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Session Controls -->
+<section class="px-4 py-2">
+<div class="grid grid-cols-3 gap-3">
+<button class="flex flex-col items-center justify-center gap-2 p-4 bg-primary/10 dark:bg-primary/20 border border-primary/30 rounded-2xl text-primary hover:bg-primary/20 transition-all">
+<span class="material-symbols-outlined text-2xl">qr_code_2</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Attendance</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-4 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">
+<span class="material-symbols-outlined text-2xl">photo_camera</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Capture</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-4 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">
+<span class="material-symbols-outlined text-2xl">auto_stories</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Release</span>
+</button>
+</div>
+</section>
+<!-- Trainee Management -->
+<section class="p-4 mt-2">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-xl font-bold">Trainees <span class="text-primary text-sm bg-primary/10 px-2 py-0.5 rounded-full ml-1">12</span></h2>
+<button class="text-primary text-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">person_add</span> Add New
+                </button>
+</div>
+<div class="space-y-3">
+<!-- Trainee Card 1 -->
+<div class="bg-white dark:bg-slate-800/40 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-center gap-4">
+<div class="size-12 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center overflow-hidden">
+<img alt="Trainee Avatar" class="w-full h-full object-cover" data-alt="Portrait of a male professional trainee" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVnnLxkidJe2oSkHKQbmRGvoS6djcBvzuDd6CloqxxujRVfr1FCHoZB8BS-oHL8H2VvafwO4Jaau7ps6ohixkDA2lgStMRdK7Y8UTiIEWRrgvlfNkcr0JIK29EckOOfJipyqog_7b6R97MO-fTvuBKeQzaOzRN0lyrn6kXN8qKn72feb5W8yQIxy37bV6AkdklnUn15oSVT-Iy_jxDrXA7fMwmgc_KTGjEX3oi7MhJv3hbOt5txxj3jctm5atLYOYQWqIjg6JYKcc"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-bold truncate">Alex Thompson</p>
+<div class="flex items-center gap-3 mt-0.5">
+<span class="text-xs text-slate-500 flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">badge</span> ID: EMP-9021
+                            </span>
+<span class="text-xs text-slate-500 flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">call</span> +1 445 120
+                            </span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-green-500">check_circle</span>
+</div>
+</div>
+<!-- Trainee Card 2 -->
+<div class="bg-white dark:bg-slate-800/40 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-center gap-4">
+<div class="size-12 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center overflow-hidden">
+<img alt="Trainee Avatar" class="w-full h-full object-cover" data-alt="Portrait of a female professional trainee" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBox5Drsh3YNo-uuePbKQJR6qxWyUQJhG0NaUmTaCZsW6a4nWJFm3a0VY-uxBN-ptEioZ03DoZSObrErp7tiHck085AT3qm-rmI5IFhUSwaB6aookDHau8aOcn3Y0mSb08YlzUy8cEFQhCEHEfnBVboN7QMq0Kdi1MiIhKWeJe2voA5fUZfMBrQtLGMds4qPNo2s5H2iBtkUswvWIyV28RO83OaW7jTj4LI34VjlZCMfCkl0gXltOTXTdVhEY7RBv01MxPQL1bzq2M"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-bold truncate">Sarah Jenkins</p>
+<div class="flex items-center gap-3 mt-0.5">
+<span class="text-xs text-slate-500 flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">badge</span> ID: EMP-9044
+                            </span>
+<span class="text-xs text-slate-500 flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">call</span> +1 445 131
+                            </span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-300 dark:text-slate-600">radio_button_unchecked</span>
+</div>
+</div>
+<!-- Trainee Card 3 -->
+<div class="bg-white dark:bg-slate-800/40 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-center gap-4">
+<div class="size-12 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center overflow-hidden">
+<img alt="Trainee Avatar" class="w-full h-full object-cover" data-alt="Portrait of a young male professional trainee" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXYRsxLAM8RITjGYGQR61sG3fLZU3O-xkcsmlvSgup2-TPlIoCwUisTKfmg5oSF3jANSy2Hb6gT4jODXbiDuFij8PmNOSk2EsW9yx9CxskbrMc90AppS-3anqAjYirr_fYll31l1g0WKkfnVg46hW0M3r-ZXdx4T606TNGkYGgR9zCiYuKdAKj_NjtW-2tEoCmaWBA3TrzMVrU1Xr8IcjwQN4Jxnglz6AxAmYDnt7sbbclDMP8id6vAJYX7NRlGMZJZ_VhlSRGJd0"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-bold truncate">Michael Chen</p>
+<div class="flex items-center gap-3 mt-0.5">
+<span class="text-xs text-slate-500 flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">badge</span> ID: EMP-8812
+                            </span>
+<span class="text-xs text-slate-500 flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">call</span> +1 445 112
+                            </span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-green-500">check_circle</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-background-dark/90 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 px-6 py-2 pb-6">
+<div class="flex items-center justify-between max-w-lg mx-auto">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined filled">calendar_today</span>
+<span class="text-[10px] font-bold">Planner</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">play_circle</span>
+<span class="text-[10px] font-bold">Sessions</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-[10px] font-bold">Trainees</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="text-[10px] font-bold">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>

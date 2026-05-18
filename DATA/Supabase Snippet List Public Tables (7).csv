@@ -1,0 +1,10 @@
+id,user_id,employee_id,full_name,mobile_number,email,department,designation,date_of_joining,campus_name,profile_photo_s3_key,is_active,created_at
+1,1,EMP001,Rajesh Kumar,+919822079201,trainee@company.com,Operations,Field Executive,null,null,null,true,2026-04-07 13:14:51.318057
+2,2,EMP002,Priya Sharma,+919822079201,trainer@company.com,Training,Senior Trainer,null,null,null,true,2026-04-07 13:14:51.318057
+3,3,EMP003,Amit Patel,+919822079201,supervisor@company.com,HR,Training Manager,null,null,null,true,2026-04-07 13:14:51.318057
+4,null,EMP065,Asd,+919881669101,asd@gmail.com,Op,Head,null,null,null,true,2026-04-14 09:33:31.395
+5,null,EMP010,R,9822079201,r@gmail.com,Operating,Associate,null,null,null,true,2026-04-30 20:05:12.047
+6,null,EMP006,Db,+919822079201,d@gmail.com,Op,Ass,null,null,null,true,2026-04-30 20:16:36.655
+7,null,EMP011,Om,+919822079201,om@gmail.com,S,Associate,null,null,null,true,2026-05-01 05:48:59.499
+8,null,EMP031,Om Reddy,+916350249262,omreddynallawar@gmail.com,Information Technology,Senior Professor,null,null,null,true,2026-05-01 06:23:30.842
+11,null,EMP032,Om,+919822079201,xyz29021986@gmail.com,IT,Senior Professor,null,null,null,true,2026-05-01 06:32:26.889
