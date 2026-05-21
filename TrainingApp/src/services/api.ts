@@ -1,12 +1,12 @@
 /**
- * API Service - Handles all backend communication
+ * API Service - Handles all backend communication using Axios Interceptors
  */
 
-// Use your computer's local IP for mobile device testing
-// Change this to your actual backend URL in production
-export const API_BASE_URL = 'http://192.168.0.107:8000/api/v1';
+export const API_BASE_URL = 'http://10.124.199.102:8000/api/v1';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios, { AxiosInstance, AxiosError } from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 interface ApiResponse<T> {
   success: boolean;
@@ -15,61 +15,168 @@ interface ApiResponse<T> {
 }
 
 class ApiService {
-  private baseUrl: string;
+  private axiosInstance: AxiosInstance;
+  private isRefreshing = false;
+  private refreshQueue: Array<(token: string) => void> = [];
 
   constructor(baseUrl: string) {
-    this.baseUrl = baseUrl;
+    this.axiosInstance = axios.create({
+      baseURL: baseUrl,
+    });
+
+    // Request Interceptor: Attach Token
+    this.axiosInstance.interceptors.request.use(
+      async (config) => {
+        const token = await AsyncStorage.getItem('auth_token');
+        if (token && config.headers) {
+          if (!config.headers.Authorization && !config.headers.authorization) {
+            config.headers.Authorization = `Bearer ${token}`;
+          }
+        }
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
+
+    // Response Interceptor: Handle 401 & Auto-Refresh
+    this.axiosInstance.interceptors.response.use(
+      (response) => response,
+      async (error: AxiosError) => {
+        const originalRequest = error.config as any;
+
+        if (
+          !error.response ||
+          error.response.status !== 401 ||
+          originalRequest.url?.includes('/auth/login') ||
+          originalRequest.url?.includes('/auth/refresh')
+        ) {
+          return Promise.reject(error);
+        }
+
+        if (!originalRequest._retry) {
+          originalRequest._retry = true;
+
+          if (this.isRefreshing) {
+            return new Promise((resolve) => {
+              this.refreshQueue.push((newToken: string) => {
+                originalRequest.headers.Authorization = `Bearer ${newToken}`;
+                resolve(this.axiosInstance(originalRequest));
+              });
+            });
+          }
+
+          this.isRefreshing = true;
+
+          try {
+            const refreshToken = await AsyncStorage.getItem('refresh_token');
+            if (!refreshToken) {
+              throw new Error('No refresh token available');
+            }
+
+            // Important: Use vanilla fetch or fresh axios to avoid interceptor loop
+            const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ refresh_token: refreshToken })
+            });
+            
+            if (!response.ok) throw new Error('Refresh token invalid');
+            
+            const data = await response.json();
+
+            if (data && data.access_token) {
+              const newAccessToken = data.access_token;
+              const newRefreshToken = data.refresh_token;
+
+              await AsyncStorage.setItem('auth_token', newAccessToken);
+              await AsyncStorage.setItem('refresh_token', newRefreshToken);
+
+              this.refreshQueue.forEach((cb) => cb(newAccessToken));
+              this.refreshQueue = [];
+
+              originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+              return this.axiosInstance(originalRequest);
+            } else {
+              throw new Error('Invalid refresh response');
+            }
+          } catch (refreshError) {
+            this.refreshQueue = [];
+            // Force logout
+            setTimeout(async () => {
+              await AsyncStorage.multiRemove(['auth_token', 'refresh_token', 'user', 'current_user']);
+            }, 0);
+            return Promise.reject(refreshError);
+          } finally {
+            this.isRefreshing = false;
+          }
+        }
+
+        return Promise.reject(error);
+      }
+    );
+  }
+
+  async ensureValidToken(): Promise<boolean> {
+    try {
+      const token = await AsyncStorage.getItem('auth_token');
+      if (!token) return false;
+
+      const decoded: any = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
+      
+      if (decoded.exp < currentTime + 60) {
+        console.log('[Token] Token expiring soon, refreshing proactively...');
+        try {
+          await this.axiosInstance.get('/auth/me');
+          return true;
+        } catch (e) {
+          return false;
+        }
+      }
+      return true;
+    } catch (e) {
+      console.error('[Token] ensureValidToken error:', e);
+      return false;
+    }
   }
 
   private async request<T>(
     endpoint: string,
-    options: RequestInit = {},
-    isRetry = false
+    options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
     try {
-      const url = `${this.baseUrl}${endpoint}`;
-      console.log(`📡 API Request: ${options.method || 'GET'} ${url}`);
-
-      const headers: any = {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      };
-
-      // If body is FormData, let fetch set the Content-Type with boundary automatically
-      if (options.body instanceof FormData) {
-        delete headers['Content-Type'];
+      const method = options.method || 'GET';
+      const url = endpoint;
+      let data = options.body;
+      
+      if (typeof data === 'string') {
+        try {
+          data = JSON.parse(data);
+        } catch (e) {}
       }
 
-      const response = await fetch(url, {
-        ...options,
+      const headers: any = { ...options.headers };
+      
+      if (options.body instanceof FormData) {
+         delete headers['Content-Type'];
+      } else if (!headers['Content-Type']) {
+         headers['Content-Type'] = 'application/json';
+      }
+
+      const response = await this.axiosInstance.request({
+        url,
+        method,
+        data,
         headers,
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.log(`❌ API Error:`, data);
-        
-        // Handle Token Expiry (401)
-        if (response.status === 401 && !isRetry && !endpoint.includes('/auth/refresh') && !endpoint.includes('/auth/login')) {
-          console.log('🔄 Token expired, attempting refresh...');
-          const refreshed = await this.refreshToken();
-          if (refreshed) {
-            // Update token in headers and retry
-            const newToken = await AsyncStorage.getItem('auth_token');
-            const newHeaders = { ...headers, 'Authorization': `Bearer ${newToken}` };
-            return this.request<T>(endpoint, { ...options, headers: newHeaders }, true);
-          }
-        }
-        
-        return { success: false, error: data.detail || data.message || 'Request failed' };
-      }
-
-      console.log(`✅ API Success:`, data);
-      return { success: true, data };
+      return { success: true, data: response.data };
     } catch (error: any) {
-      console.log(`❌ Network Error:`, error.message);
-      return { success: false, error: error.message || 'Network error' };
+      console.log(`[API Error ${endpoint}]:`, error.response?.data || error.message);
+      return { 
+        success: false, 
+        error: error.response?.data?.detail || error.response?.data?.message || error.message || 'Request failed' 
+      };
     }
   }
 
@@ -84,6 +191,7 @@ class ApiService {
       user_id: number | null;
       full_name: string;
       masked_mobile: string;
+      role?: string;
     }>('/auth/verify-identity', {
       method: 'POST',
       body: JSON.stringify({
@@ -141,29 +249,7 @@ class ApiService {
     });
   }
 
-  async refreshToken() {
-    try {
-      const refreshToken = await AsyncStorage.getItem('refresh_token');
-      if (!refreshToken) return false;
-
-      const response = await fetch(`${this.baseUrl}/auth/refresh`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ refresh_token: refreshToken })
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        await AsyncStorage.setItem('auth_token', data.access_token);
-        await AsyncStorage.setItem('refresh_token', data.refresh_token);
-        return true;
-      }
-      return false;
-    } catch (e) {
-      return false;
-    }
-  }
-
+  
   async bindDevice(employeeId: string, deviceId: string, deviceModel: string) {
     return this.request<{
       access_token: string;
@@ -374,11 +460,26 @@ class ApiService {
     });
   }
 
-  async enrollInSession(accessToken: string, data: { session_id: number; user_id: number; role?: string; status?: string }) {
+  async enrollInSession(accessToken: string, data: { session_id: number; user_id?: number; role?: string; status?: string }) {
     return this.request<any>(`/enrollments`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${accessToken}` },
       body: JSON.stringify(data),
+    });
+  }
+
+  async getMyEnrollments(accessToken: string) {
+    return this.request<any[]>('/enrollments/my-enrollments', {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+  }
+
+  async bulkEnrollInSession(accessToken: string, sessionId: number, userIds: number[]) {
+    return this.request<any>('/enrollments/bulk', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${accessToken}` },
+      body: JSON.stringify({ session_id: sessionId, user_ids: userIds }),
     });
   }
 
@@ -700,89 +801,6 @@ class ApiService {
     });
   }
 
-  async getUserAttendanceHistory(accessToken: string, userId: number) {
-    return this.request<any[]>(`/attendance/user/${userId}`, {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-  }
-
-  async getUserAssessmentHistory(accessToken: string, userId: number) {
-    return this.request<any[]>(`/assessments/results/user/${userId}`, {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-  }
-
-  // ═══════════════════════════════════════════
-  // NOTIFICATIONS ENDPOINTS
-  // ═══════════════════════════════════════════
-
-  async sendNotifications(accessToken: string, userIds: number[], notificationType: string, title: string, message: string, data?: any) {
-    return this.request<any>('/notifications/send', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${accessToken}` },
-      body: JSON.stringify({ user_ids: userIds, notification_type: notificationType, title, message, data }),
-    });
-  }
-
-  async getMyNotifications(accessToken: string, unreadOnly: boolean = false) {
-    let url = '/notifications/my-notifications';
-    if (unreadOnly) url += '?unread_only=true';
-    return this.request<any[]>(url, {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-  }
-
-  async markNotificationRead(accessToken: string, notificationId: number) {
-    return this.request<any>(`/notifications/${notificationId}/read`, {
-      method: 'PUT',
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-  }
-
-  async markAllNotificationsRead(accessToken: string) {
-    return this.request<any>('/notifications/read-all', {
-      method: 'PUT',
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-  }
-
-  async deleteNotification(accessToken: string, notificationId: number) {
-    return this.request<any>(`/notifications/${notificationId}`, {
-      method: 'DELETE',
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-  }
-
-  async deleteReadNotifications(accessToken: string) {
-    return this.request<any>('/notifications/read-all', {
-      method: 'DELETE',
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-  }
-
-  // ═══════════════════════════════════════════
-  // ENROLLMENT ENDPOINTS
-  // ═══════════════════════════════════════════
-
-  async enrollInSession(accessToken: string, data: { session_id: number; user_id?: number }) {
-    return this.request<any>('/enrollments', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${accessToken}` },
-      body: JSON.stringify(data),
-    });
-  }
-
-  async bulkEnrollInSession(accessToken: string, sessionId: number, userIds: number[]) {
-    return this.request<any>('/enrollments/bulk', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${accessToken}` },
-      body: JSON.stringify({ session_id: sessionId, user_ids: userIds }),
-    });
-  }
-
   async acceptEnrollment(accessToken: string, enrollmentId: number) {
     return this.request<any>(`/enrollments/${enrollmentId}/accept`, {
       method: 'PUT',
@@ -804,21 +822,6 @@ class ApiService {
     });
   }
 
-  // ═══════════════════════════════════════════
-  // CERTIFICATES ENDPOINTS
-  // ═══════════════════════════════════════════
-
-  async getUserCertificates(accessToken: string, userId: number) {
-    return this.request<any[]>(`/certificates/user/${userId}`, {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-  }
-
-  // ═══════════════════════════════════════════
-  // FLASHCARDS ENDPOINTS
-  // ═══════════════════════════════════════════
-
   async getFlashcards(accessToken: string, topic?: string) {
     let url = '/flashcards';
     if (topic) url += `?topic=${encodeURIComponent(topic)}`;
@@ -828,10 +831,6 @@ class ApiService {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
   }
-
-  // ═══════════════════════════════════════════
-  // USER MANAGEMENT ENDPOINTS
-  // ═══════════════════════════════════════════
 
   async listUsers(accessToken: string, params?: { role?: string; status?: string; search?: string }) {
     let url = '/users';

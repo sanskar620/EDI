@@ -2,7 +2,7 @@ import * as SQLite from 'expo-sqlite';
 import NetInfo from '@react-native-community/netinfo';
 import { dbName } from './db';
 
-const BACKEND_URL = 'http://192.168.0.104:8000/api/v1/sync'; // Set to PC IP for Expo testing
+const BACKEND_URL = 'http://10.124.199.102:8000/api/v1/sync'; // Set to PC IP for Expo testing
 
 export const runSyncWorker = async () => {
   const netState = await NetInfo.fetch();

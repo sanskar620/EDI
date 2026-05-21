@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useThemeStore } from '../../theme';
 import { useAuthStore } from '../../stores/authStore';
@@ -12,11 +12,19 @@ export default function MyCoursesScreen({ navigation }: any) {
   const { user } = useAuthStore();
   const { enrolledCourses, fetchEnrolledCourses, isLoading } = useCourseStore();
 
+  const isFocused = useIsFocused();
+
   useFocusEffect(
     useCallback(() => {
       if (user?.id) fetchEnrolledCourses(user.id);
     }, [user?.id])
   );
+
+  React.useEffect(() => {
+    if (isFocused && user?.id) {
+      fetchEnrolledCourses(user.id);
+    }
+  }, [isFocused, user?.id]);
 
   const getTopicColor = (topic: string) => {
     const map: Record<string, string> = {
@@ -53,7 +61,7 @@ export default function MyCoursesScreen({ navigation }: any) {
             {enrolledCourses.map((enrollment: any) => {
               const course = enrollment.course;
               if (!course) return null;
-              const progress = enrollment.progress || 0;
+              const progress = Number(enrollment.progress) || 0;
               const topicColor = getTopicColor(course.topic);
               const progressColor = getProgressColor(progress);
 

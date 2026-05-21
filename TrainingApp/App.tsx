@@ -4,6 +4,8 @@ import { StatusBar } from 'expo-status-bar';
 import { View, ActivityIndicator } from 'react-native';
 import AppNavigator from './src/navigation/AppNavigator';
 import { useAuthStore } from './src/stores/authStore';
+import * as Font from 'expo-font';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export default function App() {
   const [isInitializing, setIsInitializing] = useState(true);
@@ -12,6 +14,9 @@ export default function App() {
   useEffect(() => {
     const initializeApp = async () => {
       try {
+        // Pre-load MaterialIcons to prevent ExpoAsset.downloadAsync errors
+        await Font.loadAsync(MaterialIcons.font);
+        
         // Try to restore auth state from AsyncStorage
         await loadStoredAuth();
       } catch (error) {

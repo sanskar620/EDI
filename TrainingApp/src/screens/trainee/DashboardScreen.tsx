@@ -14,14 +14,13 @@ export default function TraineeDashboard({ navigation }: any) {
   const { C } = useThemeStore();
   const s = getStyles(C);
   const { user } = useAuthStore();
-  const { sessions, isLoading: sessionsLoading, fetchUserSessions } = useSessionsStore();
+  const { isLoading: sessionsLoading } = useSessionsStore();
   const { userEnrollments, fetchUserEnrollments } = useEnrollmentStore();
   const { userPerformance, fetchUserPerformance, isLoading: reportLoading } = useReportingStore();
   const { unreadCount, fetchUnreadCount } = useNotificationStore();
 
   const fetchData = useCallback(() => {
     if (user?.id) {
-      fetchUserSessions(user.id);
       fetchUserEnrollments(user.id);
       fetchUserPerformance(user.id);
       fetchUnreadCount(user.id);
@@ -106,7 +105,7 @@ export default function TraineeDashboard({ navigation }: any) {
                 <Text style={s.seeAll}>See all</Text>
               </TouchableOpacity>
             </View>
-            {sessions.length === 0 ? (
+            {userEnrollments.length === 0 ? (
               <View style={s.emptyCard}>
                 <MaterialIcons name="school" size={40} color={C.tMuted} />
                 <Text style={s.emptyText}>No enrolled courses yet</Text>
@@ -116,7 +115,16 @@ export default function TraineeDashboard({ navigation }: any) {
               </View>
             ) : (
               <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12, paddingRight: 16 }}>
-                {sessions.slice(0, 5).map((session: any) => (
+                {userEnrollments.slice(0, 5).map((enrollment: any) => {
+                  const session = {
+                    id: enrollment.session_id,
+                    title: enrollment.session_title,
+                    topic: enrollment.session_topic,
+                    scheduled_date: enrollment.session_scheduled_date,
+                    enrollment_status: enrollment.status,
+                    status: enrollment.session_status
+                  };
+                  return (
                   <TouchableOpacity
                     key={session.id}
                     style={s.courseCard}
@@ -142,7 +150,8 @@ export default function TraineeDashboard({ navigation }: any) {
                       </Text>
                     </View>
                   </TouchableOpacity>
-                ))}
+                  );
+                })}
               </ScrollView>
             )}
           </View>

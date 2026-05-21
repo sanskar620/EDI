@@ -61,7 +61,10 @@ class FaceAttendanceService {
   async uploadFaceImage(base64Image: string): Promise<FaceUploadResponse> {
     try {
       console.log('[FaceAttendance] Starting face image upload via Backend...');
-      const response = await api.uploadFaceImageBase64(this.getToken(), base64Image);
+      const apiResponse: any = await api.uploadFaceImageBase64(this.getToken(), base64Image);
+      
+      // api.ts returns { success: true, data: { ... } }
+      const response = apiResponse.success && apiResponse.data ? apiResponse.data : apiResponse;
       
       if (response.success && response.face_image_url) {
         // Update local storage so the app state stays in sync
@@ -118,15 +121,15 @@ class FaceAttendanceService {
     try {
       console.log('[FaceAttendance] Starting face verification for session:', sessionId);
       
-      const response = await api.verifyFaceAndMarkAttendance(
+      const apiResponse = await api.verifyFaceAndMarkAttendance(
         this.getToken(),
         sessionId,
         selfieBase64,
         latitude,
         longitude
-      );
+      ) as any;
 
-      return response;
+      return apiResponse.success && apiResponse.data ? apiResponse.data : apiResponse;
     } catch (error: any) {
       console.error('[FaceAttendance] Verification error:', error);
       return {
@@ -143,7 +146,8 @@ class FaceAttendanceService {
    */
   async verifyFaceOnly(selfieBase64: string): Promise<FaceVerifyResponse> {
     try {
-      return await api.verifyFaceOnly(this.getToken(), selfieBase64);
+      const apiResponse = await api.verifyFaceOnly(this.getToken(), selfieBase64) as any;
+      return apiResponse.success && apiResponse.data ? apiResponse.data : apiResponse;
     } catch (error: any) {
       console.log('[FaceAttendance] Backend unavailable or verifyFaceOnly failed:', error.message);
       return {
@@ -169,14 +173,14 @@ class FaceAttendanceService {
     notes?: string
   ): Promise<TrainerMarkResponse> {
     try {
-      const response = await api.markAttendanceByTrainer(
+      const apiResponse = await api.markAttendanceByTrainer(
         this.getToken(),
         sessionId,
         traineeIds,
         status,
         notes
-      );
-      return response;
+      ) as any;
+      return apiResponse.success && apiResponse.data ? apiResponse.data : apiResponse;
     } catch (error: any) {
       console.error('[FaceAttendance] Trainer mark error:', error);
       return {
@@ -199,7 +203,7 @@ class FaceAttendanceService {
     try {
       const response = await api.getSessionAttendance(this.getToken(), sessionId);
       if (response.success) {
-        return response.data;
+        return response.data as any[];
       }
       return [];
     } catch (error) {
@@ -215,7 +219,7 @@ class FaceAttendanceService {
     try {
       const response = await api.getUserAttendanceHistory(this.getToken(), userId);
       if (response.success) {
-        return response.data;
+        return response.data as any[];
       }
       return [];
     } catch (error) {

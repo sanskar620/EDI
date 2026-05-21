@@ -11,8 +11,14 @@ export default function FaceVerificationScreen({ navigation }: any) {
   const s = getStyles(C);
   const { tempEmployeeId, requiresFaceVerification, requiresDeviceBinding, login } = useAuthStore();
 
-  const [step, setStep] = useState(requiresFaceVerification ? 'intro' : 'device_binding');
+  const [step, setStep] = useState(requiresFaceVerification ? 'intro' : 'finalizing');
   const [isProcessing, setIsProcessing] = useState(false);
+
+  React.useEffect(() => {
+    if (step === 'finalizing') {
+      finishLogin();
+    }
+  }, [step]);
 
   // We are skipping actual physical camera implementation here and making a mock successful UI
   // because facial recognition requires native modules (Expo Camera + MLKit)
@@ -23,25 +29,9 @@ export default function FaceVerificationScreen({ navigation }: any) {
     setTimeout(() => {
       setStep('success_face');
       setTimeout(() => {
-        if (requiresDeviceBinding) {
-          setStep('device_binding');
-        } else {
-          finishLogin();
-        }
+        setStep('finalizing');
       }, 1500);
     }, 2000);
-  };
-
-  const handleDeviceBinding = async () => {
-    setIsProcessing(true);
-    // Simulate device check mapping
-    setTimeout(() => {
-      setIsProcessing(false);
-      setStep('success_device');
-      setTimeout(() => {
-        finishLogin();
-      }, 1500);
-    }, 1500);
   };
 
   const finishLogin = async () => {
@@ -131,34 +121,11 @@ export default function FaceVerificationScreen({ navigation }: any) {
         </View>
       )}
 
-      {/* Device Binding Step */}
-      {step === 'device_binding' && (
+      {/* Finalizing Step */}
+      {step === 'finalizing' && (
         <View style={s.content}>
-          <MaterialIcons name="phonelink-lock" size={80} color={C.primary} style={s.icon} />
-          <Text style={s.title}>New Device Detected</Text>
-          <Text style={s.subtitle}>It looks like you are logging in from a new device. We need to secure this device with your profile.</Text>
-          
-          <TouchableOpacity style={s.btnPrimary} onPress={handleDeviceBinding} disabled={isProcessing}>
-            {isProcessing ? (
-              <ActivityIndicator color={C.white} />
-            ) : (
-              <>
-                <MaterialIcons name="security" size={20} color={C.white} />
-                <Text style={s.btnTxt}>Secure Device & Proceed</Text>
-              </>
-            )}
-          </TouchableOpacity>
-        </View>
-      )}
-
-      {/* Success Device */}
-      {step === 'success_device' && (
-        <View style={s.content}>
-          <View style={s.iconCircleSuccess}>
-            <MaterialIcons name="check" size={60} color={C.success} />
-          </View>
-          <Text style={s.title}>Device Secured</Text>
-          <Text style={s.subtitle}>Logging you in...</Text>
+          <ActivityIndicator size="large" color={C.primary} />
+          <Text style={[s.title, { marginTop: 24 }]}>Finalizing Login...</Text>
         </View>
       )}
     </View>

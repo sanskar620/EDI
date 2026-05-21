@@ -494,7 +494,7 @@ async def get_user_assessment_history(
             "assessment_type": a.assessment_type,
             "score_percentage": a.score_percentage if hasattr(a, 'score_percentage') else 0.0,
             "passed": a.passed if hasattr(a, 'passed') else False,
-            "completed_at": a.completed_at,
+            "completed_at": a.submitted_at,
             "session": {
                 "id": session.id,
                 "title": session.title,

@@ -27,6 +27,9 @@ router = APIRouter(prefix="/certificates", tags=["Certificates"])
 class SessionInfo(BaseModel):
     title: str
     topic: str
+    
+    class Config:
+        from_attributes = True
 
 class CertificateResponse(BaseModel):
     id: int

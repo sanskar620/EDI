@@ -23,6 +23,7 @@ from app.core.deps import get_current_user
 from app.models.token import RefreshToken
 from datetime import datetime, timedelta, timezone
 import base64
+from app.config import settings
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -191,7 +192,7 @@ def bind_device_register(req: DeviceBindRequest, db: Session = Depends(get_db)):
     new_refresh = RefreshToken(
         user_id=user.id,
         token=tokens["refresh_token"],
-        expires_at=datetime.utcnow() + timedelta(days=30)
+        expires_at=datetime.utcnow() + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
     )
     db.add(new_refresh)
     db.commit()
@@ -222,7 +223,7 @@ def login(req: DeviceBindRequest, db: Session = Depends(get_db)):
     new_refresh = RefreshToken(
         user_id=user.id,
         token=tokens["refresh_token"],
-        expires_at=datetime.utcnow() + timedelta(days=30)
+        expires_at=datetime.utcnow() + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
     )
     db.add(new_refresh)
     db.commit()
@@ -259,7 +260,7 @@ def refresh_token_route(req: RefreshTokenRequest, db: Session = Depends(get_db))
     
     # Replace old refresh token with new one
     db_token.token = tokens["refresh_token"]
-    db_token.expires_at = datetime.utcnow() + timedelta(days=30)
+    db_token.expires_at = datetime.utcnow() + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
     db.commit()
     
     return TokenResponse(

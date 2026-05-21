@@ -99,10 +99,7 @@ class EnrollmentService {
       }
       
       // We don't have a generic filter endpoint, so fallback to my-enrollments
-      const response = await api.request<any[]>('/enrollments/my-enrollments', {
-        method: 'GET',
-        headers: { Authorization: `Bearer ${this.getToken()}` }
-      });
+      const response = await api.getMyEnrollments(this.getToken());
       return response;
     } catch (error: any) {
       return {
@@ -118,10 +115,7 @@ class EnrollmentService {
   async getUserEnrollments(userId: number): Promise<ServiceResponse> {
     try {
       // Backend /enrollments/my-enrollments gets current user's enrollments
-      const response = await api.request<any[]>('/enrollments/my-enrollments', {
-        method: 'GET',
-        headers: { Authorization: `Bearer ${this.getToken()}` }
-      });
+      const response = await api.getMyEnrollments(this.getToken());
       return response;
     } catch (error: any) {
       return {

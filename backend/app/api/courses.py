@@ -157,6 +157,13 @@ async def create_course(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
+    """
+    Create a new course.
+    Only supervisors/admins can create courses.
+    """
+    if current_user.role not in ["SUPERVISOR", "ADMIN"]:
+        raise HTTPException(status_code=403, detail="Only supervisors can create courses")
+
     course_data = data.dict()
     # Auto-assign trainer_id to current user if not specified
     if not course_data.get('trainer_id'):

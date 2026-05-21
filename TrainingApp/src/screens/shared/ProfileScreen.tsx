@@ -151,18 +151,20 @@ export default function ProfileScreen({ navigation }: any) {
         </View>
         
         {/* Actions */}
-        <View style={{ marginTop: 24, paddingHorizontal: 16, gap: 12 }}>
-          <TouchableOpacity 
-            style={s.actionBtn} 
-            onPress={() => navigation.navigate('Certificates')}
-          >
-            <View style={[s.actionIcon, { backgroundColor: '#a855f722' }]}>
-              <MaterialIcons name="workspace-premium" size={20} color="#a855f7" />
-            </View>
-            <Text style={s.actionTxt}>My Certificates</Text>
-            <MaterialIcons name="chevron-right" size={20} color={C.tMuted} />
-          </TouchableOpacity>
-        </View>
+        {user?.role === 'TRAINEE' && (
+          <View style={{ marginTop: 24, paddingHorizontal: 16, gap: 12 }}>
+            <TouchableOpacity 
+              style={s.actionBtn} 
+              onPress={() => navigation.navigate('Certificates')}
+            >
+              <View style={[s.actionIcon, { backgroundColor: '#a855f722' }]}>
+                <MaterialIcons name="workspace-premium" size={20} color="#a855f7" />
+              </View>
+              <Text style={s.actionTxt}>My Certificates</Text>
+              <MaterialIcons name="chevron-right" size={20} color={C.tMuted} />
+            </TouchableOpacity>
+          </View>
+        )}
 
         {/* Logout */}
         <TouchableOpacity style={s.logoutBtn} onPress={handleLogout}>

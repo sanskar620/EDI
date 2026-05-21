@@ -27,6 +27,7 @@ class SessionCreate(BaseModel):
     description: Optional[str] = None
     topic: str
     module_code: Optional[str] = None
+    trainer_id: Optional[int] = None
     scheduled_date: datetime
     start_time: datetime
     end_time: datetime
@@ -53,18 +54,18 @@ class SessionUpdate(BaseModel):
 class SessionResponse(BaseModel):
     id: int
     title: str
-    description: Optional[str]
+    description: Optional[str] = None
     topic: str
-    module_code: Optional[str]
+    module_code: Optional[str] = None
     scheduled_date: datetime
     start_time: datetime
     end_time: datetime
-    duration_minutes: int
-    venue_name: str
+    duration_minutes: Optional[int] = None
+    venue_name: Optional[str] = None
     trainer_id: int
     trainer_name: Optional[str] = None
     status: str
-    max_capacity: int
+    max_capacity: Optional[int] = None
     enrolled_count: int = 0
     is_materials_released: bool
     pre_test_enabled: bool
@@ -208,15 +209,18 @@ async def create_session(
 ):
     """
     Create a new training session.
-    Only trainers can create sessions.
+    Only supervisors/admins can create sessions.
     """
-    if current_user.role != "TRAINER":
-        raise HTTPException(status_code=403, detail="Only trainers can create sessions")
+    if current_user.role not in ["SUPERVISOR", "ADMIN"]:
+        raise HTTPException(status_code=403, detail="Only supervisors can create sessions")
+    
+    session_dict = session_data.dict(exclude_unset=True)
+    trainer_id = session_dict.pop("trainer_id", current_user.id)
     
     # Create session
     new_session = TrainingSession(
-        **session_data.dict(),
-        trainer_id=current_user.id,
+        **session_dict,
+        trainer_id=trainer_id,
         status=SessionStatus.DRAFT,
         is_materials_released=False,
         created_at=datetime.utcnow(),

@@ -284,8 +284,8 @@ export default function AppNavigator() {
     const { C, isDark } = useThemeStore();
     const { user, isAuthenticated, needsFaceOnboarding } = useAuthStore();
     
-    // Check if user needs face onboarding
-    const requiresFaceOnboarding = isAuthenticated && user && !user.profile_photo_url;
+    // Check if user needs face onboarding (only Trainees need face onboarding for attendance)
+    const requiresFaceOnboarding = isAuthenticated && user && !user.profile_photo_url && (user.role === 'TRAINEE' || user.role === 'Trainee');
     
     console.log('[AppNavigator] isAuthenticated:', isAuthenticated, 'user:', user?.employee_id, 'needsFace:', requiresFaceOnboarding);
     

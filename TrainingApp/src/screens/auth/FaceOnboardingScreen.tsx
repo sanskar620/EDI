@@ -84,9 +84,6 @@ export default function FaceOnboardingScreen({ navigation, route }: Props) {
       console.log(`[FaceOnboarding] Upload completed in ${Date.now() - startTime}ms`);
       
       if (response.success && response.face_image_url) {
-        // Update local auth state immediately (triggers navigation)
-        completeFaceOnboarding(response.face_image_url);
-        
         // Also update AsyncStorage for persistence
         const userJson = await AsyncStorage.getItem('current_user');
         if (userJson) {
@@ -101,7 +98,8 @@ export default function FaceOnboardingScreen({ navigation, route }: Props) {
           [{ 
             text: 'Continue', 
             onPress: () => {
-              // Navigation happens automatically
+              // Update local auth state to trigger navigation to dashboard
+              completeFaceOnboarding(response.face_image_url!);
             }
           }]
         );

@@ -7,6 +7,7 @@ import { useAuthStore } from '../../stores/authStore';
 // expo-file-system legacy API removed — using base64 from camera directly
 import * as Location from 'expo-location';
 import faceAttendanceService from '../../services/faceAttendanceService';
+import api from '../../services/api';
 
 interface Props {
   navigation: any;
@@ -16,7 +17,7 @@ interface Props {
 export default function FaceCaptureScreen({ navigation, route }: Props) {
   const { C } = useThemeStore();
   const s = getStyles(C);
-  const { user } = useAuthStore();
+  const { user, completeFaceOnboarding } = useAuthStore();
   
   const mode = route?.params?.mode || 'onboarding'; // 'onboarding' | 'attendance'
   const sessionId = route?.params?.sessionId;
@@ -83,18 +84,12 @@ export default function FaceCaptureScreen({ navigation, route }: Props) {
       const response = await faceAttendanceService.uploadFaceImage(base64);
       
       if (response.success && response.face_image_url) {
-        // Update user's face_image_url in database
-        const updated = await faceAttendanceService.updateUserFaceImage(user.id, response.face_image_url);
-        
-        if (updated) {
-          Alert.alert(
-            '✅ Success',
-            'Your face has been registered successfully! You can now use face verification for attendance.',
-            [{ text: 'OK', onPress: () => navigation.goBack() }]
-          );
-        } else {
-          Alert.alert('Warning', 'Face uploaded but profile update failed. Please try again.');
-        }
+        completeFaceOnboarding(response.face_image_url);
+        Alert.alert(
+          '✅ Success',
+          'Your face has been registered successfully! You can now use face verification for attendance.',
+          [{ text: 'OK', onPress: () => navigation.goBack() }]
+        );
       } else {
         Alert.alert('Error', response.message || 'Failed to upload face image.');
       }
@@ -113,6 +108,12 @@ export default function FaceCaptureScreen({ navigation, route }: Props) {
     const startTime = Date.now();
     
     try {
+      // PROACTIVE TOKEN CHECK: Ensure we don't have an expired token before continuing!
+      const isTokenValid = await api.ensureValidToken();
+      if (!isTokenValid) {
+        throw new Error('Authentication expired. Please log in again.');
+      }
+
       // Use base64 captured directly from camera (no deprecated FileSystem API)
       const base64 = capturedBase64;
       

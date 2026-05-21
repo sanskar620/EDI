@@ -227,14 +227,7 @@ class CourseService {
       return { success: false, error: error.message };
     }
   }
-  async createCourse(courseData: any): Promise<ServiceResponse> {
-    try {
-      const response = await api.createCourse(this.getToken(), courseData);
-      return response;
-    } catch (error: any) {
-      return { success: false, error: error.message || 'Failed to create course' };
-    }
-  }
+
 }
 
 export default new CourseService();

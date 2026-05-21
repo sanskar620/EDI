@@ -14,33 +14,25 @@ export default function CoursesScreen({ navigation }: any) {
   const { C } = useThemeStore();
   const s = getStyles(C);
   const { user } = useAuthStore();
-  const { sessions, fetchUpcomingSessions, fetchUserSessions, isLoading: sessionsLoading } = useSessionsStore();
+  const { sessions, fetchSessions, isLoading: sessionsLoading } = useSessionsStore();
   const { userEnrollments, fetchUserEnrollments, enrollUser, isLoading: enrollLoading } = useEnrollmentStore();
   const { userPerformance, fetchUserPerformance } = useReportingStore();
   const [tab, setTab] = useState<TabType>('upcoming');
 
   const fetchAllData = useCallback(() => {
     if (user?.id) {
-      if (tab === 'upcoming') {
-        fetchUpcomingSessions(50);
-      } else {
-        fetchUserSessions(user.id);
-      }
+      // Always fetch enrolled sessions + all sessions for reference
       fetchUserEnrollments(user.id);
+      fetchSessions();
       fetchUserPerformance(user.id);
     }
-  }, [user?.id, tab]);
+  }, [user?.id]);
 
   useFocusEffect(
     useCallback(() => {
       fetchAllData();
     }, [fetchAllData])
   );
-
-  useEffect(() => {
-    // Realtime subscriptions removed for SQLite.
-    // Relying on useFocusEffect.
-  }, [user?.id, fetchAllData]);
 
   const handleEnroll = async (sessionId: number) => {
     if (!user?.id) return;
@@ -52,7 +44,6 @@ export default function CoursesScreen({ navigation }: any) {
           const success = await enrollUser(sessionId, user.id);
           if (success) {
             Alert.alert('Success', 'You have been enrolled!');
-            fetchUserSessions(user.id);
             fetchUserEnrollments(user.id);
           } else {
             Alert.alert('Error', 'Failed to enroll. Please try again.');
@@ -63,45 +54,59 @@ export default function CoursesScreen({ navigation }: any) {
   };
 
   const isLoading = sessionsLoading || enrollLoading;
-  const enrolledSessionIds = new Set(userEnrollments.map((e: any) => e.session_id));
 
-  // Get today's date at midnight for comparison
+  // Normalize enrolled sessions from /my-enrollments (session_ prefixed fields)
+  const enrolledSessions = userEnrollments.map((e: any) => ({
+    enrollment_id: e.id,
+    enrollment_status: e.status,
+    id: e.session_id ?? e.id,
+    title: e.session_title ?? e.title,
+    topic: e.session_topic ?? e.topic ?? 'GENERAL',
+    scheduled_date: e.session_scheduled_date ?? e.scheduled_date,
+    start_time: e.session_start_time ?? e.start_time,
+    end_time: e.session_end_time ?? e.end_time,
+    venue_name: e.session_venue ?? e.venue_name,
+    status: e.session_status ?? e.status,
+    description: e.description,
+    trainer_name: e.trainer_name,
+    pre_test_enabled: e.pre_test_enabled,
+    post_test_enabled: e.post_test_enabled,
+  }));
+
+  const enrolledSessionIds = new Set(enrolledSessions.map((s: any) => s.id));
+
+  // Date boundaries (midnight)
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
-  const yesterday = new Date(today);
-  yesterday.setDate(yesterday.getDate() - 1);
 
-  // Filter sessions based on tab
   const getFilteredSessions = () => {
     if (tab === 'upcoming') {
-      return sessions.filter((s: any) => {
-        const sessionDate = new Date(s.scheduled_date);
-        sessionDate.setHours(0, 0, 0, 0);
-        return sessionDate >= tomorrow;
+      return enrolledSessions.filter((s: any) => {
+        if (!s.scheduled_date) return false;
+        const d = new Date(s.scheduled_date);
+        d.setHours(0, 0, 0, 0);
+        return d >= tomorrow;
       });
     }
-    
     if (tab === 'attending') {
-      // Show sessions that are exactly TODAY
-      return sessions.filter((s: any) => {
-        const sessionDate = new Date(s.scheduled_date);
-        sessionDate.setHours(0, 0, 0, 0);
-        return sessionDate.getTime() === today.getTime();
+      return enrolledSessions.filter((s: any) => {
+        if (!s.scheduled_date) return false;
+        const d = new Date(s.scheduled_date);
+        d.setHours(0, 0, 0, 0);
+        return d.getTime() === today.getTime();
       });
     }
-    
     if (tab === 'attended') {
-      // Show sessions that are from YESTERDAY or earlier
-      return sessions.filter((s: any) => {
-        const sessionDate = new Date(s.scheduled_date);
-        sessionDate.setHours(0, 0, 0, 0);
-        return sessionDate < today;
+      return enrolledSessions.filter((s: any) => {
+        if (!s.scheduled_date) return false;
+        const d = new Date(s.scheduled_date);
+        d.setHours(0, 0, 0, 0);
+        return d < today;
       });
     }
-    
-    return sessions;
+    return enrolledSessions;
   };
 
   const filteredSessions = getFilteredSessions();
@@ -224,11 +229,31 @@ export default function CoursesScreen({ navigation }: any) {
                     <View style={s.actionRow}>
                       {/* Mark Attendance Button - Primary action for attending sessions */}
                       {(() => {
-                        const sessionStart = new Date(`${session.scheduled_date.split('T')[0]}T${session.start_time}`);
-                        const now = new Date();
-                        // Allow marking attendance 15 mins before start
-                        const canMarkAttendance = now.getTime() >= (sessionStart.getTime() - 15 * 60000);
+                        let canMarkAttendance = false;
+                        let isPastEnd = false;
+                        try {
+                          const sessionStart = new Date(`${session.scheduled_date.split('T')[0]}T${session.start_time}`);
+                          const sessionEnd = new Date(`${session.scheduled_date.split('T')[0]}T${session.end_time}`);
+                          const now = new Date();
+                          const startTimeMs = sessionStart.getTime(); // Exactly at start time
+                          const endTimeMs = sessionEnd.getTime();
+                          
+                          if (now.getTime() >= startTimeMs && now.getTime() <= endTimeMs) {
+                            canMarkAttendance = true;
+                          } else if (now.getTime() > endTimeMs) {
+                            isPastEnd = true;
+                          }
+                        } catch (e) {}
                         
+                        if (isPastEnd) {
+                           return (
+                             <View style={[s.actionBtn, { backgroundColor: C.surface, borderColor: C.border, borderWidth: 1 }]}>
+                               <MaterialIcons name="event-busy" size={16} color={C.error} />
+                               <Text style={[s.actionBtnTxt, { color: C.error }]}>Attendance not available for session</Text>
+                             </View>
+                           );
+                        }
+
                         return canMarkAttendance ? (
                           <TouchableOpacity 
                             style={[s.actionBtn, s.actionBtnPrimary]}
@@ -240,7 +265,7 @@ export default function CoursesScreen({ navigation }: any) {
                         ) : (
                           <View style={[s.actionBtn, { backgroundColor: C.surface, borderColor: C.border, borderWidth: 1 }]}>
                             <MaterialIcons name="schedule" size={16} color={C.tMuted} />
-                            <Text style={[s.actionBtnTxt, { color: C.tMuted }]}>Starts at {fmt(session.start_time)}</Text>
+                            <Text style={[s.actionBtnTxt, { color: C.tMuted }]}>Starts at {session.start_time ? new Date(`${session.scheduled_date.split('T')[0]}T${session.start_time}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'TBD'}</Text>
                           </View>
                         );
                       })()}

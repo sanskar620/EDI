@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useThemeStore } from '../../theme';
 import { useAuthStore } from '../../stores/authStore';
@@ -14,11 +15,15 @@ export default function ScheduleScreen({ navigation }: any) {
   const { sessions, isLoading, fetchSessions } = useSessionsStore();
   const [tab, setTab] = useState<TabType>('upcoming');
 
-  useEffect(() => {
-    if (user?.id) {
-      fetchSessions({ trainerId: user.id, role: 'TRAINER', currentUserId: user.id });
-    }
-  }, [user?.id]);
+  // Reload sessions every time the screen is focused
+  useFocusEffect(
+    useCallback(() => {
+      if (user?.id) {
+        // Fetch sessions assigned to this trainer
+        fetchSessions({ trainerId: user.id, role: 'TRAINER', currentUserId: user.id });
+      }
+    }, [user?.id])
+  );
 
   // Get today's date at midnight for comparison
   const today = new Date();
@@ -92,11 +97,15 @@ export default function ScheduleScreen({ navigation }: any) {
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 80 }}>
         {isLoading ? (
           <ActivityIndicator size="large" color={C.primary} style={{ marginTop: 40 }} />
-        ) : sessions.length === 0 ? (
+        ) : filteredSessions.length === 0 ? (
           <View style={s.emptyCard}>
             <MaterialIcons name="event-note" size={48} color={C.tMuted} />
-            <Text style={s.emptyTitle}>No sessions scheduled</Text>
-            <Text style={s.emptyText}>Wait for a supervisor to assign you a session</Text>
+            <Text style={s.emptyTitle}>
+              {tab === 'upcoming' ? 'No upcoming sessions' : tab === 'attending' ? 'No sessions today' : 'No past sessions'}
+            </Text>
+            <Text style={s.emptyText}>
+              {tab === 'upcoming' ? 'Wait for a supervisor to assign you a session' : tab === 'attending' ? 'Sessions scheduled for today will appear here' : 'Completed sessions will appear here'}
+            </Text>
           </View>
         ) : (
           <View style={s.list}>

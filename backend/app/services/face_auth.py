@@ -42,14 +42,14 @@ def extract_face_embedding(image_bytes: bytes) -> Optional[str]:
         print(f"[FaceAuth] Error extracting embedding: {e}")
         return None
 
-def verify_face(image_bytes: bytes, stored_embedding_json: str) -> bool:
+def verify_face(image_bytes: bytes, stored_embedding_json: str) -> tuple[bool, float]:
     """
     Extracts face from live image, generates embedding, and compares it against stored embedding.
-    Returns True if faces match.
+    Returns (is_match, cosine_distance).
     """
     try:
         if not stored_embedding_json:
-            return False
+            return False, 1.0
             
         stored_embedding = np.array(json.loads(stored_embedding_json))
         img = _bytes_to_cv2_image(image_bytes)
@@ -57,7 +57,7 @@ def verify_face(image_bytes: bytes, stored_embedding_json: str) -> bool:
         result = DeepFace.represent(img_path=img, model_name="Facenet", enforce_detection=True)
         
         if not result or len(result) == 0:
-            return False
+            return False, 1.0
             
         live_embedding = np.array(result[0]["embedding"])
         
@@ -71,8 +71,14 @@ def verify_face(image_bytes: bytes, stored_embedding_json: str) -> bool:
         
         print(f"[FaceAuth] Cosine Distance: {cosine_distance:.4f} (Threshold: {VERIFICATION_THRESHOLD})")
         
-        return cosine_distance <= VERIFICATION_THRESHOLD
+        return cosine_distance <= VERIFICATION_THRESHOLD, float(cosine_distance)
         
+    except ValueError as ve:
+        if "Face could not be detected" in str(ve):
+            print(f"[FaceAuth] Face not detected in live image")
+            return False, 99.0
+        print(f"[FaceAuth] Value error: {ve}")
+        return False, 1.0
     except Exception as e:
         print(f"[FaceAuth] Error verifying face: {e}")
-        return False
+        return False, 1.0

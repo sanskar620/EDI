@@ -18,7 +18,7 @@ import { useAssessmentStore } from '../stores/assessmentStore';
 import { usePresenceStore } from '../stores/presenceStore';
 
 // Derive WS URL from the HTTP API base URL
-const API_BASE_URL = 'http://192.168.0.107:8000';
+const API_BASE_URL = 'http://10.124.199.102:8000';
 const WS_URL = API_BASE_URL.replace(/^http/, 'ws') + '/ws/sync';
 
 interface SyncMessage {

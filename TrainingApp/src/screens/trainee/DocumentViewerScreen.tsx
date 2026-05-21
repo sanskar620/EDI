@@ -155,7 +155,13 @@ export default function DocumentViewerScreen({ navigation, route }: any) {
       return fileUrl;
     }
 
-    // Online files — use Google Docs Viewer for PDFs, PPTs, docs
+    // Use PDF.js for PDFs, allowing local URLs via CORS
+    if (type === 'PDF') {
+      const encoded = encodeURIComponent(fileUrl);
+      return `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encoded}`;
+    }
+
+    // Other Online files — use Google Docs Viewer for PPTs, docs
     const encoded = encodeURIComponent(fileUrl);
     return `https://docs.google.com/gview?embedded=true&url=${encoded}`;
   };

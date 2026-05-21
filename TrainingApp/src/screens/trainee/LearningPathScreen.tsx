@@ -129,21 +129,7 @@ export default function LearningPathScreen({ navigation, route }: any) {
           </View>
         </TouchableOpacity>
 
-        {/* Download / Delete button */}
-        {isCurrentlyDownloading ? (
-          <View style={{ alignItems: 'center', width: 44 }}>
-            <ActivityIndicator size="small" color={C.primary} />
-            <Text style={{ fontSize: 9, color: C.tMuted, marginTop: 2 }}>{progress}%</Text>
-          </View>
-        ) : downloaded ? (
-          <TouchableOpacity onPress={() => handleDeleteDownload(material)} style={{ padding: 8 }}>
-            <MaterialIcons name="delete-outline" size={20} color="#ef4444" />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity onPress={() => handleDownload(material)} style={{ padding: 8 }}>
-            <MaterialIcons name="download-for-offline" size={24} color={C.primary} />
-          </TouchableOpacity>
-        )}
+
       </View>
     );
   };
@@ -165,20 +151,64 @@ export default function LearningPathScreen({ navigation, route }: any) {
           <Text style={s.sessionSub}>{session.topic} • {session.trainer_name || 'TBD'}</Text>
           {session.description && <Text style={s.sessionDesc}>{session.description}</Text>}
           
-          {attendanceStatus === 'PRESENT' ? (
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: '#dcfce7', paddingVertical: 12, borderRadius: 12, marginTop: 16, borderWidth: 1, borderColor: '#86efac' }}>
-              <MaterialIcons name="check-circle" size={20} color="#166534" />
-              <Text style={{ color: '#166534', fontWeight: '700', fontSize: 14 }}>Attendance is Marked</Text>
-            </View>
-          ) : (
-            <TouchableOpacity 
-              style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: C.primary, paddingVertical: 12, borderRadius: 12, marginTop: 16 }}
-              onPress={() => navigation.navigate('FaceCapture', { sessionId: session.id, mode: 'attendance' })}
-            >
-              <MaterialIcons name="face" size={20} color="#fff" />
-              <Text style={{ color: '#fff', fontWeight: '700', fontSize: 14 }}>Verify Identity & Mark Attendance</Text>
-            </TouchableOpacity>
-          )}
+          {user?.role === 'TRAINEE' && (() => {
+            let canMarkAttendance = false;
+            let isPastEnd = false;
+            try {
+              if (session?.scheduled_date && session?.start_time && session?.end_time) {
+                const sessionStart = new Date(`${session.scheduled_date.split('T')[0]}T${session.start_time}`);
+                const sessionEnd = new Date(`${session.scheduled_date.split('T')[0]}T${session.end_time}`);
+                const now = new Date();
+                const startTimeMs = sessionStart.getTime(); // Exactly at start time
+                const endTimeMs = sessionEnd.getTime();
+                
+                if (now.getTime() >= startTimeMs && now.getTime() <= endTimeMs) {
+                  canMarkAttendance = true;
+                } else if (now.getTime() > endTimeMs) {
+                  isPastEnd = true;
+                }
+              }
+            } catch (e) {}
+
+            if (attendanceStatus === 'PRESENT') {
+              return (
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: '#dcfce7', paddingVertical: 12, borderRadius: 12, marginTop: 16, borderWidth: 1, borderColor: '#86efac' }}>
+                  <MaterialIcons name="check-circle" size={20} color="#166534" />
+                  <Text style={{ color: '#166534', fontWeight: '700', fontSize: 14 }}>Attendance is Marked</Text>
+                </View>
+              );
+            }
+            
+            if (isPastEnd) {
+              return (
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: C.surface, paddingVertical: 12, borderRadius: 12, marginTop: 16, borderWidth: 1, borderColor: C.border }}>
+                  <MaterialIcons name="event-busy" size={20} color={C.error} />
+                  <Text style={{ color: C.error, fontWeight: '700', fontSize: 14 }}>Attendance not available for session</Text>
+                </View>
+              );
+            }
+            
+            if (canMarkAttendance) {
+              return (
+                <TouchableOpacity 
+                  style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: C.primary, paddingVertical: 12, borderRadius: 12, marginTop: 16 }}
+                  onPress={() => navigation.navigate('FaceCapture', { sessionId: session.id, mode: 'attendance' })}
+                >
+                  <MaterialIcons name="face" size={20} color="#fff" />
+                  <Text style={{ color: '#fff', fontWeight: '700', fontSize: 14 }}>Verify Identity & Mark Attendance</Text>
+                </TouchableOpacity>
+              );
+            }
+
+            return (
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: C.surface, paddingVertical: 12, borderRadius: 12, marginTop: 16, borderWidth: 1, borderColor: C.border }}>
+                <MaterialIcons name="schedule" size={20} color={C.tMuted} />
+                <Text style={{ color: C.tMuted, fontWeight: '700', fontSize: 14 }}>
+                  Attendance opens exactly at start time
+                </Text>
+              </View>
+            );
+          })()}
         </View>
       )}
 
@@ -230,14 +260,7 @@ export default function LearningPathScreen({ navigation, route }: any) {
               )}
             </View>
 
-            {/* Flashcards */}
-            <View style={s.section}>
-              <TouchableOpacity style={s.flashcardBtn} onPress={() => navigation.navigate('Flashcards', { topic: session?.topic })}>
-                <MaterialIcons name="style" size={24} color={C.primary} />
-                <Text style={s.flashcardTxt}>Study Flashcards</Text>
-                <MaterialIcons name="chevron-right" size={22} color={C.tMuted} />
-              </TouchableOpacity>
-            </View>
+
           </>
         )}
       </ScrollView>

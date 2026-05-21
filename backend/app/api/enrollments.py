@@ -38,7 +38,12 @@ class EnrollmentResponse(BaseModel):
     session_title: str
     session_topic: str = "GENERAL"
     session_scheduled_date: datetime
-    session_venue: str
+    session_start_time: Optional[datetime] = None
+    session_end_time: Optional[datetime] = None
+    session_venue: Optional[str] = None
+    session_status: Optional[str] = None
+    trainer_name: Optional[str] = None
+    description: Optional[str] = None
     user_id: int
     status: str
     created_at: datetime
@@ -51,7 +56,7 @@ class EnrollmentResponse(BaseModel):
 # ENDPOINTS
 # ═══════════════════════════════════════════
 
-@router.get("/my-enrollments", response_model=List[EnrollmentResponse])
+@router.get("/my-enrollments")
 async def get_my_enrollments(
     status: Optional[EnrollmentStatus] = None,
     db: Session = Depends(get_db),
@@ -60,35 +65,46 @@ async def get_my_enrollments(
     """
     Get all enrollments for the current user.
     """
-    query = db.query(SessionEnrollment).filter(
-        SessionEnrollment.user_id == current_user.id
-    )
-    
-    if status:
-        query = query.filter(SessionEnrollment.status == status)
-    
-    enrollments = query.all()
-    
-    result = []
-    for enrollment in enrollments:
-        session = db.query(TrainingSession).filter(
-            TrainingSession.id == enrollment.session_id
-        ).first()
+    try:
+        query = db.query(SessionEnrollment).filter(
+            SessionEnrollment.user_id == current_user.id
+        )
         
-        if session:
-            result.append(EnrollmentResponse(
-                id=enrollment.id,
-                session_id=enrollment.session_id,
-                session_title=session.title,
-                session_topic=session.topic,
-                session_scheduled_date=session.scheduled_date,
-                session_venue=session.venue_name,
-                user_id=enrollment.user_id,
-                status=enrollment.status.value,
-                created_at=enrollment.created_at
-            ))
-    
-    return result
+        if status:
+            query = query.filter(SessionEnrollment.status == status)
+        
+        enrollments = query.all()
+        
+        result = []
+        for enrollment in enrollments:
+            session = db.query(TrainingSession).filter(
+                TrainingSession.id == enrollment.session_id
+            ).first()
+            
+            if session:
+                # Get trainer name
+                trainer = db.query(User).filter(User.id == session.trainer_id).first()
+                result.append(EnrollmentResponse(
+                    id=enrollment.id,
+                    session_id=enrollment.session_id,
+                    session_title=session.title,
+                    session_topic=session.topic or "GENERAL",
+                    session_scheduled_date=session.scheduled_date,
+                    session_start_time=session.start_time,
+                    session_end_time=session.end_time,
+                    session_venue=session.venue_name,
+                    session_status=session.status.value if session.status else None,
+                    trainer_name=trainer.full_name if trainer else None,
+                    description=session.description,
+                    user_id=enrollment.user_id,
+                    status=enrollment.status.value,
+                    created_at=enrollment.created_at
+                ))
+        
+        return result
+    except Exception as e:
+        import traceback
+        return {"error": str(e), "traceback": traceback.format_exc()}
 
 
 @router.post("", response_model=EnrollmentResponse, status_code=201)
@@ -139,20 +155,10 @@ async def enroll_in_session(
         session_id=enrollment_data.session_id,
         user_id=target_user_id,
         status=EnrollmentStatus.ACCEPTED,
-        created_at=datetime.utcnow(),
-        updated_at=datetime.utcnow()
+        created_at=datetime.utcnow()
     )
     
     db.add(new_enrollment)
-    
-    # Auto-enroll in parent course if applicable
-    if session.course_id:
-        exists_course = db.query(CourseEnrollment).filter(
-            CourseEnrollment.course_id == session.course_id,
-            CourseEnrollment.user_id == target_user_id
-        ).first()
-        if not exists_course:
-            db.add(CourseEnrollment(course_id=session.course_id, user_id=target_user_id))
             
     # Send notification
     db.add(Notification(
@@ -229,19 +235,9 @@ async def bulk_enroll(
             session_id=bulk_data.session_id,
             user_id=u_id,
             status=EnrollmentStatus.ACCEPTED,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow()
+            created_at=datetime.utcnow()
         )
         db.add(enrollment)
-        
-        # Auto-enroll in parent course
-        if session.course_id:
-            exists_course = db.query(CourseEnrollment).filter(
-                CourseEnrollment.course_id == session.course_id,
-                CourseEnrollment.user_id == u_id
-            ).first()
-            if not exists_course:
-                db.add(CourseEnrollment(course_id=session.course_id, user_id=u_id))
         
         # Notify
         db.add(Notification(
