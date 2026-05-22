@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, Linking, AppState, AppStateStatus, Platform } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, Linking, AppState, AppStateStatus, Platform, TextInput } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import * as DocumentPicker from 'expo-document-picker';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as ScreenCapture from 'expo-screen-capture';
@@ -34,6 +35,14 @@ export default function CourseDetailScreen({ route, navigation }: any) {
   const [localProgress, setLocalProgress] = useState(enrollment?.progress || 0);
   const [isGeneratingCert, setIsGeneratingCert] = useState(false);
   
+  // Upload State
+  const [showUploadForm, setShowUploadForm] = useState(false);
+  const [matTitle, setMatTitle] = useState('');
+  const [matType, setMatType] = useState<'PDF' | 'VIDEO'>('PDF');
+  const [selectedFile, setSelectedFile] = useState<any>(null);
+  const [matUrl, setMatUrl] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
+
   const videoPlayer = useVideoPlayer(activeVideo?.uri || null, player => {
     player.loop = false;
     if (activeVideo?.uri) player.play();
@@ -76,7 +85,9 @@ export default function CourseDetailScreen({ route, navigation }: any) {
         warnings.current += 1;
         if (warnings.current >= 3) {
           Alert.alert('⚠️ Assessment Failed', 'You have switched apps too many times. Your quiz will be auto-submitted.');
-          handleQuizSubmit();
+          if (quizRef.current) {
+            submitQuizInternal(quizRef.current, answersRef.current, true);
+          }
         } else {
           Alert.alert('Warning', `Please do not leave the app during the quiz. Warning ${warnings.current} of 3.`);
         }
@@ -136,6 +147,60 @@ export default function CourseDetailScreen({ route, navigation }: any) {
       Alert.alert('Error', err.message || 'Download failed');
     }
     setDownloadingId(null);
+  };
+
+  const handlePickFile = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: matType === 'VIDEO' ? 'video/*' : 'application/pdf',
+        copyToCacheDirectory: true,
+      });
+      if (result.canceled) return;
+      const file = result.assets[0];
+      if (!file) return;
+
+      const sizeMB = file.size ? file.size / (1024 * 1024) : 0;
+      if (sizeMB > 150) {
+        Alert.alert('File Too Large', `Please select a file smaller than 150MB. This file is ${sizeMB.toFixed(1)}MB.`);
+        return;
+      }
+      setSelectedFile(file);
+      setMatTitle(file.name || 'Material');
+      setMatUrl(file.uri);
+    } catch (e: any) {
+      Alert.alert('Error', e.message);
+    }
+  };
+
+  const handleSaveMaterial = async () => {
+    if (!matTitle.trim() || (!selectedFile && !matUrl.trim())) {
+      Alert.alert('Error', 'Title and file are required');
+      return;
+    }
+    setIsUploading(true);
+    
+    const fileToUpload = selectedFile || { uri: matUrl, name: matTitle, mimeType: 'application/octet-stream' };
+    const order_index = currentCourseMaterials.length + 1;
+    
+    const res = await materialsService.uploadMaterial(fileToUpload, {
+      title: matTitle.trim(),
+      material_type: matType as any,
+      topic: course?.topic || 'General',
+      course_id: courseId,
+      order_number: order_index
+    });
+
+    setIsUploading(false);
+    if (!res.success) {
+      Alert.alert('Error', res.error || 'Failed to upload material');
+      return;
+    }
+    Alert.alert('Saved', 'Material uploaded successfully!');
+    setMatTitle('');
+    setMatUrl('');
+    setSelectedFile(null);
+    setShowUploadForm(false);
+    fetchCourseMaterials(courseId);
   };
 
   const handleDownloadOffline = async (material: any) => {
@@ -244,7 +309,7 @@ export default function CourseDetailScreen({ route, navigation }: any) {
     // Only update backend progress if the user is a trainee
     if (user?.role === 'TRAINEE') {
       if (currentCourseMaterials.length > 0) {
-        const newProgress = Math.round((next.size / currentCourseMaterials.length) * 100);
+        const newProgress = Math.min(Math.round((next.size / currentCourseMaterials.length) * 100), 100);
         setLocalProgress(newProgress);
         if (user?.id) {
           await updateProgress(courseId, user.id, newProgress);
@@ -280,7 +345,8 @@ export default function CourseDetailScreen({ route, navigation }: any) {
     const questions = quiz.quiz_data?.questions || [];
     let correct = 0;
     questions.forEach((q: any) => {
-      if (answers[q.id] === q.correct) correct++;
+      const correctAns = q.correct !== undefined ? q.correct : q.correctIndex;
+      if (answers[q.id] === correctAns) correct++;
     });
     const pct = questions.length > 0 ? Math.round((correct / questions.length) * 100) : 0;
     const passed = pct >= 70;
@@ -435,9 +501,10 @@ export default function CourseDetailScreen({ route, navigation }: any) {
               <Text style={s.questionText}>{q.question}</Text>
               <View style={s.optionsList}>
                 {q.options.map((opt: string, oi: number) => {
+                  const correctAns = q.correct !== undefined ? q.correct : q.correctIndex;
                   const selected = quizAnswers[q.id] === oi;
-                  const isCorrect = quizSubmitted && oi === q.correct;
-                  const isWrong = quizSubmitted && selected && oi !== q.correct;
+                  const isCorrect = quizSubmitted && oi === correctAns;
+                  const isWrong = quizSubmitted && selected && oi !== correctAns;
 
                   return (
                     <TouchableOpacity
@@ -496,7 +563,7 @@ export default function CourseDetailScreen({ route, navigation }: any) {
                 <View style={s.progressBarBg}>
                   <View style={[s.progressBarFill, { width: `${Math.min(localProgress, 100)}%` }]} />
                 </View>
-                <Text style={s.progressPct}>{Math.round(localProgress)}%</Text>
+                <Text style={s.progressPct}>{Math.min(Math.round(localProgress), 100)}%</Text>
               </View>
               <Text style={s.progressSub}>{completedItems.size}/{currentCourseMaterials.length} items completed</Text>
             </View>
@@ -504,7 +571,40 @@ export default function CourseDetailScreen({ route, navigation }: any) {
         </View>
 
         <View style={s.materialsSection}>
-          <Text style={s.sectionTitle}>Course Content</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <Text style={s.sectionTitle}>Course Content</Text>
+            {(user?.role === 'TRAINER' || user?.role === 'SUPERVISOR') && (
+              <TouchableOpacity style={{ backgroundColor: C.primary, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16 }} onPress={() => setShowUploadForm(!showUploadForm)}>
+                <Text style={{ color: '#fff', fontSize: 13, fontWeight: '700' }}>{showUploadForm ? 'Cancel' : '+ Add Material'}</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+
+          {showUploadForm && (
+            <View style={{ backgroundColor: C.bg, padding: 14, marginBottom: 16, borderRadius: 12, borderWidth: 1, borderColor: C.primary + '66' }}>
+              <Text style={{ fontSize: 14, fontWeight: '600', color: C.t1, marginBottom: 8 }}>Upload New Material</Text>
+              <View style={{ flexDirection: 'row', gap: 6, marginBottom: 10 }}>
+                {(['PDF', 'VIDEO'] as const).map(t => (
+                  <TouchableOpacity key={t} style={[s.chip, matType === t && { backgroundColor: C.primary, borderColor: C.primary }, { paddingVertical: 6, paddingHorizontal: 10 }]} onPress={() => setMatType(t)}>
+                    <Text style={[s.chipTxt, { fontSize: 11 }, matType === t && { color: '#fff' }]}>{t}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+              <TextInput style={s.uploadInput} placeholder="Material Title" placeholderTextColor={C.tMuted} value={matTitle} onChangeText={setMatTitle} />
+              
+              <TouchableOpacity style={[s.uploadBtnArea, { paddingVertical: 12, marginTop: 8 }]} onPress={handlePickFile} disabled={isUploading}>
+                {isUploading ? (
+                  <ActivityIndicator color={C.primary} />
+                ) : (
+                  <Text style={{ color: C.primary, fontWeight: '700', fontSize: 13 }}>{matUrl ? '✅ File Selected' : '📂 Pick File from Device'}</Text>
+                )}
+              </TouchableOpacity>
+              
+              <TouchableOpacity style={s.actionBtn} onPress={handleSaveMaterial} disabled={isUploading}>
+                {isUploading ? <ActivityIndicator color="#fff" size="small" /> : <Text style={s.actionBtnTxt}>Upload to Course</Text>}
+              </TouchableOpacity>
+            </View>
+          )}
 
           {isLoading ? (
             <ActivityIndicator size="large" color={C.primary} style={{ marginTop: 20 }} />
@@ -629,6 +729,12 @@ const getStyles = (C: any) => StyleSheet.create({
   progressBarFill: { height: '100%', borderRadius: 5, backgroundColor: '#3b82f6' },
   progressPct: { fontSize: 16, fontWeight: '800', color: C.t1, minWidth: 40 },
   progressSub: { fontSize: 12, color: C.tMuted },
+  chip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, backgroundColor: C.card, borderWidth: 1, borderColor: C.border },
+  chipTxt: { fontSize: 13, fontWeight: '600', color: C.tMuted },
+  uploadInput: { backgroundColor: C.card, borderWidth: 1, borderColor: C.border, borderRadius: 10, paddingHorizontal: 14, paddingVertical: 10, fontSize: 14, color: C.t1, marginTop: 4 },
+  uploadBtnArea: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, borderWidth: 2, borderColor: C.primary + '44', borderStyle: 'dashed', borderRadius: 12, paddingVertical: 18, marginTop: 10 },
+  actionBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: C.primary, borderRadius: 12, paddingVertical: 14, marginTop: 14 },
+  actionBtnTxt: { color: '#fff', fontSize: 15, fontWeight: '700' },
   materialsSection: { padding: 16 },
   sectionTitle: { fontSize: 18, fontWeight: '700', color: C.t1, marginBottom: 12 },
   materialsList: { gap: 10 },

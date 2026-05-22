@@ -211,7 +211,6 @@ export default function CreateCourseScreen({ navigation }: any) {
   const matTypes = [
     { key: 'VIDEO', icon: 'play-circle-outline', label: 'Video' },
     { key: 'PDF', icon: 'picture-as-pdf', label: 'PDF' },
-    { key: 'DOCUMENT', icon: 'description', label: 'Document' },
     { key: 'QUIZ', icon: 'quiz', label: 'Quiz' },
   ];
 

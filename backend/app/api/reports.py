@@ -7,6 +7,7 @@ from typing import List, Optional, Dict, Any
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import func, extract, and_, or_
+import enum
 
 from app.database import get_db
 from app.models.user import User, UserRole
@@ -207,21 +208,44 @@ async def get_user_performance_report(
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
         
-    # Enrollments
-    total_enrolled = db.query(func.count(SessionEnrollment.id)).filter(
+    # Enrollments for Sessions
+    session_enrollments = db.query(SessionEnrollment).filter(
         SessionEnrollment.user_id == user_id,
         SessionEnrollment.status != EnrollmentStatus.DECLINED
-    ).scalar()
+    ).all()
+    total_enrolled_sessions = len(session_enrollments)
     
+    # Enrollments for Courses
+    from app.models.course import CourseEnrollment
+    course_enrollments = db.query(CourseEnrollment).filter(
+        CourseEnrollment.user_id == user_id
+    ).all()
+    
+    courses_data = []
+    for ce in course_enrollments:
+        courses_data.append({
+            "course_id": ce.course.id,
+            "title": ce.course.title,
+            "progress": ce.progress,
+            "status": ce.status
+        })
+
     # Attendance
-    attendance_records = db.query(func.count(Attendance.id)).filter(
+    attendance_records = db.query(Attendance).filter(
         Attendance.user_id == user_id
-    ).scalar()
-    present_count = db.query(func.count(Attendance.id)).filter(
-        Attendance.user_id == user_id,
-        Attendance.is_present == True
-    ).scalar()
-    attendance_rate = (present_count / attendance_records * 100) if attendance_records > 0 else 0.0
+    ).order_by(Attendance.created_at.desc()).all()
+    
+    total_attendance = len(attendance_records)
+    present_count = sum(1 for a in attendance_records if a.is_present)
+    attendance_rate = (present_count / total_attendance * 100) if total_attendance > 0 else 0.0
+    
+    history_data = []
+    for a in attendance_records[:10]:
+        history_data.append({
+            "session": {"title": a.session.title if a.session else "Unknown"},
+            "check_in_time": a.check_in_time,
+            "status": a.status.value if isinstance(a.status, enum.Enum) else a.status
+        })
     
     # Assessments
     results = db.query(AssessmentResult).filter(
@@ -234,14 +258,25 @@ async def get_user_performance_report(
     avg_score = sum(r.score_percentage for r in results) / total_tests if total_tests > 0 else 0.0
     
     return {
-        "user_id": user.id,
-        "full_name": user.full_name,
-        "employee_id": user.employee_id,
-        "total_enrolled_sessions": total_enrolled,
-        "attendance_rate": round(attendance_rate, 2),
-        "post_tests_taken": total_tests,
-        "post_tests_passed": passed_tests,
-        "average_score": round(avg_score, 2)
+        "data": {
+            "user": {
+                "id": user.id,
+                "full_name": user.full_name,
+                "employee_id": user.employee_id,
+                "department": user.department
+            },
+            "summary": {
+                "total_sessions_enrolled": total_enrolled_sessions,
+                "total_sessions_attended": present_count,
+                "attendance_rate": round(attendance_rate, 2),
+                "total_assessments": total_tests,
+                "assessments_passed": passed_tests,
+                "certificates_earned": passed_tests, # Mocked as passed
+                "average_score": round(avg_score, 2)
+            },
+            "attendance_history": history_data,
+            "enrolled_courses": courses_data
+        }
     }
 
 

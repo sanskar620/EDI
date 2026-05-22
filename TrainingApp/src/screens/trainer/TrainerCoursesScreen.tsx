@@ -1,47 +1,24 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useThemeStore } from '../../theme';
 import { useAuthStore } from '../../stores/authStore';
 import { useCourseStore } from '../../stores/courseStore';
-import { useSessionsStore } from '../../stores/sessionsStore';
 
 export default function TrainerCoursesScreen({ navigation }: any) {
   const { C } = useThemeStore();
   const s = getStyles(C);
   const { user } = useAuthStore();
-  const { isLoading: coursesLoading } = useCourseStore();
-  const { sessions, fetchSessions } = useSessionsStore();
-
-  const [expandedCourse, setExpandedCourse] = useState<string | null>(null);
+  const { courses, fetchTrainerCourses, isLoading } = useCourseStore();
 
   useFocusEffect(
     useCallback(() => {
       if (user?.id) {
-        fetchSessions({ trainerId: user.id });
+        fetchTrainerCourses(user.id);
       }
     }, [user?.id])
   );
-
-  const derivedCourses = React.useMemo(() => {
-    const map = new Map<string, any>();
-    sessions.forEach((session: any) => {
-      const topicName = session.topic || session.title;
-      if (!map.has(topicName)) {
-        map.set(topicName, {
-          id: topicName, // use topic name as unique ID for the accordion
-          title: topicName,
-          topic: session.topic || 'General',
-          status: session.status,
-          created_at: session.created_at,
-          sessions: []
-        });
-      }
-      map.get(topicName).sessions.push(session);
-    });
-    return Array.from(map.values());
-  }, [sessions]);
 
   const getTopicColor = (topic: string) => {
     const map: Record<string, string> = {
@@ -65,31 +42,34 @@ export default function TrainerCoursesScreen({ navigation }: any) {
       <View style={s.header}>
         <View>
           <Text style={s.headerTitle}>My Courses</Text>
-          <Text style={s.headerSub}>{derivedCourses.length} assigned courses</Text>
+          <Text style={s.headerSub}>{courses.length} courses created</Text>
         </View>
-        <View style={{ width: 24 }} />
+        <TouchableOpacity style={s.createBtn} onPress={() => navigation.navigate('CreateCourseScreen')}>
+           <MaterialIcons name="add" size={20} color="#fff" />
+           <Text style={s.createBtnTxt}>New Course</Text>
+        </TouchableOpacity>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 80 }}>
-        {coursesLoading && derivedCourses.length === 0 ? (
+        {isLoading ? (
           <ActivityIndicator size="large" color={C.primary} style={{ marginTop: 40 }} />
-        ) : derivedCourses.length === 0 ? (
+        ) : courses.length === 0 ? (
           <View style={s.emptyCard}>
             <MaterialIcons name="library-books" size={56} color={C.tMuted} />
-            <Text style={s.emptyTitle}>No Courses Assigned</Text>
-            <Text style={s.emptyText}>Courses will appear here once assigned by the supervisor.</Text>
+            <Text style={s.emptyTitle}>No Courses Found</Text>
+            <Text style={s.emptyText}>Create a new course to start adding materials and enrolling trainees.</Text>
+            <TouchableOpacity style={s.emptyBtn} onPress={() => navigation.navigate('CreateCourseScreen')}>
+              <Text style={s.emptyBtnTxt}>Create Course</Text>
+            </TouchableOpacity>
           </View>
         ) : (
           <View style={s.list}>
-            {derivedCourses.map((course: any) => {
-              const courseSessions = course.sessions;
-              const isExpanded = expandedCourse === course.id;
-
+            {courses.map((course: any) => {
               return (
                 <View key={course.id} style={s.card}>
                   <TouchableOpacity 
                     activeOpacity={0.8}
-                    onPress={() => setExpandedCourse(isExpanded ? null : course.id)}
+                    onPress={() => navigation.navigate('CourseDetail', { courseId: course.id, enrollment: { course } })}
                   >
                     <View style={s.cardTop}>
                       <View style={[s.topicBadge, { backgroundColor: getTopicColor(course.topic) + '18' }]}>
@@ -117,36 +97,12 @@ export default function TrainerCoursesScreen({ navigation }: any) {
                           {new Date(course.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                         </Text>
                       </View>
-                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-                        {/* We don't have a course ID to navigate to CourseDetail, so we just expand sessions */}
-                        <MaterialIcons name={isExpanded ? "keyboard-arrow-up" : "keyboard-arrow-down"} size={24} color={C.tMuted} />
+                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: C.primary + '15', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8 }}>
+                        <MaterialIcons name="edit" size={16} color={C.primary} />
+                        <Text style={{ fontSize: 12, fontWeight: '700', color: C.primary }}>Manage</Text>
                       </View>
                     </View>
                   </TouchableOpacity>
-
-                  {/* Sessions Accordion */}
-                  {isExpanded && (
-                    <View style={{ marginTop: 12, paddingTop: 12, borderTopWidth: 1, borderTopColor: C.border }}>
-                      <Text style={{ fontSize: 13, fontWeight: '600', color: C.t1, marginBottom: 8 }}>Assigned Sessions ({courseSessions.length})</Text>
-                      {courseSessions.length === 0 ? (
-                        <Text style={{ fontSize: 13, color: C.tMuted, fontStyle: 'italic' }}>No sessions assigned for this course.</Text>
-                      ) : (
-                        courseSessions.map((session: any) => (
-                          <TouchableOpacity 
-                            key={session.id}
-                            style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: C.bg, padding: 10, borderRadius: 8, marginBottom: 6 }}
-                            onPress={() => navigation.navigate('SessionDetails', { sessionId: session.id })}
-                          >
-                            <View style={{ flex: 1 }}>
-                              <Text style={{ fontSize: 14, fontWeight: '600', color: C.t1, marginBottom: 2 }}>{session.title}</Text>
-                              <Text style={{ fontSize: 12, color: C.tMuted }}>{new Date(session.scheduled_date).toLocaleDateString()} • {session.venue_name || 'TBD'}</Text>
-                            </View>
-                            <MaterialIcons name="chevron-right" size={20} color={C.tMuted} />
-                          </TouchableOpacity>
-                        ))
-                      )}
-                    </View>
-                  )}
                 </View>
               );
             })}
@@ -154,7 +110,6 @@ export default function TrainerCoursesScreen({ navigation }: any) {
         )}
       </ScrollView>
     </View>
-
   );
 }
 

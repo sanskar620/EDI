@@ -18,8 +18,26 @@ export default function EnrollmentScreen({ navigation }: any) {
   const [selectedSession, setSelectedSession] = useState<number | null>(null);
   const [selectedTrainees, setSelectedTrainees] = useState<Set<number>>(new Set());
   const [selectedTrainer, setSelectedTrainer] = useState<number | null>(null);
+  const [enrolledTraineeIds, setEnrolledTraineeIds] = useState<Set<number>>(new Set());
 
   useEffect(() => { fetchAll(); }, []);
+
+  useEffect(() => {
+    if (selectedSession) {
+      fetchSessionEnrollments(selectedSession);
+    } else {
+      setEnrolledTraineeIds(new Set());
+    }
+  }, [selectedSession]);
+
+  const fetchSessionEnrollments = async (sessionId: number) => {
+    const res = await enrollmentService.getSessionEnrollments(sessionId);
+    if (res.success && res.data) {
+      setEnrolledTraineeIds(new Set(res.data.map((e: any) => e.user_id)));
+    } else {
+      setEnrolledTraineeIds(new Set());
+    }
+  };
 
   const fetchAll = async () => {
     setLoading(true);
@@ -40,11 +58,13 @@ export default function EnrollmentScreen({ navigation }: any) {
     setSelectedTrainees(next);
   };
 
+  const availableTrainees = trainees.filter(t => !enrolledTraineeIds.has(t.id));
+
   const selectAll = () => {
-    if (selectedTrainees.size === trainees.length) {
+    if (selectedTrainees.size === availableTrainees.length && availableTrainees.length > 0) {
       setSelectedTrainees(new Set());
     } else {
-      setSelectedTrainees(new Set(trainees.map(t => t.id)));
+      setSelectedTrainees(new Set(availableTrainees.map(t => t.id)));
     }
   };
 
@@ -61,6 +81,7 @@ export default function EnrollmentScreen({ navigation }: any) {
     setLoading(false);
     if (res.success) {
       Alert.alert('✅ Enrollment Complete', `${selectedTrainees.size} trainees processed`);
+      fetchSessionEnrollments(selectedSession); // Refresh the list
     } else {
       Alert.alert('Error', res.error || 'Failed to enroll trainees');
     }
@@ -109,7 +130,16 @@ export default function EnrollmentScreen({ navigation }: any) {
         <Text style={s.sectionTitle}>Select Session</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 16 }}>
           <View style={{ flexDirection: 'row', gap: 8 }}>
-            {sessions.map(sess => (
+            {sessions.filter(s => {
+              if (s.status === 'COMPLETED' || s.status === 'CANCELLED') return false;
+              if (s.end_time) {
+                const endDate = new Date(s.end_time);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                if (endDate.getTime() < today.getTime()) return false;
+              }
+              return true;
+            }).map(sess => (
               <TouchableOpacity key={sess.id} style={[s.sessionChip, selectedSession === sess.id && s.sessionChipActive]} onPress={() => setSelectedSession(sess.id)}>
                 <Text style={[s.sessionChipTxt, selectedSession === sess.id && s.sessionChipTxtActive]} numberOfLines={1}>{sess.title}</Text>
                 <Text style={[s.sessionChipSub, selectedSession === sess.id && { color: '#fff8' }]}>{sess.status}</Text>
@@ -131,19 +161,23 @@ export default function EnrollmentScreen({ navigation }: any) {
               <Text style={s.sectionTitle}>Select Trainees</Text>
               <TouchableOpacity onPress={selectAll}>
                 <Text style={{ color: C.primary, fontWeight: '700', fontSize: 13 }}>
-                  {selectedTrainees.size === trainees.length ? 'Deselect All' : 'Select All'} ({selectedTrainees.size})
+                  {selectedTrainees.size === availableTrainees.length && availableTrainees.length > 0 ? 'Deselect All' : 'Select All'} ({selectedTrainees.size})
                 </Text>
               </TouchableOpacity>
             </View>
-            {trainees.map(t => (
-              <TouchableOpacity key={t.id} style={s.userRow} onPress={() => toggleTrainee(t.id)}>
-                <MaterialIcons name={selectedTrainees.has(t.id) ? 'check-box' : 'check-box-outline-blank'} size={22} color={selectedTrainees.has(t.id) ? C.primary : C.tMuted} />
-                <View style={{ flex: 1, marginLeft: 10 }}>
-                  <Text style={s.userName}>{t.full_name}</Text>
-                  <Text style={s.userSub}>{t.employee_id}</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
+            {availableTrainees.length === 0 ? (
+              <Text style={{ color: C.tMuted, fontStyle: 'italic', marginBottom: 16 }}>All available trainees are already enrolled in this session.</Text>
+            ) : (
+              availableTrainees.map(t => (
+                <TouchableOpacity key={t.id} style={s.userRow} onPress={() => toggleTrainee(t.id)}>
+                  <MaterialIcons name={selectedTrainees.has(t.id) ? 'check-box' : 'check-box-outline-blank'} size={22} color={selectedTrainees.has(t.id) ? C.primary : C.tMuted} />
+                  <View style={{ flex: 1, marginLeft: 10 }}>
+                    <Text style={s.userName}>{t.full_name}</Text>
+                    <Text style={s.userSub}>{t.employee_id}</Text>
+                  </View>
+                </TouchableOpacity>
+              ))
+            )}
             <TouchableOpacity style={s.actionBtn} onPress={handleEnrollTrainees} disabled={loading}>
               {loading ? <ActivityIndicator color="#fff" /> : (
                 <><MaterialIcons name="how-to-reg" size={20} color="#fff" /><Text style={s.actionBtnTxt}>Enroll {selectedTrainees.size} Trainees</Text></>
@@ -153,15 +187,19 @@ export default function EnrollmentScreen({ navigation }: any) {
         ) : (
           <>
             <Text style={[s.sectionTitle, { marginBottom: 12 }]}>Select Trainer</Text>
-            {trainers.map(t => (
-              <TouchableOpacity key={t.id} style={[s.userRow, selectedTrainer === t.id && { borderColor: C.primary, backgroundColor: C.primary + '08' }]} onPress={() => setSelectedTrainer(t.id)}>
-                <MaterialIcons name={selectedTrainer === t.id ? 'radio-button-checked' : 'radio-button-unchecked'} size={22} color={selectedTrainer === t.id ? C.primary : C.tMuted} />
-                <View style={{ flex: 1, marginLeft: 10 }}>
-                  <Text style={s.userName}>{t.full_name}</Text>
-                  <Text style={s.userSub}>{t.employee_id}</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
+            {trainers.filter(t => t.id !== selectedSessionData?.trainer_id).length === 0 ? (
+              <Text style={{ color: C.tMuted, fontStyle: 'italic', marginBottom: 16 }}>No available trainers.</Text>
+            ) : (
+              trainers.filter(t => t.id !== selectedSessionData?.trainer_id).map(t => (
+                <TouchableOpacity key={t.id} style={[s.userRow, selectedTrainer === t.id && { borderColor: C.primary, backgroundColor: C.primary + '08' }]} onPress={() => setSelectedTrainer(t.id)}>
+                  <MaterialIcons name={selectedTrainer === t.id ? 'radio-button-checked' : 'radio-button-unchecked'} size={22} color={selectedTrainer === t.id ? C.primary : C.tMuted} />
+                  <View style={{ flex: 1, marginLeft: 10 }}>
+                    <Text style={s.userName}>{t.full_name}</Text>
+                    <Text style={s.userSub}>{t.employee_id}</Text>
+                  </View>
+                </TouchableOpacity>
+              ))
+            )}
             <TouchableOpacity style={s.actionBtn} onPress={handleAssignTrainer} disabled={loading}>
               {loading ? <ActivityIndicator color="#fff" /> : (
                 <><MaterialIcons name="person-add" size={20} color="#fff" /><Text style={s.actionBtnTxt}>Assign Trainer</Text></>

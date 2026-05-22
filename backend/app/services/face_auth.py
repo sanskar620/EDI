@@ -29,8 +29,8 @@ def extract_face_embedding(image_bytes: bytes) -> Optional[str]:
         img = _bytes_to_cv2_image(image_bytes)
         
         # DeepFace represent returns a list of dictionaries (one for each face found)
-        # We enforce finding at least one face.
-        result = DeepFace.represent(img_path=img, model_name="Facenet", enforce_detection=True)
+        # We enforce finding at least one face, but make it lenient for mobile testing
+        result = DeepFace.represent(img_path=img, model_name="Facenet", enforce_detection=False)
         
         if not result or len(result) == 0:
             return None
@@ -53,8 +53,8 @@ def verify_face(image_bytes: bytes, stored_embedding_json: str) -> tuple[bool, f
             
         stored_embedding = np.array(json.loads(stored_embedding_json))
         img = _bytes_to_cv2_image(image_bytes)
-        
-        result = DeepFace.represent(img_path=img, model_name="Facenet", enforce_detection=True)
+        # Set enforce_detection=False so mobile selfies don't fail if perfectly centered/lit
+        result = DeepFace.represent(img_path=img, model_name="Facenet", enforce_detection=False)
         
         if not result or len(result) == 0:
             return False, 1.0

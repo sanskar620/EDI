@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 
 from app.database import get_db
-from app.models.user import User, UserRole, UserStatus
+from app.models.user import User, UserRole, UserStatus, HRMasterData
 from app.api.auth import get_current_user
 from app.api.ws import broadcast_change
 
@@ -126,6 +126,19 @@ async def create_user(
     )
     
     db.add(new_user)
+    
+    # Auto-provision HR record so the user can log in immediately
+    hr_record = HRMasterData(
+        employee_id=data.employee_id,
+        full_name=data.full_name,
+        mobile_number=data.mobile_number,
+        email=data.email,
+        department=data.department or ("Training" if data.role == "TRAINER" else "Operations"),
+        designation=data.designation or data.role.capitalize(),
+        is_active=True
+    )
+    db.add(hr_record)
+    
     db.commit()
     
     # Broadcast real-time update
@@ -232,6 +245,9 @@ async def delete_user(
     db.query(Attendance).filter(Attendance.user_id == user_id).delete()
     db.query(SessionEnrollment).filter(SessionEnrollment.user_id == user_id).delete()
     db.query(CourseEnrollment).filter(CourseEnrollment.user_id == user_id).delete()
+    
+    # Also clean up the HR record so the employee ID can be reused
+    db.query(HRMasterData).filter(HRMasterData.employee_id == user.employee_id).delete()
     
     # Hard delete the user
     db.delete(user)

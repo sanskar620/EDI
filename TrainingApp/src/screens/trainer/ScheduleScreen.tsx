@@ -35,22 +35,19 @@ export default function ScheduleScreen({ navigation }: any) {
     if (tab === 'upcoming') {
       return sessions.filter((s: any) => {
         const sessionDate = new Date(s.scheduled_date);
-        sessionDate.setHours(0, 0, 0, 0);
-        return sessionDate >= tomorrow;
+        return sessionDate.setHours(0,0,0,0) > today.getTime();
       });
     }
     if (tab === 'attending') {
       return sessions.filter((s: any) => {
         const sessionDate = new Date(s.scheduled_date);
-        sessionDate.setHours(0, 0, 0, 0);
-        return sessionDate.getTime() === today.getTime();
+        return sessionDate.setHours(0,0,0,0) === today.getTime();
       });
     }
     if (tab === 'attended') {
       return sessions.filter((s: any) => {
         const sessionDate = new Date(s.scheduled_date);
-        sessionDate.setHours(0, 0, 0, 0);
-        return sessionDate < today;
+        return sessionDate.setHours(0,0,0,0) < today.getTime();
       });
     }
     return sessions;
@@ -129,9 +126,9 @@ export default function ScheduleScreen({ navigation }: any) {
                       <View style={s.metaRow}>
                         <MaterialIcons name="schedule" size={14} color={C.tMuted} />
                         <Text style={s.metaTxt}>
-                          {session.start_time ? new Date(session.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'TBD'}
+                          {session.start_time ? new Date(session.start_time.replace('T', ' ').replace(/-/g, '/')).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'TBD'}
                           {' - '}
-                          {session.end_time ? new Date(session.end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'TBD'}
+                          {session.end_time ? new Date(session.end_time.replace('T', ' ').replace(/-/g, '/')).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'TBD'}
                         </Text>
                       </View>
                       <View style={s.metaRow}>

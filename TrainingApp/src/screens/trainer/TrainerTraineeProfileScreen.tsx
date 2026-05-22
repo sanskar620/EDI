@@ -82,6 +82,26 @@ export default function TrainerTraineeProfileScreen({ navigation, route }: any) 
               </View>
             </View>
 
+            {/* Enrolled Courses */}
+            <View style={s.section}>
+              <Text style={s.sectionTitle}>Enrolled Courses</Text>
+              {(perf.enrolled_courses || []).map((course: any, idx: number) => (
+                <View key={idx} style={s.courseRow}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={s.courseTitle}>{course.title}</Text>
+                    <Text style={s.courseSub}>Status: {course.status}</Text>
+                  </View>
+                  <View style={s.courseProgressBg}>
+                    <View style={[s.courseProgressFill, { width: `${Math.min(course.progress || 0, 100)}%` }]} />
+                  </View>
+                  <Text style={s.courseProgressTxt}>{Math.round(course.progress || 0)}%</Text>
+                </View>
+              ))}
+              {(!perf.enrolled_courses || perf.enrolled_courses.length === 0) && (
+                <Text style={s.emptyTxt}>No courses enrolled</Text>
+              )}
+            </View>
+
             {/* Attendance History */}
             <View style={s.section}>
               <Text style={s.sectionTitle}>Recent Attendance</Text>
@@ -132,6 +152,12 @@ const getStyles = (C: any) => StyleSheet.create({
   historyRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: C.border },
   historyTitle: { fontSize: 14, fontWeight: '600', color: C.t1 },
   historySub: { fontSize: 12, color: C.tMuted, marginTop: 2 },
+  courseRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: C.border },
+  courseTitle: { fontSize: 14, fontWeight: '700', color: C.t1 },
+  courseSub: { fontSize: 12, color: C.tMuted, marginTop: 2 },
+  courseProgressBg: { width: 60, height: 6, backgroundColor: C.border, borderRadius: 3, overflow: 'hidden' },
+  courseProgressFill: { height: '100%', backgroundColor: '#3b82f6', borderRadius: 3 },
+  courseProgressTxt: { fontSize: 12, fontWeight: '700', color: C.t1, width: 35, textAlign: 'right' },
   emptyCard: { alignItems: 'center', paddingTop: 60, gap: 12 },
   emptyTxt: { color: C.tMuted, fontSize: 14 },
 });

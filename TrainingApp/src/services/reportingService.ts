@@ -118,45 +118,38 @@ class ReportingService {
   async getUserPerformanceReport(userId: number): Promise<ServiceResponse> {
     try {
       const reportResp = await api.getUserPerformanceReport(this.getToken(), userId);
-      const report = reportResp?.data || reportResp;
-      const attendanceResp = await api.getUserAttendanceHistory(this.getToken(), userId);
-      const assessmentsResp = await api.getUserAssessmentHistory(this.getToken(), userId);
       
-      const attendanceData = Array.isArray(attendanceResp?.data) ? attendanceResp.data : (Array.isArray(attendanceResp) ? attendanceResp : []);
-      const assessmentsData = Array.isArray(assessmentsResp?.data) ? assessmentsResp.data : (Array.isArray(assessmentsResp) ? assessmentsResp : []);
-
-      // Try to get certificates count
-      let certsCount = 0;
-      try {
-        const certsResp = await api.getUserCertificates(this.getToken(), userId);
-        const certsData = certsResp?.data || certsResp;
-        certsCount = Array.isArray(certsData) ? certsData.length : 0;
-      } catch { /* ignore */ }
-
-      const attendanceRate = typeof report?.attendance_rate === 'number' ? report.attendance_rate.toFixed(2) : '0.00';
-      const avgScore = typeof report?.average_score === 'number' ? report.average_score.toFixed(2) : '0.00';
+      // Backend returns: { data: { user, summary, attendance_history, enrolled_courses } }
+      // api.ts request() wraps in { success, data } so reportResp.data = { data: { ... } }
+      // Unwrap both layers
+      const outer = reportResp?.data;
+      const inner = outer?.data ?? outer; // handles single or double nesting
+      
+      const user = inner?.user || {};
+      const summary = inner?.summary || {};
+      const attendanceHistory = inner?.attendance_history || [];
+      const enrolledCourses = inner?.enrolled_courses || [];
 
       return {
         success: true,
         data: {
           user: {
-            id: report?.user_id,
-            employee_id: report?.employee_id,
-            full_name: report?.full_name,
-            department: 'N/A',
-            designation: 'N/A',
+            id: user?.id,
+            employee_id: user?.employee_id,
+            full_name: user?.full_name,
+            department: user?.department || 'N/A',
           },
           summary: {
-            total_sessions_enrolled: report?.total_enrolled_sessions || 0,
-            total_sessions_attended: attendanceData.length,
-            attendance_rate: attendanceRate,
-            total_assessments: report?.post_tests_taken || 0,
-            assessments_passed: report?.post_tests_passed || 0,
-            average_score: avgScore,
-            certificates_earned: certsCount,
+            total_sessions_enrolled: summary?.total_sessions_enrolled || 0,
+            total_sessions_attended: summary?.total_sessions_attended || 0,
+            attendance_rate: summary?.attendance_rate || 0,
+            total_assessments: summary?.total_assessments || 0,
+            assessments_passed: summary?.assessments_passed || 0,
+            average_score: summary?.average_score || 0,
+            certificates_earned: summary?.certificates_earned || 0,
           },
-          attendance_history: attendanceData,
-          assessment_history: assessmentsData,
+          attendance_history: attendanceHistory,
+          enrolled_courses: enrolledCourses,
         },
       };
     } catch (error: any) {
@@ -166,6 +159,7 @@ class ReportingService {
       };
     }
   }
+
 
   /**
    * Get trainer activity report

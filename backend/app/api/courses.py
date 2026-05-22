@@ -137,8 +137,16 @@ def get_courses(
     if status:
         query = query.filter(Course.status == status)
     if trainer_id:
-        query = query.filter(Course.trainer_id == trainer_id)
-        
+        from app.models.session import TrainingSession
+        from sqlalchemy import or_
+        query = query.filter(
+            or_(
+                Course.trainer_id == trainer_id,
+                Course.id.in_(
+                    db.query(TrainingSession.course_id).filter(TrainingSession.trainer_id == trainer_id)
+                )
+            )
+        )
     courses = query.order_by(Course.created_at.desc()).all()
     
     result = []

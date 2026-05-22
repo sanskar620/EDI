@@ -136,10 +136,10 @@ export default function FaceCaptureScreen({ navigation, route }: Props) {
           return null;
         })();
         
-        // Wait max 3 seconds for location
+        // Wait max 10 seconds for location
         const coords = await Promise.race([
           locationPromise,
-          new Promise<null>((resolve) => setTimeout(() => resolve(null), 3000))
+          new Promise<null>((resolve) => setTimeout(() => resolve(null), 10000))
         ]);
         
         if (coords) {
@@ -168,9 +168,21 @@ export default function FaceCaptureScreen({ navigation, route }: Props) {
           [{ text: 'OK', onPress: () => navigation.goBack() }]
         );
       } else {
+        // If it's an API error (like timing constraint), api.ts returns 'error', not 'message'
+        const errorMessage = response.error || response.message || 'Verification failed.';
+        
+        let title = '❌ Verification Failed';
+        if (errorMessage.toLowerCase().includes('time') || errorMessage.toLowerCase().includes('not available')) {
+          title = '❌ Too Early / Too Late';
+        } else if (response.is_match === true) {
+          title = '❌ Location Not Matched';
+        } else if (response.is_match === false) {
+          title = '❌ Face Not Matched';
+        }
+        
         Alert.alert(
-          '❌ Verification Failed',
-          response.message || `Face did not match.\n\nPlease ensure good lighting and try again.`,
+          title,
+          errorMessage,
           [{ text: 'Try Again', onPress: retakePhoto }]
         );
       }

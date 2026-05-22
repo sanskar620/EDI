@@ -36,6 +36,7 @@ class TrainingSession(Base):
     description = Column(Text, nullable=True)
     topic = Column(String(200), nullable=False)
     module_code = Column(String(50), nullable=True)
+    course_id = Column(Integer, ForeignKey("courses.id"), nullable=True)
 
     # Schedule
     scheduled_date = Column(DateTime, nullable=False)

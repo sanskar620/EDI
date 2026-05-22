@@ -1,0 +1,1 @@
+import requests; print(requests.post('http://127.0.0.1:8000/api/v1/materials/upload', data={'title':'test','topic':'test'}, files={'file': ('test.txt', b'hello', 'text/plain')}, headers={'Authorization': 'Bearer 123'}).text)

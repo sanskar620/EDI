@@ -26,6 +26,7 @@ class SessionCreate(BaseModel):
     title: str
     description: Optional[str] = None
     topic: str
+    course_id: Optional[int] = None
     module_code: Optional[str] = None
     trainer_id: Optional[int] = None
     scheduled_date: datetime
@@ -43,12 +44,16 @@ class SessionCreate(BaseModel):
 class SessionUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
+    topic: Optional[str] = None
+    course_id: Optional[int] = None
+    module_code: Optional[str] = None
     scheduled_date: Optional[datetime] = None
     start_time: Optional[datetime] = None
     end_time: Optional[datetime] = None
     venue_name: Optional[str] = None
     status: Optional[SessionStatus] = None
     max_capacity: Optional[int] = None
+    trainer_id: Optional[int] = None
 
 
 class SessionResponse(BaseModel):
@@ -56,6 +61,7 @@ class SessionResponse(BaseModel):
     title: str
     description: Optional[str] = None
     topic: str
+    course_id: Optional[int] = None
     module_code: Optional[str] = None
     scheduled_date: datetime
     start_time: datetime
@@ -450,6 +456,36 @@ async def get_session_modules(
         module_dict["materials"] = [MaterialBriefResponse.from_orm(m) for m in materials]
         result.append(module_dict)
         
+    # If no modules exist for this session, fetch materials from a matching course
+    if not result:
+        from app.models.course import Course, CourseMaterial
+        matching_course = db.query(Course).filter(Course.topic == session.topic).first()
+        if not matching_course:
+            matching_course = db.query(Course).filter(Course.topic.ilike(f"%{session.topic}%")).first()
+        if not matching_course:
+            matching_course = db.query(Course).first()
+            
+        if matching_course:
+            materials = db.query(CourseMaterial).filter(CourseMaterial.course_id == matching_course.id).all()
+            if materials:
+                dummy_module = {
+                    "id": 0,
+                    "session_id": session_id,
+                    "title": f"Course Materials: {matching_course.title}",
+                    "order_number": 1,
+                    "materials": [
+                        {
+                            "id": m.id,
+                            "title": m.title,
+                            "material_type": m.material_type.value if hasattr(m.material_type, 'value') else str(m.material_type),
+                            "s3_key": m.s3_key,
+                            "order_number": idx + 1,
+                            "duration_seconds": getattr(m, "duration_seconds", None)
+                        } for idx, m in enumerate(materials)
+                    ]
+                }
+                result.append(dummy_module)
+
     return result
 
 
@@ -510,4 +546,44 @@ async def submit_feedback(
     db.commit()
     
     return {"success": True, "message": "Feedback submitted successfully"}
+
+
+@router.get("/{session_id}/feedback-stats")
+async def get_feedback_stats(
+    session_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Get aggregated feedback statistics for a session."""
+    from sqlalchemy import func
+    from app.models.feedback import SessionFeedback
+
+    feedbacks = db.query(SessionFeedback).filter(SessionFeedback.session_id == session_id).all()
+    
+    total = len(feedbacks)
+    if total == 0:
+        return {"total_responses": 0, "averages": {
+            "overall_rating": 0, "content_quality": 0, "trainer_effectiveness": 0, "venue_facilities": 0
+        }}
+
+    avg_overall = sum(f.overall_rating or 0 for f in feedbacks) / total
+    avg_content = sum(f.content_relevance or 0 for f in feedbacks) / total
+    avg_trainer = sum(f.trainer_clarity or 0 for f in feedbacks) / total
+    avg_venue = sum(f.venue_quality or 0 for f in feedbacks) / total
+
+    comments = [
+        {"text": f.comment, "date": f.submitted_at}
+        for f in feedbacks if f.comment
+    ]
+
+    return {
+        "total_responses": total,
+        "averages": {
+            "overall_rating": round(avg_overall, 1),
+            "content_quality": round(avg_content, 1),
+            "trainer_effectiveness": round(avg_trainer, 1),
+            "venue_facilities": round(avg_venue, 1)
+        },
+        "comments": comments
+    }
 

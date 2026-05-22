@@ -2,7 +2,7 @@
  * API Service - Handles all backend communication using Axios Interceptors
  */
 
-export const API_BASE_URL = 'http://10.124.199.102:8000/api/v1';
+export const API_BASE_URL = 'http://10.57.228.102:8000/api/v1';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios, { AxiosInstance, AxiosError } from 'axios';
@@ -580,14 +580,26 @@ class ApiService {
   // ═══════════════════════════════════════════
 
   async uploadMaterial(accessToken: string, formData: FormData) {
-    // Note: Do not set Content-Type header for FormData, fetch will set it with boundary
-    return this.request<any>('/materials/upload', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: formData,
-    });
+    try {
+      const response = await fetch(`${API_BASE_URL}/materials/upload`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: formData,
+      });
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Upload failed');
+      }
+      
+      const data = await response.json();
+      return { success: true, data };
+    } catch (e: any) {
+      console.log(`[API Error /materials/upload]:`, e);
+      return { success: false, error: e.message };
+    }
   }
 
   async getMaterials(accessToken: string, topic?: string, materialType?: string) {

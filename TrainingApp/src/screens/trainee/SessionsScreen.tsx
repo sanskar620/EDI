@@ -7,6 +7,7 @@ import { useAuthStore } from '../../stores/authStore';
 import { useSessionsStore } from '../../stores/sessionsStore';
 import { useEnrollmentStore } from '../../stores/enrollmentStore';
 import { useReportingStore } from '../../stores/reportingStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type TabType = 'attended' | 'attending' | 'upcoming';
 
@@ -28,9 +29,25 @@ export default function CoursesScreen({ navigation }: any) {
     }
   }, [user?.id]);
 
+  const [submittedFeedbacks, setSubmittedFeedbacks] = useState<Record<number, boolean>>({});
+
+  const loadSubmittedFeedbacks = async () => {
+    try {
+      const keys = await AsyncStorage.getAllKeys();
+      const feedbackKeys = keys.filter(k => k.startsWith('feedback_submitted_'));
+      const submitted: Record<number, boolean> = {};
+      feedbackKeys.forEach(k => {
+        const id = parseInt(k.replace('feedback_submitted_', ''));
+        if (!isNaN(id)) submitted[id] = true;
+      });
+      setSubmittedFeedbacks(submitted);
+    } catch (e) {}
+  };
+
   useFocusEffect(
     useCallback(() => {
       fetchAllData();
+      loadSubmittedFeedbacks();
     }, [fetchAllData])
   );
 
@@ -86,24 +103,21 @@ export default function CoursesScreen({ navigation }: any) {
       return enrolledSessions.filter((s: any) => {
         if (!s.scheduled_date) return false;
         const d = new Date(s.scheduled_date);
-        d.setHours(0, 0, 0, 0);
-        return d >= tomorrow;
+        return d.setHours(0,0,0,0) > today.getTime();
       });
     }
     if (tab === 'attending') {
       return enrolledSessions.filter((s: any) => {
         if (!s.scheduled_date) return false;
         const d = new Date(s.scheduled_date);
-        d.setHours(0, 0, 0, 0);
-        return d.getTime() === today.getTime();
+        return d.setHours(0,0,0,0) === today.getTime();
       });
     }
     if (tab === 'attended') {
       return enrolledSessions.filter((s: any) => {
         if (!s.scheduled_date) return false;
         const d = new Date(s.scheduled_date);
-        d.setHours(0, 0, 0, 0);
-        return d < today;
+        return d.setHours(0,0,0,0) < today.getTime();
       });
     }
     return enrolledSessions;
@@ -229,23 +243,7 @@ export default function CoursesScreen({ navigation }: any) {
                     <View style={s.actionRow}>
                       {/* Mark Attendance Button - Primary action for attending sessions */}
                       {(() => {
-                        let canMarkAttendance = false;
-                        let isPastEnd = false;
-                        try {
-                          const sessionStart = new Date(`${session.scheduled_date.split('T')[0]}T${session.start_time}`);
-                          const sessionEnd = new Date(`${session.scheduled_date.split('T')[0]}T${session.end_time}`);
-                          const now = new Date();
-                          const startTimeMs = sessionStart.getTime(); // Exactly at start time
-                          const endTimeMs = sessionEnd.getTime();
-                          
-                          if (now.getTime() >= startTimeMs && now.getTime() <= endTimeMs) {
-                            canMarkAttendance = true;
-                          } else if (now.getTime() > endTimeMs) {
-                            isPastEnd = true;
-                          }
-                        } catch (e) {}
-                        
-                        if (isPastEnd) {
+                        if (tab === 'attended') {
                            return (
                              <View style={[s.actionBtn, { backgroundColor: C.surface, borderColor: C.border, borderWidth: 1 }]}>
                                <MaterialIcons name="event-busy" size={16} color={C.error} />
@@ -254,7 +252,7 @@ export default function CoursesScreen({ navigation }: any) {
                            );
                         }
 
-                        return canMarkAttendance ? (
+                        return (
                           <TouchableOpacity 
                             style={[s.actionBtn, s.actionBtnPrimary]}
                             onPress={() => navigation.navigate('AttendanceCheckin', { sessionId: session.id, session })}
@@ -262,12 +260,8 @@ export default function CoursesScreen({ navigation }: any) {
                             <MaterialIcons name="how-to-reg" size={16} color={C.white} />
                             <Text style={[s.actionBtnTxt, { color: C.white }]}>Mark Attendance</Text>
                           </TouchableOpacity>
-                        ) : (
-                          <View style={[s.actionBtn, { backgroundColor: C.surface, borderColor: C.border, borderWidth: 1 }]}>
-                            <MaterialIcons name="schedule" size={16} color={C.tMuted} />
-                            <Text style={[s.actionBtnTxt, { color: C.tMuted }]}>Starts at {session.start_time ? new Date(`${session.scheduled_date.split('T')[0]}T${session.start_time}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'TBD'}</Text>
-                          </View>
                         );
+
                       })()}
                       
                       {/* Pre-Test Button */}
@@ -307,13 +301,24 @@ export default function CoursesScreen({ navigation }: any) {
                       </TouchableOpacity>
                       
                       {/* Session Evaluation */}
-                      <TouchableOpacity 
-                        style={s.actionBtn}
-                        onPress={() => navigation.navigate('SessionEvaluation', { sessionId: session.id })}
-                      >
-                        <MaterialIcons name="rate-review" size={16} color={C.primary} />
-                        <Text style={s.actionBtnTxt}>Feedback</Text>
-                      </TouchableOpacity>
+                      {!submittedFeedbacks[session.id] ? (
+                        <TouchableOpacity 
+                          style={s.actionBtn}
+                          onPress={() => {
+                            navigation.navigate('SessionEvaluation', { session });
+                            // When they come back, we reload local feedback states
+                            setTimeout(loadSubmittedFeedbacks, 5000); 
+                          }}
+                        >
+                          <MaterialIcons name="rate-review" size={16} color={C.primary} />
+                          <Text style={s.actionBtnTxt}>Feedback</Text>
+                        </TouchableOpacity>
+                      ) : (
+                        <View style={[s.actionBtn, { backgroundColor: C.surface, borderColor: C.border, borderWidth: 1 }]}>
+                          <MaterialIcons name="check-circle" size={16} color={C.success} />
+                          <Text style={[s.actionBtnTxt, { color: C.success }]}>Feedback Submitted</Text>
+                        </View>
+                      )}
                       
                       {/* Post-Test Button */}
                       {session.post_test_enabled && (

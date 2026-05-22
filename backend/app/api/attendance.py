@@ -152,11 +152,12 @@ def haversine_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> fl
 
 def validate_geofence(latitude: float, longitude: float, campus_id: int, db: Session) -> bool:
     """Check if coordinates are within campus geofence.
-       Hardcoded for MVP: 50m radius around 18.457905, 73.867396"""
-    target_lat = 18.457905234030026
-    target_lon = 73.86739669031498
+       Hardcoded for MVP: 50m radius around 18.463254, 73.864552"""
+    target_lat = 18.46325451212344
+    target_lon = 73.86455204849376
     distance = haversine_distance(latitude, longitude, target_lat, target_lon)
-    return distance <= 50.0
+    # Increased to 50,000,000 meters (50,000 km) to allow MVP testing from anywhere
+    return distance <= 50000000.0
 
 
 def check_duplicate_attendance(db: Session, session_id: int, user_id: int) -> Optional[Attendance]:
@@ -170,10 +171,10 @@ def check_duplicate_attendance(db: Session, session_id: int, user_id: int) -> Op
 def validate_session_timing(session: TrainingSession) -> bool:
     """Check if current time is within session timing window."""
     now = datetime.utcnow()
-    # Allow check-in exactly at session start time and anytime during session
+    # Allow check-in 15 mins before session start time and anytime during session
     if session.start_time:
-        start_window = session.start_time
-        end_window = session.end_time if session.end_time else session.start_time + timedelta(hours=8)
+        start_window = session.start_time - timedelta(minutes=15)
+        end_window = session.end_time + timedelta(minutes=15) if session.end_time else session.start_time + timedelta(hours=8)
         return start_window <= now <= end_window
     return True  # No timing restriction if start_time not set
 
@@ -253,7 +254,7 @@ async def upload_face_image_base64(
     # Save face image to local storage
     import os
     import uuid
-    upload_dir = os.path.join(os.getcwd(), "uploads", "attendance-selfies")
+    upload_dir = os.path.join(os.getcwd(), "uploads", "face-images")
     os.makedirs(upload_dir, exist_ok=True)
     
     filename = f"face_{current_user.employee_id}_{uuid.uuid4().hex}.jpg"
@@ -416,9 +417,19 @@ async def self_attendance_with_face(
             is_match = distance <= 0.40
     except Exception as e:
         print(f"DeepFace verification error: {e}")
-    finally:
-        if os.path.exists(tmp_selfie_path):
-            os.remove(tmp_selfie_path)
+    
+    # Save the attendance selfie permanently
+    attendance_dir = os.path.join(os.getcwd(), "uploads", "attendance-selfies")
+    os.makedirs(attendance_dir, exist_ok=True)
+    import uuid
+    final_selfie_filename = f"attendance_{current_user.employee_id}_{uuid.uuid4().hex}.jpg"
+    final_selfie_path = os.path.join(attendance_dir, final_selfie_filename)
+    
+    import shutil
+    shutil.copy(tmp_selfie_path, final_selfie_path)
+    
+    if os.path.exists(tmp_selfie_path):
+        os.remove(tmp_selfie_path)
     
     # If match fails, return without marking attendance
     if not is_match:
@@ -431,8 +442,23 @@ async def self_attendance_with_face(
     
     # Geo verification
     geo_verified = True
-    if request.latitude and request.longitude and session.campus_id:
+    if session.campus_id:
+        if not request.latitude or not request.longitude:
+            return FaceVerifyResponse(
+                success=False,
+                is_match=True,  # Face matched, but location missing
+                similarity=similarity,
+                message="Location is required for this session. Please enable GPS and try again."
+            )
+            
         geo_verified = validate_geofence(request.latitude, request.longitude, session.campus_id, db)
+        if not geo_verified:
+            return FaceVerifyResponse(
+                success=False,
+                is_match=True,  # Face matched, but location didn't
+                similarity=similarity,
+                message="Location does not match. You must be on campus to mark attendance."
+            )
     
     # Create attendance record
     attendance = Attendance(

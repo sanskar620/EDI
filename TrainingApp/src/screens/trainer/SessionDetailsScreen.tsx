@@ -5,6 +5,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import { FileSystemUploadType } from 'expo-file-system/legacy';
 import { useThemeStore } from '../../theme';
+import { useAuthStore } from '../../stores/authStore';
 import { useSessionsStore } from '../../stores/sessionsStore';
 import { useEnrollmentStore } from '../../stores/enrollmentStore';
 import authService from '../../services/authService';
@@ -18,10 +19,12 @@ export default function SessionDetailsScreen({ navigation, route }: any) {
   const { C } = useThemeStore();
   const s = getStyles(C);
   const sessionId = route?.params?.sessionId;
+  const { user } = useAuthStore();
   const { currentSession, fetchSessionById, isLoading } = useSessionsStore();
   const { sessionEnrollments, fetchSessionEnrollments } = useEnrollmentStore();
 
-  const [tab, setTab] = useState<'info' | 'materials' | 'assessments' | 'attendance'>('info');
+  const [tab, setTab] = useState<'info' | 'materials' | 'assessments' | 'attendance' | 'feedback'>('info');
+  const [feedbackStats, setFeedbackStats] = useState<any>(null);
   const [assessmentTab, setAssessmentTab] = useState<'PRE_TEST'|'POST_TEST'>('PRE_TEST');
   const [attendanceRecords, setAttendanceRecords] = useState<any[]>([]);
   const [modules, setModules] = useState<any[]>([]);
@@ -56,8 +59,25 @@ export default function SessionDetailsScreen({ navigation, route }: any) {
       fetchSessionEnrollments(sessionId);
       fetchLiveAttendance();
       fetchModules();
+      fetchFeedbackStats();
     }
   }, [sessionId]);
+
+  const fetchFeedbackStats = async () => {
+    try {
+      const { API_BASE_URL } = require('../../services/api');
+      const token = authService.getAuthToken();
+      const res = await fetch(`${API_BASE_URL}/sessions/${sessionId}/feedback-stats`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setFeedbackStats(data);
+      }
+    } catch (e) {
+      console.log('Failed to fetch feedback stats', e);
+    }
+  };
 
   // Fetch questions once the session's topic is available
   useEffect(() => {
@@ -231,10 +251,10 @@ export default function SessionDetailsScreen({ navigation, route }: any) {
 
       {/* Tabs */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ maxHeight: 48, minHeight: 48 }} contentContainerStyle={{ paddingHorizontal: 12, gap: 6, alignItems: 'center' }}>
-        {(['info', 'materials', 'attendance', 'assessments'] as const).map(t => (
+        {(['info', 'materials', 'attendance', 'assessments', ...(user?.role !== 'TRAINER' ? ['feedback'] : [])] as const).map((t: any) => (
           <TouchableOpacity key={t} style={[s.tabBtn, tab === t && s.tabActive]} onPress={() => setTab(t)}>
             <Text style={[s.tabTxt, tab === t && s.tabTxtActive]}>
-              {t === 'info' ? '📋 Info' : t === 'materials' ? '📁 Materials' : t === 'assessments' ? '📝 Assessments' : '✅ Attendance'}
+              {t === 'info' ? '📋 Info' : t === 'materials' ? '📁 Materials' : t === 'assessments' ? '📝 Assessments' : t === 'attendance' ? '✅ Attendance' : '⭐ Feedback'}
             </Text>
           </TouchableOpacity>
         ))}
@@ -305,7 +325,7 @@ export default function SessionDetailsScreen({ navigation, route }: any) {
                 <View style={{ backgroundColor: C.bg, padding: 12, marginTop: 8, borderRadius: 10, borderWidth: 1, borderColor: C.primary + '66' }}>
                   <Text style={{ fontSize: 14, fontWeight: '600', color: C.t1, marginBottom: 8 }}>Add Material to {mod.title}</Text>
                   <View style={{ flexDirection: 'row', gap: 6, marginBottom: 10 }}>
-                    {(['DOCUMENT', 'VIDEO'] as const).map(t => (
+                    {(['PDF', 'VIDEO'] as const).map(t => (
                       <TouchableOpacity key={t} style={[s.chip, matType === t && s.chipAct, { paddingVertical: 6, paddingHorizontal: 10 }]} onPress={() => setMatType(t)}>
                         <Text style={[s.chipTxt, { fontSize: 11 }, matType === t && { color: '#fff' }]}>{t}</Text>
                       </TouchableOpacity>
@@ -427,6 +447,60 @@ export default function SessionDetailsScreen({ navigation, route }: any) {
           ))}
         </>)}
 
+        {/* ═══ FEEDBACK TAB ═══ */}
+        {tab === 'feedback' && (
+          <View>
+            <Text style={s.secTitle}>Session Feedback</Text>
+            {!feedbackStats || feedbackStats.total_responses === 0 ? (
+              <Text style={s.emptyTxt}>No feedback submitted yet.</Text>
+            ) : (
+              <>
+                <View style={s.card}>
+                  <Text style={{ fontSize: 13, color: C.tMuted, marginBottom: 12 }}>
+                    Based on {feedbackStats.total_responses} response(s)
+                  </Text>
+                  {[
+                    { label: 'Overall Rating', key: 'overall_rating' },
+                    { label: 'Content Quality', key: 'content_quality' },
+                    { label: 'Trainer Effectiveness', key: 'trainer_effectiveness' },
+                    { label: 'Venue & Facilities', key: 'venue_facilities' },
+                  ].map((item) => (
+                    <View key={item.key} style={{ marginBottom: 12 }}>
+                      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
+                        <Text style={{ fontSize: 14, fontWeight: '600', color: C.t1 }}>{item.label}</Text>
+                        <Text style={{ fontSize: 14, fontWeight: '700', color: C.primary }}>
+                          {feedbackStats.averages[item.key]} / 5.0
+                        </Text>
+                      </View>
+                      <View style={{ height: 8, backgroundColor: C.border, borderRadius: 4, overflow: 'hidden' }}>
+                        <View style={{ height: '100%', backgroundColor: C.primary, width: `${(feedbackStats.averages[item.key] / 5.0) * 100}%` }} />
+                      </View>
+                    </View>
+                  ))}
+                </View>
+
+                {/* Individual Comments */}
+                {feedbackStats.comments && feedbackStats.comments.length > 0 && (
+                  <View style={{ marginTop: 20 }}>
+                    <Text style={[s.secTitle, { fontSize: 15 }]}>Recent Comments</Text>
+                    {feedbackStats.comments.map((c: any, idx: number) => (
+                      <View key={idx} style={[s.card, { padding: 12, marginBottom: 10, backgroundColor: C.card }]}>
+                        <MaterialIcons name="format-quote" size={24} color={C.primary + '66'} style={{ marginBottom: 4 }} />
+                        <Text style={{ fontSize: 14, color: C.t1, fontStyle: 'italic', lineHeight: 20 }}>"{c.text}"</Text>
+                        {c.date && (
+                          <Text style={{ fontSize: 11, color: C.tMuted, marginTop: 8, textAlign: 'right' }}>
+                            {new Date(c.date).toLocaleDateString()}
+                          </Text>
+                        )}
+                      </View>
+                    ))}
+                  </View>
+                )}
+              </>
+            )}
+          </View>
+        )}
+
       </ScrollView>
     </View>
   );
@@ -435,7 +509,16 @@ export default function SessionDetailsScreen({ navigation, route }: any) {
 function DRow({ icon, label, val, C }: any) {
   return <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 8 }}><MaterialIcons name={icon} size={20} color={C.tMuted} /><View style={{ flex: 1 }}><Text style={{ fontSize: 11, color: C.tMuted }}>{label}</Text><Text style={{ fontSize: 14, color: C.t1, fontWeight: '500' }}>{val}</Text></View></View>;
 }
-function fmt(iso: string) { if (!iso) return 'TBD'; try { return new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); } catch { return 'TBD'; } }
+function fmt(iso: string) { 
+  if (!iso) return 'TBD'; 
+  try { 
+    // Replace T with space and - with / to ensure cross-platform local time parsing
+    const safeIso = iso.replace('T', ' ').replace(/-/g, '/');
+    return new Date(safeIso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); 
+  } catch { 
+    return 'TBD'; 
+  } 
+}
 function getCol(s: string) { const m: any = { COMPLETED: '#10b981', PUBLISHED: '#3b82f6', ONGOING: '#f59e0b', DRAFT: '#94a3b8', CANCELLED: '#ef4444' }; return m[s] || '#94a3b8'; }
 
 const getStyles = (C: any) => StyleSheet.create({

@@ -160,6 +160,35 @@ async def enroll_in_session(
     
     db.add(new_enrollment)
             
+    # Auto-enroll in matching Course based on topic
+    try:
+        from app.models.course import Course, CourseEnrollment
+        matching_course = db.query(Course).filter(Course.topic == session.topic).first()
+        
+        # If no exact match, fallback to substring match
+        if not matching_course:
+            matching_course = db.query(Course).filter(Course.topic.ilike(f"%{session.topic}%")).first()
+            
+        # If still no match, fallback to first available course to guarantee they see something
+        if not matching_course:
+            matching_course = db.query(Course).first()
+            
+        if matching_course:
+            existing_c_enroll = db.query(CourseEnrollment).filter(
+                CourseEnrollment.course_id == matching_course.id,
+                CourseEnrollment.user_id == target_user_id
+            ).first()
+            if not existing_c_enroll:
+                db.add(CourseEnrollment(
+                    course_id=matching_course.id,
+                    user_id=target_user_id,
+                    progress=0,
+                    status="ENROLLED",
+                    enrolled_at=datetime.utcnow()
+                ))
+    except Exception as e:
+        print(f"Auto course enrollment failed: {e}")
+            
     # Send notification
     db.add(Notification(
         user_id=target_user_id,
@@ -238,6 +267,30 @@ async def bulk_enroll(
             created_at=datetime.utcnow()
         )
         db.add(enrollment)
+        
+        # Auto-enroll in matching Course based on course_id or topic
+        try:
+            from app.models.course import Course, CourseEnrollment
+            matching_course = None
+            if session.course_id:
+                matching_course = db.query(Course).filter(Course.id == session.course_id).first()
+            if not matching_course:
+                matching_course = db.query(Course).filter(Course.topic == session.topic).first()
+            if matching_course:
+                existing_c_enroll = db.query(CourseEnrollment).filter(
+                    CourseEnrollment.course_id == matching_course.id,
+                    CourseEnrollment.user_id == u_id
+                ).first()
+                if not existing_c_enroll:
+                    db.add(CourseEnrollment(
+                        course_id=matching_course.id,
+                        user_id=u_id,
+                        progress=0,
+                        status="ENROLLED",
+                        enrolled_at=datetime.utcnow()
+                    ))
+        except Exception as e:
+            print(f"Auto course enrollment failed in bulk: {e}")
         
         # Notify
         db.add(Notification(

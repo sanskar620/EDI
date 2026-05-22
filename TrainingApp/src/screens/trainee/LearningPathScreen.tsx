@@ -156,8 +156,8 @@ export default function LearningPathScreen({ navigation, route }: any) {
             let isPastEnd = false;
             try {
               if (session?.scheduled_date && session?.start_time && session?.end_time) {
-                const sessionStart = new Date(`${session.scheduled_date.split('T')[0]}T${session.start_time}`);
-                const sessionEnd = new Date(`${session.scheduled_date.split('T')[0]}T${session.end_time}`);
+                const sessionStart = new Date(session.start_time);
+                const sessionEnd = new Date(session.end_time);
                 const now = new Date();
                 const startTimeMs = sessionStart.getTime(); // Exactly at start time
                 const endTimeMs = sessionEnd.getTime();

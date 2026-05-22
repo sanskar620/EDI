@@ -94,7 +94,7 @@ export default function MyCoursesScreen({ navigation }: any) {
                     <View style={s.progressBarBg}>
                       <View style={[s.progressBarFill, { width: `${Math.min(progress, 100)}%`, backgroundColor: progressColor }]} />
                     </View>
-                    <Text style={[s.progressTxt, { color: progressColor }]}>{Math.round(progress)}%</Text>
+                    <Text style={[s.progressTxt, { color: progressColor }]}>{Math.min(Math.round(progress), 100)}%</Text>
                   </View>
 
                   {/* Meta */}

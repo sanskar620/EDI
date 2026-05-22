@@ -16,10 +16,11 @@ import { useMaterialsStore } from '../stores/materialsStore';
 import { useCourseStore } from '../stores/courseStore';
 import { useAssessmentStore } from '../stores/assessmentStore';
 import { usePresenceStore } from '../stores/presenceStore';
+import { API_BASE_URL } from '../services/api';
 
 // Derive WS URL from the HTTP API base URL
-const API_BASE_URL = 'http://10.124.199.102:8000';
-const WS_URL = API_BASE_URL.replace(/^http/, 'ws') + '/ws/sync';
+const ROOT_URL = API_BASE_URL.replace('/api/v1', '');
+const WS_URL = ROOT_URL.replace(/^http/, 'ws') + '/ws/sync';
 
 interface SyncMessage {
   event: string;

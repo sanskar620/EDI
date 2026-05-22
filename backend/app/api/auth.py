@@ -33,9 +33,14 @@ def verify_identity(req: VerifyIdentityRequest, db: Session = Depends(get_db)):
     """Step 1: Verify employee ID and mobile number against HR data."""
     employee_id_upper = req.employee_id.upper()
     
+    req_mobile = req.mobile_number
+    mobile_variants = [req_mobile]
+    if req_mobile.startswith("+91"):
+        mobile_variants.append(req_mobile[3:])
+        
     hr_record = db.query(HRMasterData).filter(
         HRMasterData.employee_id == employee_id_upper,
-        HRMasterData.mobile_number == req.mobile_number,
+        HRMasterData.mobile_number.in_(mobile_variants),
         HRMasterData.is_active == True
     ).first()
 

@@ -96,9 +96,7 @@ export default function VideoPlayerScreen({ navigation, route }: any) {
           <MaterialIcons name="arrow-back" size={24} color={C.t1} />
         </TouchableOpacity>
         <Text style={s.headerTitle} numberOfLines={1}>{material?.title || 'Video Player'}</Text>
-        <TouchableOpacity onPress={handleDownload} disabled={downloading}>
-          {downloading ? <ActivityIndicator size="small" color={C.primary} /> : <MaterialIcons name="file-download" size={24} color={C.primary} />}
-        </TouchableOpacity>
+        <View style={{ width: 24 }} />
       </View>
 
       {/* Video player */}

@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } fr
 import { WebView } from 'react-native-webview';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as FileSystem from 'expo-file-system/legacy';
+import * as Sharing from 'expo-sharing';
 import * as ScreenCapture from 'expo-screen-capture';
 import { useThemeStore } from '../../theme';
 import materialsService from '../../services/materialsService';
@@ -22,6 +23,7 @@ export default function DocumentViewerScreen({ navigation, route }: any) {
   const [loading, setLoading] = useState(true);
   const [downloading, setDownloading] = useState(false);
   const [offlineActionRequired, setOfflineActionRequired] = useState(false);
+  const [pdfHtml, setPdfHtml] = useState<string | null>(null);
 
   useEffect(() => {
     resolveUrl();
@@ -75,10 +77,101 @@ export default function DocumentViewerScreen({ navigation, route }: any) {
 
     if (urlResult.success && urlResult.data) {
       setFileUrl(urlResult.data.url);
+      const type = (material?.material_type || directType || '').toUpperCase();
+      if (type === 'PDF') {
+        loadPdfInWebView(urlResult.data.url);
+      }
     } else {
       Alert.alert('Error', 'Could not load document. Download it for offline access.');
     }
     setLoading(false);
+  };
+
+  const loadPdfInWebView = async (url: string) => {
+    try {
+      setDownloading(true);
+      let localUri = url;
+      if (url.startsWith('http')) {
+        const ext = 'pdf';
+        const tmpFile = FileSystem.cacheDirectory + `temp_doc_${Date.now()}.${ext}`;
+        const { API_BASE_URL } = require('../../services/api');
+        const authService = require('../../services/authService').default;
+        const token = authService.getAuthToken();
+        const downloadOptions = url.includes(API_BASE_URL) && token ? {
+          headers: { 'Authorization': `Bearer ${token}` }
+        } : {};
+        const downloadResult = await FileSystem.downloadAsync(url, tmpFile, downloadOptions);
+        if (downloadResult.status !== 200) {
+          Alert.alert('Error', 'Failed to download PDF for viewing.');
+          setDownloading(false);
+          return;
+        }
+        localUri = downloadResult.uri;
+      }
+
+      const base64 = await FileSystem.readAsStringAsync(localUri, { encoding: FileSystem.EncodingType.Base64 });
+      const html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+          <style>
+            body { margin: 0; padding: 0; background-color: #f3f4f6; display: flex; flex-direction: column; align-items: center; }
+            canvas { max-width: 100%; height: auto; margin-bottom: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+            #loading { color: #6b7280; margin-top: 20px; font-family: sans-serif; }
+          </style>
+        </head>
+        <body>
+          <div id="loading">Rendering PDF pages...</div>
+          <div id="pdf-container"></div>
+          <script>
+            try {
+              const base64Data = "${base64}";
+              const pdfData = atob(base64Data);
+              const uint8Array = new Uint8Array(pdfData.length);
+              for (let i = 0; i < pdfData.length; i++) {
+                uint8Array[i] = pdfData.charCodeAt(i);
+              }
+
+              pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+              
+              const loadingTask = pdfjsLib.getDocument({ data: uint8Array });
+              loadingTask.promise.then(function(pdf) {
+                document.getElementById('loading').style.display = 'none';
+                const container = document.getElementById('pdf-container');
+                for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                  pdf.getPage(pageNum).then(function(page) {
+                    const viewport = page.getViewport({ scale: 1.5 });
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    container.appendChild(canvas);
+
+                    const renderContext = {
+                      canvasContext: context,
+                      viewport: viewport
+                    };
+                    page.render(renderContext);
+                  });
+                }
+              }).catch(function(error) {
+                document.getElementById('loading').innerHTML = "Failed to render PDF: " + error.message;
+              });
+            } catch(err) {
+               document.getElementById('loading').innerHTML = "Error loading PDF data.";
+            }
+          </script>
+        </body>
+        </html>
+      `;
+      setPdfHtml(html);
+      setDownloading(false);
+    } catch (e) {
+      setDownloading(false);
+      Alert.alert('Error', 'Failed to render PDF natively in-app.');
+    }
   };
 
   const handleDownload = async () => {
@@ -155,15 +248,51 @@ export default function DocumentViewerScreen({ navigation, route }: any) {
       return fileUrl;
     }
 
-    // Use PDF.js for PDFs, allowing local URLs via CORS
-    if (type === 'PDF') {
-      const encoded = encodeURIComponent(fileUrl);
-      return `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encoded}`;
-    }
-
     // Other Online files — use Google Docs Viewer for PPTs, docs
     const encoded = encodeURIComponent(fileUrl);
     return `https://docs.google.com/gview?embedded=true&url=${encoded}`;
+  };
+
+  const handleOpenNatively = async () => {
+    try {
+      if (!fileUrl) return;
+      let localUriToOpen = fileUrl;
+
+      // If it's a remote URL, we must download it first to a temp file
+      if (fileUrl.startsWith('http')) {
+        setDownloading(true);
+        const ext = getFileExtension();
+        const tmpFile = FileSystem.cacheDirectory + `temp_doc_${Date.now()}.${ext}`;
+        const { API_BASE_URL } = require('../../services/api');
+        const authService = require('../../services/authService').default;
+        const token = authService.getAuthToken();
+        const downloadOptions = fileUrl.includes(API_BASE_URL) && token ? {
+          headers: { 'Authorization': `Bearer ${token}` }
+        } : {};
+        const downloadResult = await FileSystem.downloadAsync(fileUrl, tmpFile, downloadOptions);
+        if (downloadResult.status !== 200) {
+           Alert.alert('Error', 'Failed to prepare file for viewing.');
+           setDownloading(false);
+           return;
+        }
+        localUriToOpen = downloadResult.uri;
+        setDownloading(false);
+      }
+
+      // Share/Open natively
+      const isAvailable = await Sharing.isAvailableAsync();
+      if (isAvailable) {
+        await Sharing.shareAsync(localUriToOpen, {
+          dialogTitle: 'Open Document',
+          mimeType: getMimeType()
+        });
+      } else {
+        Alert.alert('Error', 'Native sharing/viewing is not available on this device.');
+      }
+    } catch (e: any) {
+      setDownloading(false);
+      Alert.alert('Error', e.message || 'Failed to open document');
+    }
   };
 
   const getTypeIcon = (): string => {
@@ -206,13 +335,7 @@ export default function DocumentViewerScreen({ navigation, route }: any) {
             )}
           </View>
         </View>
-        <TouchableOpacity onPress={handleDownload} disabled={downloading || !fileUrl} style={s.headerBtn}>
-          {downloading ? (
-            <ActivityIndicator size="small" color={C.primary} />
-          ) : (
-            <MaterialIcons name="file-download" size={24} color={fileUrl ? C.primary : C.tMuted} />
-          )}
-        </TouchableOpacity>
+        {/* Download removed as requested */}
       </View>
 
       {/* Content area */}
@@ -242,6 +365,28 @@ export default function DocumentViewerScreen({ navigation, route }: any) {
             <Text style={s.openBtnTxt}>View Document</Text>
           </TouchableOpacity>
         </View>
+      ) : ((material?.material_type || directType || '').toUpperCase() === 'PDF') ? (
+        pdfHtml ? (
+          <WebView
+            originWhitelist={['*']}
+            source={{ html: pdfHtml }}
+            style={s.webview}
+            startInLoadingState={true}
+            renderLoading={() => (
+              <View style={[s.center, StyleSheet.absoluteFill, { backgroundColor: C.bg }]}>
+                <ActivityIndicator size="large" color={C.primary} />
+                <Text style={s.loadingTxt}>Loading PDF Viewer...</Text>
+              </View>
+            )}
+            javaScriptEnabled={true}
+            domStorageEnabled={true}
+          />
+        ) : (
+          <View style={s.center}>
+            <ActivityIndicator size="large" color="#ef4444" />
+            <Text style={s.loadingTxt}>Preparing PDF...</Text>
+          </View>
+        )
       ) : (
         <WebView
           source={{ uri: getViewerUrl() }}

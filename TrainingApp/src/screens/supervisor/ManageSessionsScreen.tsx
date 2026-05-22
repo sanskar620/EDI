@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, TextInput, StyleSheet, Alert, ActivityIndicator, FlatList, Platform, Modal } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, TextInput, StyleSheet, Alert, ActivityIndicator, SectionList, Platform, Modal } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useThemeStore } from '../../theme';
@@ -66,12 +66,18 @@ export default function ManageSessionsScreen({ navigation }: any) {
     const st = new Date(sDate); st.setHours(sH, sM);
     const et = new Date(sDate); et.setHours(eH, eM);
 
+    const formatLocalISO = (d: Date) => {
+      const pad = (n: number) => n.toString().padStart(2, '0');
+      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    };
+
     const res = await sessionsService.createSession({
       title: title.trim(),
       topic: courses.find(c => c.id === selectedCourse)?.title || title.trim(),
-      scheduled_date: sDate.toISOString(),
-      start_time: st.toISOString(),
-      end_time: et.toISOString(),
+      course_id: selectedCourse,
+      scheduled_date: formatLocalISO(sDate),
+      start_time: formatLocalISO(st),
+      end_time: formatLocalISO(et),
       duration_minutes: Math.round((et.getTime() - st.getTime()) / 60000),
       venue_name: venueName.trim(),
       trainer_id: selectedTrainer,
@@ -163,20 +169,32 @@ export default function ManageSessionsScreen({ navigation }: any) {
       </View>
 
       {tab === 'list' ? (
-        <FlatList
-          data={sessions}
+        <SectionList
+          sections={[
+            {
+              title: 'Upcoming & Active Sessions',
+              data: sessions.filter(s => !(s.status === 'COMPLETED' || s.status === 'CANCELLED' || (s.end_time && new Date(s.end_time).getTime() < Date.now())))
+            },
+            {
+              title: 'Past Sessions',
+              data: sessions.filter(s => (s.status === 'COMPLETED' || s.status === 'CANCELLED' || (s.end_time && new Date(s.end_time).getTime() < Date.now())))
+            }
+          ].filter(sec => sec.data.length > 0)}
           keyExtractor={item => item.id?.toString()}
           contentContainerStyle={{ padding: 16, gap: 10 }}
           refreshing={loading}
           onRefresh={fetchAll}
           ListEmptyComponent={<Text style={s.emptyTxt}>No sessions found</Text>}
+          renderSectionHeader={({ section: { title } }) => (
+            <Text style={{ fontSize: 16, fontWeight: '800', color: C.t1, marginTop: 12, marginBottom: 4 }}>{title}</Text>
+          )}
           renderItem={({ item }) => (
             <View style={s.sessionCard}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <View style={[s.statusBadge, { backgroundColor: getColor(item.status) + '18' }]}>
                   <Text style={[s.statusTxt, { color: getColor(item.status) }]}>{item.status}</Text>
                 </View>
-                <Text style={s.dateTxt}>{item.scheduled_date ? new Date(item.scheduled_date).toLocaleDateString() : ''}</Text>
+                <Text style={s.dateTxt}>{item.scheduled_date ? new Date(item.scheduled_date.replace('T', ' ').replace(/-/g, '/')).toLocaleDateString() : ''}</Text>
               </View>
               <Text style={s.sessTitle}>{item.title}</Text>
               <Text style={s.sessMeta}>{item.venue_name || 'No venue'} • {item.max_capacity || 0} seats</Text>
@@ -231,7 +249,7 @@ export default function ManageSessionsScreen({ navigation }: any) {
             <Text style={s.pickerTxt}>{scheduledDate || 'Select Date'}</Text>
             <MaterialIcons name="calendar-today" size={18} color={C.tMuted} />
           </TouchableOpacity>
-          {showDatePicker && <DateTimePicker value={dateObj} mode="date" display="default" minimumDate={new Date()} onChange={(e: any, d?: Date) => { setShowDatePicker(Platform.OS === 'ios'); if (d && e.type !== 'dismissed') { setDateObj(d); setScheduledDate(d.toISOString().split('T')[0]); } }} />}
+          {showDatePicker && <DateTimePicker value={dateObj} mode="date" display="default" minimumDate={new Date()} onChange={(e: any, d?: Date) => { setShowDatePicker(Platform.OS === 'ios'); if (d && e.type !== 'dismissed') { setDateObj(d); const pad = (n: number) => n.toString().padStart(2,'0'); setScheduledDate(`${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`); } }} />}
 
           <View style={{ flexDirection: 'row', gap: 12 }}>
             <View style={{ flex: 1 }}>
